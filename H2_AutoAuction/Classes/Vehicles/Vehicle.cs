@@ -125,8 +125,54 @@ public abstract class Vehicle
     /// </returns>
     private EnergyClassEnum GetEnergyClass()
     {
-        //TODO: V4 - Implement GetEnergyClass
-        throw new NotImplementedException();
+        // If the car is older than 2010, the energy class is calculated differently.
+        if (Year < 2010)
+        {
+            // If the car is diesel, the energy class is calculated differently.
+            if (FuelType == FuelTypeEnum.Diesel)
+            {
+                return KmPerLiter switch
+                {
+                    >= 23 => EnergyClassEnum.A,
+                    >= 18 => EnergyClassEnum.B,
+                    >= 13 => EnergyClassEnum.C,
+                    _ => EnergyClassEnum.D
+                };
+            }
+            else
+            {
+                return KmPerLiter switch
+                {
+                    >= 18 => EnergyClassEnum.A,
+                    >= 14 => EnergyClassEnum.B,
+                    >= 10 => EnergyClassEnum.C,
+                    _ => EnergyClassEnum.D
+                };
+            }
+        }
+        else
+        {
+            if (FuelType == FuelTypeEnum.Diesel)
+            {
+                return KmPerLiter switch
+                {
+                    >= 25 => EnergyClassEnum.A,
+                    >= 20 => EnergyClassEnum.B,
+                    >= 15 => EnergyClassEnum.C,
+                    _ => EnergyClassEnum.D
+                };
+            }
+            else
+            {
+                return KmPerLiter switch
+                {
+                    >= 20 => EnergyClassEnum.A,
+                    >= 16 => EnergyClassEnum.B,
+                    >= 12 => EnergyClassEnum.C,
+                    _ => EnergyClassEnum.D
+                };
+            }
+        }
     }
 
     /// <summary>
