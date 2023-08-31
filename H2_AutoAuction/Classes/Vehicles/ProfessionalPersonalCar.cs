@@ -39,7 +39,6 @@ public class ProfessionalPersonalCar : PersonalCar
     /// <returns>The Veihcle as a string</returns>
     public override string ToString()
     {
-        //TODO: V18 - ToString for ProfessionalPersonalCar
-        throw new NotImplementedException();
+        return $"{base.ToString()} /n HasSafetyBar: {HasSafetyBar}, LoadCapacity: {LoadCapacity}";
     }
 }
