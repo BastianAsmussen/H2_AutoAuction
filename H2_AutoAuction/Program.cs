@@ -20,7 +20,7 @@ internal class Program
         var privateCar2 = new PrivatePersonalCar("Another car brand", 300.0, "DF12345", 2020, 12000M, true, 10.0, 20.0,
             Vehicle.FuelTypeEnum.Benzine, 5, td, false);
         var professionalCar = new ProfessionalPersonalCar("Suzuki Swift", 500.0, "XY12345", 2012, 10000M, 10.0, 20.0,
-            Vehicle.FuelTypeEnum.Benzine, 2, td, true, 400.0);
+            Vehicle.FuelTypeEnum.Benzine, 2, td, true, 400.0, Vehicle.DriversLicenseEnum.B);
         var bus = new Bus("City bus", 800.0, "HE24745", 2012, 30000M, true, 10.0, 15.0, Vehicle.FuelTypeEnum.Diesel, vd,
             24, 10, true);
 
