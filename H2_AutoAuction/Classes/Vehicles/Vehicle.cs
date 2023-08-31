@@ -184,17 +184,16 @@ public abstract class Vehicle
     /// <returns>The Vehicle as a string.</returns>
     public new virtual string ToString()
     {
-        return @$"
-            Name: {Name}
-            Km: {Km}
-            Registration number: {RegistrationNumber}
-            Year: {Year}
-            New price: {NewPrice}
-            Has towbar: {HasTowbar}
-            Engine size: {EngineSize}
-            Km per liter: {KmPerLiter}
-            Drivers license: {DriversLicense}
-            Fuel type: {FuelType}
-            Energy class: {EnergyClass}";
+        return $"Name: {Name}\n" +
+               $"Km: {Km}\n" +
+               $"Registration number: {RegistrationNumber}\n" +
+               $"Year: {Year}\n" +
+               $"New price: {NewPrice}\n" +
+               $"Has towbar: {HasTowbar}\n" +
+               $"Engine size: {EngineSize}\n" +
+               $"Km per liter: {KmPerLiter}\n" +
+               $"Drivers license: {DriversLicense}\n" +
+               $"Fuel type: {FuelType}\n" +
+               $"Energy class: {EnergyClass}\n";
     }
 }

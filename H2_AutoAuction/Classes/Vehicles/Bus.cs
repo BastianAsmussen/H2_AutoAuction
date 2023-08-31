@@ -21,9 +21,9 @@ internal class Bus : HeavyVehicle
         NumberOfSeats = numberOfSeats;
         NumberOfSleepingSpaces = numberOfSleepingSpaces;
         HasToilet = hasToilet;
-        //TODO: V7 - set constructor and DriversLicense to DE if the car has a towbar or D if not.
-        //TODO: V8 - Add to database and set ID
-        throw new NotImplementedException();
+        DriversLicense = HasTowbar ? DriversLicenseEnum.DE : DriversLicenseEnum.D;
+
+        // TODO: V8 - Add to database and set ID
     }
 
     /// <summary>
@@ -32,12 +32,13 @@ internal class Bus : HeavyVehicle
     /// </summary>
     public override double EngineSize
     {
-        get => EngineSize;
+        get => base.EngineSize;
         set
         {
-            //V7 - TODO value must be between 4.2 and 15.0 L or cast an out of range execution.
-            throw new NotImplementedException();
-            EngineSize = value;
+            if (value is < 4.2 or > 15.0)
+                throw new ArgumentOutOfRangeException(nameof(value), value, "Engine size must be between 4.2 and 15.0 L!");
+
+            base.EngineSize = value;
         }
     }
 

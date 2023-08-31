@@ -28,9 +28,8 @@ public abstract class HeavyVehicle : Vehicle
     /// </summary>
     public override string ToString()
     {
-        return @$"
-            {base.ToString()}
-            Vehicle dimensions: {VehicleDimensions}";
+        return $"{base.ToString()}" +
+               $"Vehicle dimensions: {VehicleDimensions}\n";
     }
 
     /// <summary>
