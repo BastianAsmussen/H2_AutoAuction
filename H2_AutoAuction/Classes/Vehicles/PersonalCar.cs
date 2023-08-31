@@ -51,7 +51,7 @@ public abstract class PersonalCar : Vehicle
     /// </summary>
     public override string ToString()
     {
-        return $"PersonalCar: {base.ToString()}, NumberOfSeat: {NumberOfSeat}, TrunkDimensions: {TrunkDimensions.ToString()}";
+        return $"{base.ToString()} \nNumberOfSeat: {NumberOfSeat} \nTrunkDimensions: {TrunkDimensions.ToString()}";
     }
 
     public readonly struct TrunkDimensionsStruct
