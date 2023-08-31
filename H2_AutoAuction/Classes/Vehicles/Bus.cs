@@ -61,7 +61,10 @@ internal class Bus : HeavyVehicle
     /// </summary>
     public override string ToString()
     {
-        //TODO: V9 - Tostring for bus
-        throw new NotImplementedException();
+        return @$"
+                {base.ToString()}
+                Number of seats: {NumberOfSeats}
+                Number of sleeping spaces: {NumberOfSleepingSpaces}
+                Has toilet: {HasToilet}";
     }
 }
