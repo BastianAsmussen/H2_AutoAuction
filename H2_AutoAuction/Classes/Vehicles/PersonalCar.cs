@@ -51,8 +51,9 @@ public abstract class PersonalCar : Vehicle
     /// </summary>
     public override string ToString()
     {
-        //TODO: V15 - ToString for PersonalCar
-        throw new NotImplementedException();
+        return $"{base.ToString()}\n" +
+               $"NumberOfSeat: {NumberOfSeat}\n" +
+               $"TrunkDimensions: {TrunkDimensions.ToString()}";
     }
 
     public readonly struct TrunkDimensionsStruct
