@@ -18,10 +18,7 @@ public class ProfessionalPersonalCar : PersonalCar
         : base(name, km, registrationNumber, year, newPrice, true, engineSize, kmPerLiter, fuelType, numberOfSeat,
             trunkDimensions)
     {
-        if (loadCapacity < 750)
-            DriversLicense = DriversLicenseEnum.B;
-        else
-            DriversLicense = DriversLicenseEnum.BE;
+        DriversLicense = loadCapacity < 750 ? DriversLicenseEnum.B : DriversLicenseEnum.BE;
 
         HasSafetyBar = hasSafetyBar;
         LoadCapacity = loadCapacity;
