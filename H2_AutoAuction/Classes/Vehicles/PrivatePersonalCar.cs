@@ -18,9 +18,14 @@ public class PrivatePersonalCar : PersonalCar
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
             trunkDimensions)
     {
-        //TODO: V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
+        // V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
+        if (DriversLicense != DriversLicenseEnum.B && hasIsofixFittings)
+            throw new NotImplementedException(); //Exception thrown if DriversLicense is not 'B'
+
+    
+        
         //TODO: V20 - Add to database and set ID
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     /// <summary>
