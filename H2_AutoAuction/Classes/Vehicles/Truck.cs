@@ -50,7 +50,7 @@ internal class Truck : HeavyVehicle
     /// </summary>
     public override string ToString()
     {
-        //TODO: V12 - ToString for Truck
-        throw new NotImplementedException();
+        return $"{base.ToString()}" +
+               $"LoadCapacity: {LoadCapacity}\n";
     }
 }
