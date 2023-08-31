@@ -47,7 +47,6 @@ public abstract class Vehicle
         EngineSize = engineSize;
         KmPerLiter = kmPerLiter;
         FuelType = fuelType;
-        //TODO: V1 - Constructor for Vehicle
         //TODO: V2 - Add to database and set ID
     }
 
@@ -133,10 +132,20 @@ public abstract class Vehicle
     /// <summary>
     ///     Returns the vehicle in a string with relevant information.
     /// </summary>
-    /// <returns>The Vehicle as a string</returns>
+    /// <returns>The Vehicle as a string.</returns>
     public new virtual string ToString()
     {
-        //TODO: V3 - Vehicle tostring
-        throw new NotImplementedException();
+        return @$"
+            Name: {Name}
+            Km: {Km}
+            Registration number: {RegistrationNumber}
+            Year: {Year}
+            New price: {NewPrice}
+            Has towbar: {HasTowbar}
+            Engine size: {EngineSize}
+            Km per liter: {KmPerLiter}
+            Drivers license: {DriversLicense}
+            Fuel type: {FuelType}
+            Energy class: {EnergyClass}";
     }
 }
