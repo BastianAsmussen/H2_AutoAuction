@@ -13,7 +13,10 @@ public class Auction
     /// <param name="minimumPrice"></param>
     public Auction(Vehicle vehicle, ISeller seller, decimal minimumPrice)
     {
-        //TODO: A1 - Set constructor
+        Vehicle = vehicle;
+        Seller = seller;
+        MinimumPrice = minimumPrice;
+        
         //TODO: A2 - Add to database and set ID
         throw new NotImplementedException();
     }
