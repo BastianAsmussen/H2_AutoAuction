@@ -2,7 +2,7 @@
 
 public class CorporateUser : User
 {
-    public CorporateUser(string userName, string password, uint zipCode, uint cvrNummer, decimal credit) : base(
+    public CorporateUser(string userName, string password, uint zipCode, uint cvrNumber, decimal credit) : base(
         userName, password, zipCode)
     {
         //TODO: U7 - Set constructor
@@ -10,6 +10,6 @@ public class CorporateUser : User
         throw new NotImplementedException();
     }
 
-    public uint CVRNumber { get; set; }
+    public uint CvrNumber { get; set; }
     public decimal Credit { get; set; }
 }

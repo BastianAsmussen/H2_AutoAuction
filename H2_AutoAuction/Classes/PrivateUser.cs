@@ -2,7 +2,7 @@
 
 public class PrivateUser : User
 {
-    public PrivateUser(string userName, string password, uint zipCode, uint cprNummer) : base(userName, password,
+    public PrivateUser(string userName, string password, uint zipCode, uint cprNumber) : base(userName, password,
         zipCode)
     {
         //TODO: U10 - Set constructor
@@ -10,5 +10,5 @@ public class PrivateUser : User
         throw new NotImplementedException();
     }
 
-    public uint CPRNumber { get; set; }
+    public uint CprNumber { get; set; }
 }

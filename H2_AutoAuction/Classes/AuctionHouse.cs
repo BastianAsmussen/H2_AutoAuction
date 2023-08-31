@@ -3,7 +3,7 @@ using H2_AutoAuction.Interfaces;
 
 namespace H2_AutoAuction.Classes;
 
-public delegate string NodificationDelegate(string message);
+public delegate string NotificationDelegate(string message);
 
 public static class AuctionHouse
 {
@@ -14,9 +14,9 @@ public static class AuctionHouse
     /// </summary>
     /// <param name="vehicle"></param>
     /// <param name="seller"></param>
-    /// <param name="miniumBid"></param>
+    /// <param name="minimumBid"></param>
     /// <returns> Auction ID </returns>
-    public static uint SetForSale(Vehicle vehicle, ISeller seller, decimal miniumBid)
+    public static uint SetForSale(Vehicle vehicle, ISeller seller, decimal minimumBid)
     {
         //TODO: A3 - SetForSale
         throw new NotImplementedException();
@@ -27,27 +27,27 @@ public static class AuctionHouse
     /// </summary>
     /// <param name="vehicle"></param>
     /// <param name="seller"></param>
-    /// <param name="miniumBid"></param>
-    /// <param name="NodificationMethod"> This is a delegate that is used to nodifi the user, with more information</param>
+    /// <param name="minimumBid"></param>
+    /// <param name="notificationMethod"> This is a delegate that is used to notify the user, with more information.</param>
     /// <returns> The auction ID </returns>
-    public static uint SetForSale(Vehicle vehicle, ISeller seller, decimal miniumBid,
-        NodificationDelegate NodificationMethod)
+    public static uint SetForSale(Vehicle vehicle, ISeller seller, decimal minimumBid,
+        NotificationDelegate notificationMethod)
     {
         //TODO: A4 - SetForSale overload
         throw new NotImplementedException();
     }
 
     /// <summary>
-    ///     Recieves a bid from a buyer.
-    ///     Checks if the bid is eligable, by ...
+    ///     Receives a bid from a buyer.
+    ///     Checks if the bid is eligible, by ...
     /// </summary>
-    /// <param name="buyer">identification for the potential buyer placeing a bid.</param>
-    /// <param name="auctionID">Used to find the auction.</param>
+    /// <param name="buyer">identification for the potential buyer placing a bid.</param>
+    /// <param name="auctionId">Used to find the auction.</param>
     /// <param name="bid">The bid in decimal with the value ending in M for money.</param>
-    /// <returns> A bool that indicats whether a bid was recieved or rejected. </returns>
-    public static bool RecieveBid(IBuyer buyer, uint auctionID, decimal bid)
+    /// <returns> A bool that indicates whether a bid was received or rejected. </returns>
+    public static bool ReceiveBid(IBuyer buyer, uint auctionId, decimal bid)
     {
-        //TODO: A5 - RecieveBid
+        //TODO: A5 - ReceiveBid
         throw new NotImplementedException();
     }
 
@@ -55,9 +55,9 @@ public static class AuctionHouse
     ///     Accepts a bid and ...
     /// </summary>
     /// <param name="seller"></param>
-    /// <param name="auctionID"></param>
+    /// <param name="auctionId"></param>
     /// <returns></returns>
-    public static bool AcceptBid(ISeller seller, uint auctionID)
+    public static bool AcceptBid(ISeller seller, uint auctionId)
     {
         //TODO: A6 - AcceptBid
         throw new NotImplementedException();
@@ -68,9 +68,9 @@ public static class AuctionHouse
     /// <summary>
     ///     Find an auction in the auction list from the id using a binary search.
     /// </summary>
-    /// <param name="auctionID"></param>
-    /// <returns> The Auction with the specific id or null if not found </returns>
-    public static async Task<Auction> FindAuctionByID(uint auctionID)
+    /// <param name="auctionId"></param>
+    /// <returns> The Auction with the specific id or null if not found.</returns>
+    public static async Task<Auction> FindAuctionById(uint auctionId)
     {
         //TODO: A7 - FindAuctionByID
         throw new NotImplementedException();
@@ -95,9 +95,9 @@ public static class AuctionHouse
     /// <param name="seats"></param>
     /// <param name="hasToilet"></param>
     /// <returns> A list of vehicles that contains the vehicles </returns>
-    public static async Task<List<Vehicle>> FindVehiclesByNumberofSeats(int seats, bool hasToilet)
+    public static async Task<List<Vehicle>> FindVehiclesByNumberOfSeats(int seats, bool hasToilet)
     {
-        //TODO: AS2 - FindVehiclesByNumberofSeats
+        //TODO: AS2 - FindVehiclesByNumberOfSeats
         throw new NotImplementedException();
     }
 
@@ -107,9 +107,9 @@ public static class AuctionHouse
     /// </summary>
     /// <param name="maxWeight"></param>
     /// <returns> A list of vehicles that contains the vehicles </returns>
-    public static async Task<List<Vehicle>> FindVehiclesByDriversLisence(double maxWeight)
+    public static async Task<List<Vehicle>> FindVehiclesByDriversLicense(double maxWeight)
     {
-        //TODO: AS3 - FindVehiclesByDriversLisence
+        //TODO: AS3 - FindVehiclesByDriversLicense
         throw new NotImplementedException();
     }
 

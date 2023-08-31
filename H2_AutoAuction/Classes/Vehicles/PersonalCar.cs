@@ -13,33 +13,33 @@ public abstract class PersonalCar : Vehicle
         double kmPerLiter,
         FuelTypeEnum fuelType,
         ushort numberOfSeat,
-        TrunkDimentionsStruct trunkDimentions)
+        TrunkDimensionsStruct trunkDimensions)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType)
     {
         NumberOfSeat = numberOfSeat;
-        TrunkDimentions = trunkDimentions;
+        TrunkDimensions = trunkDimensions;
     }
 
     /// <summary>
-    ///     Number of seat proberty
+    ///     Number of seat property
     /// </summary>
     public ushort NumberOfSeat { get; set; }
 
     /// <summary>
-    ///     Trunk dimentions proberty and struct
+    ///     Trunk dimensions property and struct
     /// </summary>
-    public TrunkDimentionsStruct TrunkDimentions { get; set; }
+    public TrunkDimensionsStruct TrunkDimensions { get; set; }
 
     /// <summary>
-    ///     Engine size proberty
-    ///     must be between 0.7 and 10.0 L or cast an out of range exection.
+    ///     Engine size property.
+    ///     must be between 0.7 and 10.0 L or cast an out of range execution.
     /// </summary>
     public override double EngineSize
     {
         get => EngineSize;
         set
         {
-            //TODO: V13 - EngineSize: must be between 0.7 and 10.0 L or cast an out of range exection.
+            //TODO: V13 - EngineSize: must be between 0.7 and 10.0 L or cast an out of range execution.
             throw new NotImplementedException();
 
             EngineSize = value;
@@ -47,7 +47,7 @@ public abstract class PersonalCar : Vehicle
     }
 
     /// <summary>
-    ///     Returns the PersonalCar in a string with relivant information.
+    ///     Returns the PersonalCar in a string with relevant information.
     /// </summary>
     public override string ToString()
     {
@@ -55,9 +55,9 @@ public abstract class PersonalCar : Vehicle
         throw new NotImplementedException();
     }
 
-    public readonly struct TrunkDimentionsStruct
+    public readonly struct TrunkDimensionsStruct
     {
-        public TrunkDimentionsStruct(double height, double width, double depth)
+        public TrunkDimensionsStruct(double height, double width, double depth)
         {
             Height = height;
             Width = width;

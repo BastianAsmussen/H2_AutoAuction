@@ -12,10 +12,10 @@ public abstract class HeavyVehicle : Vehicle
         double engineSize,
         double kmPerLiter,
         FuelTypeEnum fuelType,
-        VehicleDimensionsStruct vehicleDimentions) : base(name, km, registrationNumber, year, newPrice, hasTowbar,
+        VehicleDimensionsStruct vehicleDimensions) : base(name, km, registrationNumber, year, newPrice, hasTowbar,
         engineSize, kmPerLiter, fuelType)
     {
-        VehicleDimensions = vehicleDimentions;
+        VehicleDimensions = vehicleDimensions;
     }
 
     /// <summary>

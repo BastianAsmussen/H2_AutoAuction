@@ -3,24 +3,24 @@
 public interface ISeller
 {
     /// <summary>
-    ///     UserName proberty
+    ///     UserName property.
     /// </summary>
     public string UserName { get; set; }
 
     /// <summary>
-    ///     Balance proberty
+    ///     Balance property.
     /// </summary>
     decimal Balance { get; set; }
 
     /// <summary>
-    ///     Zipcode proberty
+    ///     Zipcode property.
     /// </summary>
     uint Zipcode { get; set; }
 
     /// <summary>
-    ///     Receives a message for the user
+    ///     Receives a message for the user.
     /// </summary>
     /// <param name="message"></param>
-    /// <returns> The message </returns>
-    string ReceiveBidNodification(string message);
+    /// <returns>The message </returns>
+    string ReceiveBidNotification(string message);
 }

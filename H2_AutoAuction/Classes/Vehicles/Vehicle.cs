@@ -2,7 +2,7 @@
 
 public abstract class Vehicle
 {
-    public enum DriversLisenceEnum
+    public enum DriversLicenseEnum
     {
         A,
         B,
@@ -24,7 +24,7 @@ public abstract class Vehicle
     public enum FuelTypeEnum
     {
         Diesel,
-        Benzin
+        Benzine
     }
 
     protected Vehicle(string name,
@@ -51,62 +51,62 @@ public abstract class Vehicle
     }
 
     /// <summary>
-    ///     ID field and proberty
+    ///     ID field and property.
     /// </summary>
-    public uint ID { get; }
+    public uint Id { get; }
 
     /// <summary>
-    ///     Name field and proberty
+    ///     Name field and property.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    ///     Km field and proberty
+    ///     Km field and property.
     /// </summary>
     public double Km { get; set; }
 
     /// <summary>
-    ///     Registration number field and proberty
+    ///     Registration number field and property.
     /// </summary>
     public string RegistrationNumber { get; set; }
 
     /// <summary>
-    ///     Year field and proberty
+    ///     Year field and property.
     /// </summary>
     public int Year { get; set; }
 
     /// <summary>
-    ///     New price field and proberty
+    ///     New price field and property.
     /// </summary>
     public decimal NewPrice { get; set; }
 
     /// <summary>
-    ///     Towbar field and proberty
+    ///     Towbar field and property.
     /// </summary>
     public bool HasTowbar { get; set; }
 
     /// <summary>
-    ///     Engine size field and proberty
+    ///     Engine size field and property.
     /// </summary>
     public virtual double EngineSize { get; set; }
 
     /// <summary>
-    ///     Km per liter field and proberty
+    ///     Km per liter field and property.
     /// </summary>
     public double KmPerLiter { get; set; }
 
     /// <summary>
-    ///     Drivers lisence Enum, field and proberty
+    ///     Drivers license Enum, field and property.
     /// </summary>
-    public DriversLisenceEnum DriversLisence { get; set; }
+    public DriversLicenseEnum DriversLicense { get; set; }
 
     /// <summary>
-    ///     NFuel type Enum, field and proberty
+    ///     NFuel type Enum, field and property.
     /// </summary>
     public FuelTypeEnum FuelType { get; set; }
 
     /// <summary>
-    ///     Engery class Enum, field and proberty
+    ///     Energy class Enum, field and property.
     /// </summary>
     public EnergyClassEnum EnergyClass
     {
@@ -115,7 +115,7 @@ public abstract class Vehicle
     }
 
     /// <summary>
-    ///     Engery class is calculated bassed on year of the car and the efficiancy in km/L.
+    ///     Energy class is calculated based on year of the car and the efficiency in km/L.
     /// </summary>
     /// <returns>
     ///     Returns the energy class in EnergyClassEnum (A,B,C,D)
@@ -127,9 +127,9 @@ public abstract class Vehicle
     }
 
     /// <summary>
-    ///     Returns the vehicle in a string with relivant information.
+    ///     Returns the vehicle in a string with relevant information.
     /// </summary>
-    /// <returns>The Veihcle as a string</returns>
+    /// <returns>The Vehicle as a string</returns>
     public new virtual string ToString()
     {
         //TODO: V3 - Vehicle tostring

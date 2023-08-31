@@ -3,12 +3,12 @@
 public interface IBuyer
 {
     /// <summary>
-    ///     UserName proberty
+    ///     UserName property.
     /// </summary>
     public string UserName { get; set; }
 
     /// <summary>
-    ///     Balance proberty
+    ///     Balance property.
     /// </summary>
     decimal Balance { get; set; }
 }

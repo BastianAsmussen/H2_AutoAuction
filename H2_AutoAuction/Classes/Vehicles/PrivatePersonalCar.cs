@@ -13,10 +13,10 @@ public class PrivatePersonalCar : PersonalCar
         double kmPerLiter,
         FuelTypeEnum fuelType,
         ushort numberOfSeat,
-        TrunkDimentionsStruct trunkDimentions,
+        TrunkDimensionsStruct trunkDimensions,
         bool hasIsofixFittings)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
-            trunkDimentions)
+            trunkDimensions)
     {
         //TODO: V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
         //TODO: V20 - Add to database and set ID
@@ -24,12 +24,12 @@ public class PrivatePersonalCar : PersonalCar
     }
 
     /// <summary>
-    ///     Isofix Fittings proberty
+    ///     Isofix Fittings property.
     /// </summary>
     public bool HasIsofixFittings { get; set; }
 
     /// <summary>
-    ///     Returns the PrivatePersonalCar in a string with relivant information.
+    ///     Returns the PrivatePersonalCar in a string with relevant information.
     /// </summary>
     public override string ToString()
     {

@@ -26,12 +26,12 @@ public abstract class User //TODO: U4 - Implement interfaces
     }
 
     /// <summary>
-    ///     ID proberty
+    ///     ID property.
     /// </summary>
-    public uint ID { get; }
+    public uint Id { get; }
 
     /// <summary>
-    ///     PasswordHash proberty
+    ///     PasswordHash property.
     /// </summary>
     private byte[] PasswordHash { get; }
 
@@ -43,19 +43,19 @@ public abstract class User //TODO: U4 - Implement interfaces
     {
         //TODO: U5 - Implement the rest of validation for password and user name
 
-        HashAlgorithm sha = SHA256.Create(); //Make a HashAlgorithm object for makeing hash computations.
+        HashAlgorithm sha = SHA256.Create(); //Make a HashAlgorithm object for making hash computations.
         var result =
-            sha.ComputeHash(Encoding.ASCII.GetBytes(loginPassword)); //Encodes the password into a hash in a Byte array.
+            sha.ComputeHash(Encoding.ASCII.GetBytes(loginPassword)); // Encodes the password into a hash in a Byte array.
 
         return PasswordHash == result;
 
         throw new NotImplementedException();
     }
 
-    //TODO: U4 - Implement interface proberties and methods.
+    //TODO: U4 - Implement interface properties and methods.
 
     /// <summary>
-    ///     Returns the User in a string with relivant information.
+    ///     Returns the User in a string with relevant information.
     /// </summary>
     /// <returns>...</returns>
     public override string ToString()
