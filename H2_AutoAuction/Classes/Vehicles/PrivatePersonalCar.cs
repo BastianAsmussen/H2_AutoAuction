@@ -16,28 +16,14 @@ public class PrivatePersonalCar : PersonalCar
         TrunkDimensionsStruct trunkDimensions,
         bool hasIsofixFittings)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
-            trunkDimensions)
+            trunkDimensions, DriversLicenseEnum.B)
     {
         // V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
         if (DriversLicense != DriversLicenseEnum.B && !hasIsofixFittings)
-            throw new NotImplementedException("DriversLicense is not of type'B' or Doesn't have IsofixFittings ");
+            throw new ArgumentOutOfRangeException(nameof(hasIsofixFittings), hasIsofixFittings,
+                "Drivers license must be B and hasIsofixFittings must be true!");
 
-        Name = name;
-        Km = km;
-        RegistrationNumber = registrationNumber;
-        Year = year;
-        NewPrice = newPrice;
-        HasTowbar = hasTowbar;
-        EngineSize = engineSize;
-        KmPerLiter = kmPerLiter;
-        FuelType = fuelType;
-        NumberOfSeat = numberOfSeat;
-        TrunkDimensions = trunkDimensions;
-        HasIsofixFittings = hasIsofixFittings;
-
-
-        //TODO: V20 - Add to database and set ID
-        // throw new NotImplementedException();
+        // TODO: V20 - Add to database and set ID
     }
 
     /// <summary>
