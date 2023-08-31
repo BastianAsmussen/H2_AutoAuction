@@ -39,6 +39,6 @@ public class ProfessionalPersonalCar : PersonalCar
     /// <returns>The Veihcle as a string</returns>
     public override string ToString()
     {
-        return $"{base.ToString()} /n HasSafetyBar: {HasSafetyBar}, LoadCapacity: {LoadCapacity}";
+        return $"{base.ToString()} \nHasSafetyBar: {HasSafetyBar} \nLoadCapacity: {LoadCapacity}";
     }
 }
