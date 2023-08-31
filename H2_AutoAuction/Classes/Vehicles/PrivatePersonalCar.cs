@@ -22,7 +22,19 @@ public class PrivatePersonalCar : PersonalCar
         if (DriversLicense != DriversLicenseEnum.B && hasIsofixFittings)
             throw new NotImplementedException(); //Exception thrown if DriversLicense is not 'B'
 
-    
+        Name = name;
+        Km = km;
+        RegistrationNumber = registrationNumber;
+        Year = year;
+        NewPrice = newPrice;
+        HasTowbar = hasTowbar;
+        EngineSize = engineSize;
+        KmPerLiter = kmPerLiter;
+        FuelType = fuelType;
+        NumberOfSeat = numberOfSeat;
+        TrunkDimensions = trunkDimensions;
+        HasIsofixFittings = hasIsofixFittings;
+
         
         //TODO: V20 - Add to database and set ID
         // throw new NotImplementedException();
