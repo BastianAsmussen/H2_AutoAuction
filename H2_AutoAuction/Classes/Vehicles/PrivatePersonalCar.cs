@@ -18,21 +18,9 @@ public class PrivatePersonalCar : PersonalCar
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
             trunkDimensions)
     {
-        // V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
         if (DriversLicense != DriversLicenseEnum.B && !hasIsofixFittings)
             throw new NotImplementedException("DriversLicense is not of type'B' or Doesn't have IsofixFittings ");
-
-        Name = name;
-        Km = km;
-        RegistrationNumber = registrationNumber;
-        Year = year;
-        NewPrice = newPrice;
-        HasTowbar = hasTowbar;
-        EngineSize = engineSize;
-        KmPerLiter = kmPerLiter;
-        FuelType = fuelType;
-        NumberOfSeat = numberOfSeat;
-        TrunkDimensions = trunkDimensions;
+        
         HasIsofixFittings = hasIsofixFittings;
 
 
