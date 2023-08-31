@@ -27,6 +27,7 @@ public abstract class Vehicle
         Benzine
     }
 
+    # region Constructors
     protected Vehicle(string name,
         double km,
         string registrationNumber,
@@ -49,6 +50,9 @@ public abstract class Vehicle
         //TODO: V1 - Constructor for Vehicle
         //TODO: V2 - Add to database and set ID
     }
+
+    # endregion
+
 
     /// <summary>
     ///     ID field and property.
