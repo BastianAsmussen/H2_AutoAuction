@@ -50,6 +50,7 @@ public class PrivatePersonalCar : PersonalCar
     /// </summary>
     public override string ToString()
     {
-        return $"PrivatePersonalCar: {base.ToString()}, HasIsofixFittings: {HasIsofixFittings}";
+        return $"{base.ToString()}\n" +
+               $"HasIsofixFittings: {HasIsofixFittings}\n";
     }
 }
