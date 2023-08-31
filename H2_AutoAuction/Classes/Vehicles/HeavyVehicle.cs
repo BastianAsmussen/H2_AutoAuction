@@ -19,23 +19,24 @@ public abstract class HeavyVehicle : Vehicle
     }
 
     /// <summary>
-    ///     Vehicle dimentions proberty and struct
+    ///     Vehicle dimensions property and struct
     /// </summary>
     public VehicleDimensionsStruct VehicleDimensions { get; set; }
 
     /// <summary>
-    ///     Returns the HeavyVehicle in a string with relivant information.
+    ///     Returns the HeavyVehicle in a string with relevant information.
     /// </summary>
     public override string ToString()
     {
-        //TODO: V6 - ToString for HeavyVehicle
-        throw new NotImplementedException();
+        return @$"
+            {base.ToString()}
+            Vehicle dimensions: {VehicleDimensions}";
     }
 
     /// <summary>
     ///     The dimensions of the vehicle i meters.
     /// </summary>
-    public struct VehicleDimensionsStruct
+    public readonly struct VehicleDimensionsStruct
     {
         public VehicleDimensionsStruct(double height, double weight, double length)
         {
