@@ -35,7 +35,7 @@ public class PrivatePersonalCar : PersonalCar
         TrunkDimensions = trunkDimensions;
         HasIsofixFittings = hasIsofixFittings;
 
-        
+
         //TODO: V20 - Add to database and set ID
         // throw new NotImplementedException();
     }
@@ -50,7 +50,6 @@ public class PrivatePersonalCar : PersonalCar
     /// </summary>
     public override string ToString()
     {
-        //TODO: V21 - ToString for PrivatePersonalCar
-        throw new NotImplementedException();
+        return $"PrivatePersonalCar: {base.ToString()}, HasIsofixFittings: {HasIsofixFittings}";
     }
 }
