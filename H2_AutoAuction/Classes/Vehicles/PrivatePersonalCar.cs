@@ -18,12 +18,13 @@ public class PrivatePersonalCar : PersonalCar
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
             trunkDimensions, DriversLicenseEnum.B)
     {
-        // V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
         if (DriversLicense != DriversLicenseEnum.B && !hasIsofixFittings)
             throw new ArgumentOutOfRangeException(nameof(hasIsofixFittings), hasIsofixFittings,
                 "Drivers license must be B and hasIsofixFittings must be true!");
 
         // TODO: V20 - Add to database and set ID
+        
+        HasIsofixFittings = hasIsofixFittings;
     }
 
     /// <summary>

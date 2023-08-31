@@ -17,7 +17,11 @@ public class ProfessionalPersonalCar : PersonalCar
         double loadCapacity) :
         base(name, km, registrationNumber, year, newPrice, false, engineSize, kmPerLiter, fuelType, numberOfSeat, trunkDimensions, DriversLicenseEnum.B)
     {
-        //TODO: V16 - ProfessionalPersonalCar constructor. DriversLicense should be 'B' if load capasity is below 750 otherwise it should be 'BE'
+        DriversLicense = loadCapacity < 750 ? DriversLicenseEnum.B : DriversLicenseEnum.BE;
+
+        HasSafetyBar = hasSafetyBar;
+        LoadCapacity = loadCapacity;
+
         //TODO: V17 - Add to database and set ID
         throw new NotImplementedException();
     }
