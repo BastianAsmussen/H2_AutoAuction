@@ -19,8 +19,8 @@ public class PrivatePersonalCar : PersonalCar
             trunkDimensions)
     {
         // V19 - PrivatePersonalCar constructor. DriversLicense should be 'B'
-        if (DriversLicense != DriversLicenseEnum.B && hasIsofixFittings)
-            throw new NotImplementedException(); //Exception thrown if DriversLicense is not 'B'
+        if (DriversLicense != DriversLicenseEnum.B && !hasIsofixFittings)
+            throw new NotImplementedException("DriversLicense is not of type'B' or Doesn't have IsofixFittings ");
 
         Name = name;
         Km = km;
