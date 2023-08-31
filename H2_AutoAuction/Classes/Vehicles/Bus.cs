@@ -61,10 +61,9 @@ internal class Bus : HeavyVehicle
     /// </summary>
     public override string ToString()
     {
-        return @$"
-                {base.ToString()}
-                Number of seats: {NumberOfSeats}
-                Number of sleeping spaces: {NumberOfSleepingSpaces}
-                Has toilet: {HasToilet}";
+        return $"{base.ToString()}" +
+               $"NumberOfSeats: {NumberOfSeats}\n" +
+               $"NumberOfSleepingSpaces: {NumberOfSleepingSpaces}\n" +
+               $"HasToilet: {HasToilet}\n";
     }
 }
