@@ -13,9 +13,16 @@ public abstract class PersonalCar : Vehicle
         double kmPerLiter,
         FuelTypeEnum fuelType,
         ushort numberOfSeat,
-        TrunkDimensionsStruct trunkDimensions)
+        TrunkDimensionsStruct trunkDimensions,
+        DriversLicenseEnum driversLicense)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType)
     {
+        // If drivers license is not B or BE, throw an exception.
+        if (driversLicense is not (DriversLicenseEnum.B or DriversLicenseEnum.BE))
+            throw new ArgumentOutOfRangeException(nameof(driversLicense), driversLicense,
+                "Drivers license must be B or BE!");
+
+        DriversLicense = driversLicense;
         NumberOfSeat = numberOfSeat;
         TrunkDimensions = trunkDimensions;
     }
@@ -36,13 +43,13 @@ public abstract class PersonalCar : Vehicle
     /// </summary>
     public override double EngineSize
     {
-        get => EngineSize;
+        get => base.EngineSize;
         set
         {
-            //TODO: V13 - EngineSize: must be between 0.7 and 10.0 L or cast an out of range execution.
-            throw new NotImplementedException();
+            if (value is < 0.7 or > 10.0)
+                throw new ArgumentOutOfRangeException(nameof(value), value, "Engine size must be between 0.7 and 10.0 L!");
 
-            EngineSize = value;
+            base.EngineSize = value;
         }
     }
 

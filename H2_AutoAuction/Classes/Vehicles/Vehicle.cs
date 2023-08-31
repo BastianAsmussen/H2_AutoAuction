@@ -105,6 +105,10 @@ public abstract class Vehicle
         double kmPerLiter,
         FuelTypeEnum fuelType)
     {
+        // If the engine size is not between 0.7 and 10.0 L, throw an exception.
+        if (engineSize is < 0.7 or > 10.0)
+            throw new ArgumentOutOfRangeException(nameof(engineSize), engineSize, "Engine size must be between 0.7 and 10.0 L!");
+
         Name = name;
         Km = km;
         RegistrationNumber = registrationNumber;
@@ -114,7 +118,8 @@ public abstract class Vehicle
         EngineSize = engineSize;
         KmPerLiter = kmPerLiter;
         FuelType = fuelType;
-        //TODO: V2 - Add to database and set ID
+
+        // TODO: V2 - Add to database and set ID
     }
 
     # endregion
