@@ -27,30 +27,6 @@ public abstract class Vehicle
         Benzine
     }
 
-    # region Constructors
-    protected Vehicle(string name,
-        double km,
-        string registrationNumber,
-        int year,
-        decimal newPrice,
-        bool hasTowbar,
-        double engineSize,
-        double kmPerLiter,
-        FuelTypeEnum fuelType)
-    {
-        Name = name;
-        Km = km;
-        RegistrationNumber = registrationNumber;
-        Year = year;
-        NewPrice = newPrice;
-        HasTowbar = hasTowbar;
-        EngineSize = engineSize;
-        KmPerLiter = kmPerLiter;
-        FuelType = fuelType;
-        //TODO: V2 - Add to database and set ID
-    }
-
-    # endregion
 
 
     /// <summary>
@@ -116,6 +92,33 @@ public abstract class Vehicle
         get => EnergyClass;
         set => GetEnergyClass();
     }
+    
+    
+    # region Constructors
+    protected Vehicle(string name,
+        double km,
+        string registrationNumber,
+        int year,
+        decimal newPrice,
+        bool hasTowbar,
+        double engineSize,
+        double kmPerLiter,
+        FuelTypeEnum fuelType)
+    {
+        Name = name;
+        Km = km;
+        RegistrationNumber = registrationNumber;
+        Year = year;
+        NewPrice = newPrice;
+        HasTowbar = hasTowbar;
+        EngineSize = engineSize;
+        KmPerLiter = kmPerLiter;
+        FuelType = fuelType;
+        //TODO: V2 - Add to database and set ID
+    }
+
+    # endregion
+
 
     /// <summary>
     ///     Energy class is calculated based on year of the car and the efficiency in km/L.
