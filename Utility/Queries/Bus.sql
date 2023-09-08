@@ -10,6 +10,7 @@ BEGIN
         NumberOfSeats TINYINT NOT NULL,
         NumberOfWheels TINYINT NOT NULL,
         HasToilet BIT NOT NULL,
+        
         HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicle(Id)
     )
 END
