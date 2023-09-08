@@ -1,7 +1,7 @@
 USE Auction
 GO
 
--- Create the Car table if it doesn't exist
+-- Create the PersonalCar table if it doesn't exist
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCar')
     BEGIN
         CREATE TABLE PersonalCar
@@ -13,19 +13,6 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCar')
         )
     END
 GO
-
--- Create the ProfessionalPersonalCar table if it doesn't exist
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProfessionalPersonalCar')
-BEGIN
-    CREATE TABLE ProfessionalPersonalCar
-    (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
-        HasSafetyBar BIT NOT NULL,
-        LoadCapacity FLOAT NOT NULL,
-        CarId INT NOT NULL FOREIGN KEY REFERENCES Car(Id),
-    )
-END
-GO 
 
 -- Create the PrivatePersonalCar table if it doesn't exist
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivatePersonalCar')
