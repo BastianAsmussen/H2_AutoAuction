@@ -6,7 +6,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicle')
 BEGIN
     CREATE TABLE Vehicle
     (
-        Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
         Name VARCHAR(128) NOT NULL,
         Km FLOAT NOT NULL,
@@ -17,9 +17,9 @@ BEGIN
         EngineSize FLOAT NOT NULL,
         KmPerLiter FLOAT NOT NULL,
         
-        LicenseTypeId TINYINT FOREIGN KEY REFERENCES LicenseType(id),
-        FuelTypeId TINYINT FOREIGN KEY REFERENCES FuelType(id),
-        EnergyClassId TINYINT FOREIGN KEY REFERENCES EnergyClass(id),
+        LicenseTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES LicenseType(id),
+        FuelTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES FuelType(id),
+        EnergyClassId TINYINT NOT NULL FOREIGN KEY REFERENCES EnergyClass(id),
     )
 END
 GO

@@ -6,7 +6,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProfessionalPersonalCar')
 BEGIN
     CREATE TABLE ProfessionalPersonalCar
     (
-        Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
         HasSafetyBar BIT NOT NULL,
         LoadCapacity FLOAT NOT NULL,

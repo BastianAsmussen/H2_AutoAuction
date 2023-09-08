@@ -6,7 +6,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Truck')
    BEGIN
        CREATE TABLE Truck
        (
-           Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+           Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
            HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicle(Id),
        )

@@ -6,9 +6,9 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'LicenseType')
 BEGIN
     CREATE TABLE LicenseType
     (
-        Id TINYINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-        Type varchar(2) NOT NULL,
+        Type VARCHAR(2) NOT NULL,
     )
 END
 GO
