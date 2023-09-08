@@ -1,23 +1,12 @@
 USE Auction
 GO
 
--- Create the LicenseType table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'LicenseType')
-BEGIN
-    CREATE TABLE LicenseType
-    (
-        LicenseTypeID TINYINT IDENTITY(1,1) PRIMARY KEY,
-        Type varchar(2) NOT NULL,
-    )
-END
-GO
-
 -- Create the FuelType table if it does not exist.
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelType')
 BEGIN
     CREATE TABLE FuelType
     (
-        FuelTypeID TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Id TINYINT IDENTITY(1,1) PRIMARY KEY,
         Type varchar(2) NOT NULL,
     )
 END
@@ -28,7 +17,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'EnergyClass')
 BEGIN
     CREATE TABLE EnergyClass
     (
-        EnergyClassID TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Id TINYINT IDENTITY(1,1) PRIMARY KEY,
         Type varchar(2) NOT NULL,
     )
 END
@@ -49,9 +38,9 @@ BEGIN
         EngineSize FLOAT NOT NULL,
         KmPerLiter FLOAT NOT NULL,
         
-        LicenseTypeID TINYINT FOREIGN KEY REFERENCES LicenseType(LicenseTypeID),
-        FuelTypeID TINYINT FOREIGN KEY REFERENCES FuelType(FuelTypeID),
-        EnergyClassID TINYINT FOREIGN KEY REFERENCES EnergyClass(EnergyClassID),
+        LicenseTypeId TINYINT FOREIGN KEY REFERENCES LicenseType(id),
+        FuelTypeId TINYINT FOREIGN KEY REFERENCES FuelType(id),
+        EnergyClassId TINYINT FOREIGN KEY REFERENCES EnergyClass(id),
     )
 END
 GO
