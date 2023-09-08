@@ -1,6 +1,6 @@
 using System.Data.SqlClient;
 using System.Security.Authentication;
-using DotNetEnv;
+using dotenv.net;
 
 namespace Utility;
 
@@ -39,40 +39,41 @@ public class DatabaseManager
     private static (string, uint, string, string, string) GetCredentials()
     {
         // Fetch credentials from file.
-        var credentials = Env.Load(".env");
-        var keyValuePairs = credentials.ToList();
+        DotEnv.Load();
+
+        var env = DotEnv.Read();
 
         // Check if credentials are valid.
-        var host = keyValuePairs.ToDictionary().GetValueOrDefault("SQL_HOST");
-        if (string.IsNullOrEmpty(host))
+        var host = env["SQL_HOST"];
+        if (string.IsNullOrWhiteSpace(host))
         {
             throw new InvalidCredentialException("SQL Host is invalid!");
         }
 
-        var port = keyValuePairs.ToDictionary().GetValueOrDefault("SQL_PORT");
-        if (port == null || string.IsNullOrEmpty(port) || !uint.TryParse(port, out _))
+        var port = env["SQL_PORT"];
+        if (!uint.TryParse(port, out var _))
         {
             throw new InvalidCredentialException("SQL Port is invalid!");
         }
 
-        var database = keyValuePairs.ToDictionary().GetValueOrDefault("SQL_DATABASE");
-        if (string.IsNullOrEmpty(database))
+        var database = env["SQL_DATABASE"];
+        if (string.IsNullOrWhiteSpace(database))
         {
             throw new InvalidCredentialException("SQL Database is invalid!");
         }
 
-        var user = keyValuePairs.ToDictionary().GetValueOrDefault("SQL_USER");
-        if (string.IsNullOrEmpty(user))
+        var username = env["SQL_USERNAME"];
+        if (string.IsNullOrWhiteSpace(username))
         {
             throw new InvalidCredentialException("SQL User is invalid!");
         }
 
-        var password = keyValuePairs.ToDictionary().GetValueOrDefault("SQL_PASSWORD");
-        if (string.IsNullOrEmpty(password))
+        var password = env["SQL_PASSWORD"];
+        if (string.IsNullOrWhiteSpace(password))
         {
             throw new InvalidCredentialException("SQL Password is invalid!");
         }
 
-        return (host, uint.Parse(port), database, user, password);
+        return (host, uint.Parse(port), database, username, password);
     }
 }
