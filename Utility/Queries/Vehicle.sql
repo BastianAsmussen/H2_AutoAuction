@@ -14,6 +14,7 @@ BEGIN
     CREATE TABLE LicenseType
     (
         LicenseTypeID TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Type varchar(2) NOT NULL,
     )
 END
 GO
@@ -24,6 +25,7 @@ BEGIN
     CREATE TABLE FuelType
     (
         FuelTypeID TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Type varchar(2) NOT NULL,
     )
 END
 GO
@@ -34,6 +36,7 @@ BEGIN
     CREATE TABLE EnergyClass
     (
         EnergyClassID TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Type varchar(2) NOT NULL,
     )
 END
 GO
