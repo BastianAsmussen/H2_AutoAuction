@@ -6,7 +6,7 @@ namespace Utility;
 
 public class DatabaseManager
 {
-    private static DatabaseManager? _instance = null;
+    private static DatabaseManager? _instance;
     public static DatabaseManager Instance => _instance ??= new DatabaseManager();
 
     private SqlConnection? _connection;
@@ -39,7 +39,7 @@ public class DatabaseManager
     private static (string, uint, string, string, string) GetCredentials()
     {
         // Fetch credentials from file.
-        var credentials = DotNetEnv.Env.Load(".env");
+        var credentials = Env.Load(".env");
         var keyValuePairs = credentials.ToList();
 
         // Check if credentials are valid.
