@@ -1,4 +1,4 @@
--- Create the trunkDimensions table if it doesn't exist
+-- Create the trunkDimensions table if it doesn't exist.
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Dimensions')
 BEGIN
     CREATE TABLE Dimensions
