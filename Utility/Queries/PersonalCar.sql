@@ -6,7 +6,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCar')
     BEGIN
         CREATE TABLE PersonalCar
         (
-            Id INT IDENTITY(1,1) PRIMARY KEY,
+            Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+
             NumberOfSeats TINYINT NOT NULL,
 
             TrunkDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),

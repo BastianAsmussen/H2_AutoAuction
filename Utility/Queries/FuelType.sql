@@ -6,7 +6,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelType')
 BEGIN
     CREATE TABLE FuelType
     (
-        Id TINYINT IDENTITY(1,1) PRIMARY KEY,
+        Id TINYINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+
         Type varchar(2) NOT NULL,
     )
 END

@@ -6,7 +6,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivatePersonalCar')
     BEGIN
         CREATE TABLE PrivatePersonalCar
         (
-            Id INT IDENTITY(1,1) PRIMARY KEY,
+            Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+
             HasIsofixFittings BIT NOT NULL,
 
             PersonalCarId INT NOT NULL FOREIGN KEY REFERENCES PersonalCar(Id),

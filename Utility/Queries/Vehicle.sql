@@ -6,7 +6,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicle')
 BEGIN
     CREATE TABLE Vehicle
     (
-        Id INT IDENTITY(1,1) PRIMARY KEY,
+        Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+
         Name VARCHAR(128) NOT NULL,
         Km FLOAT NOT NULL,
         RegistrationNumber VARCHAR(7) NOT NULL,
