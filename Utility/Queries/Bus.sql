@@ -6,7 +6,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Bus')
 BEGIN
     CREATE TABLE Bus
     (
-        Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+        Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+        
         NumberOfSeats TINYINT NOT NULL,
         NumberOfWheels TINYINT NOT NULL,
         HasToilet BIT NOT NULL,
