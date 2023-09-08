@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H2_AutoAuction", "H2_AutoAu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{76B02503-312B-4D41-A08C-0742AF09B25A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI", "GUI\GUI.csproj", "{2C59A86A-15BE-49D8-917C-AB68BE9A261B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{76B02503-312B-4D41-A08C-0742AF09B25A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76B02503-312B-4D41-A08C-0742AF09B25A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76B02503-312B-4D41-A08C-0742AF09B25A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C59A86A-15BE-49D8-917C-AB68BE9A261B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C59A86A-15BE-49D8-917C-AB68BE9A261B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C59A86A-15BE-49D8-917C-AB68BE9A261B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C59A86A-15BE-49D8-917C-AB68BE9A261B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
