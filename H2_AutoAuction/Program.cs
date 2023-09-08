@@ -1,6 +1,7 @@
 ﻿using H2_AutoAuction.Classes;
 using H2_AutoAuction.Classes.Vehicles;
 using H2_AutoAuction.Interfaces;
+using Utility;
 
 namespace H2_AutoAuction;
 
@@ -8,6 +9,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        var connection = DatabaseManager.Instance.GetConnection();
+        Console.WriteLine(connection.ToString());
+
         // AuctionHouse objects init
 
         #region init car objects
