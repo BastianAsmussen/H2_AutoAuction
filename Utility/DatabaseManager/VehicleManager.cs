@@ -1,84 +1,11 @@
 using System.Data;
 using System.Data.SqlClient;
-using System.Security.Authentication;
 using Data.Classes.Vehicles;
-using dotenv.net;
 
-namespace Utility;
+namespace Utility.DatabaseManager;
 
-public class DatabaseManager
+public partial class DatabaseManager
 {
-    private static DatabaseManager? _instance;
-    public static DatabaseManager Instance => _instance ??= new DatabaseManager();
-
-    private SqlConnection? _connection;
-
-    private DatabaseManager()
-    {
-        _instance ??= this;
-    }
-
-    public SqlConnection GetConnection()
-    {
-        var credentials = GetCredentials();
-
-        SqlConnectionStringBuilder sb = new()
-        {
-            DataSource = $"{credentials.Item1},{credentials.Item2.ToString()}",
-            InitialCatalog = credentials.Item3,
-            UserID = credentials.Item4,
-            Password = credentials.Item5,
-        };
-
-        var connectionString = sb.ToString();
-
-        _connection = new SqlConnection(connectionString);
-        _connection.Open();
-
-        return _connection;
-    }
-
-    private static (string, uint, string, string, string) GetCredentials()
-    {
-        // Fetch credentials from file.
-        DotEnv.Load();
-
-        var env = DotEnv.Read();
-
-        // Check if credentials are valid.
-        var host = env["SQL_HOST"];
-        if (string.IsNullOrWhiteSpace(host))
-        {
-            throw new InvalidCredentialException("SQL Host is invalid!");
-        }
-
-        var port = env["SQL_PORT"];
-        if (!uint.TryParse(port, out var _))
-        {
-            throw new InvalidCredentialException("SQL Port is invalid!");
-        }
-
-        var database = env["SQL_DATABASE"];
-        if (string.IsNullOrWhiteSpace(database))
-        {
-            throw new InvalidCredentialException("SQL Database is invalid!");
-        }
-
-        var username = env["SQL_USERNAME"];
-        if (string.IsNullOrWhiteSpace(username))
-        {
-            throw new InvalidCredentialException("SQL User is invalid!");
-        }
-
-        var password = env["SQL_PASSWORD"];
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            throw new InvalidCredentialException("SQL Password is invalid!");
-        }
-
-        return (host, uint.Parse(port), database, username, password);
-    }
-
     /// <summary>
     ///     Get the license type from the database by id.
     /// </summary>
@@ -87,7 +14,7 @@ public class DatabaseManager
     /// <exception cref="DataException">If the license type is not found.</exception>
     public LicenseType GetLicenseTypeById(uint id)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
         var query = "SELECT * FROM LicenseTypes WHERE Id = @Id";
 
@@ -251,7 +178,7 @@ public class DatabaseManager
         var registrationNumber = reader.GetString(5);
         var year = (ushort) reader.GetSqlInt16(6).Value;
         var newPrice = reader.GetDecimal(7);
-        var hasTowbar = reader.GetBoolean(8);
+        // var hasTowbar = reader.GetBoolean(8);
         var engineSize = reader.GetDouble(9);
         var kmPerLiter = reader.GetDouble(10);
 
