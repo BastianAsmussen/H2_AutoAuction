@@ -1,4 +1,4 @@
-﻿using H2_AutoAuction.Classes.Vehicles;
+﻿using Data.Classes.Vehicles;
 using H2_AutoAuction.Interfaces;
 
 namespace H2_AutoAuction.Classes;

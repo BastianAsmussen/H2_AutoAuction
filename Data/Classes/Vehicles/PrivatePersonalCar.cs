@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 public class PrivatePersonalCar : PersonalCar
 {
@@ -11,14 +11,14 @@ public class PrivatePersonalCar : PersonalCar
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         ushort numberOfSeat,
         TrunkDimensionsStruct trunkDimensions,
         bool hasIsofixFittings)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
-            trunkDimensions, DriversLicenseEnum.B)
+            trunkDimensions, LicenseType.B)
     {
-        if (DriversLicense != DriversLicenseEnum.B && !hasIsofixFittings)
+        if (DriversLicense != LicenseType.B && !hasIsofixFittings)
             throw new ArgumentOutOfRangeException(nameof(hasIsofixFittings), hasIsofixFittings,
                 "Drivers license must be B and hasIsofixFittings must be true!");
 

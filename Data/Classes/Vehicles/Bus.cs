@@ -1,6 +1,6 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
-internal class Bus : HeavyVehicle
+public class Bus : HeavyVehicle
 {
     public Bus(
         string name,
@@ -11,7 +11,7 @@ internal class Bus : HeavyVehicle
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         VehicleDimensionsStruct vehicleDimensions,
         ushort numberOfSeats,
         ushort numberOfSleepingSpaces,
@@ -21,7 +21,7 @@ internal class Bus : HeavyVehicle
         NumberOfSeats = numberOfSeats;
         NumberOfSleepingSpaces = numberOfSleepingSpaces;
         HasToilet = hasToilet;
-        DriversLicense = HasTowbar ? DriversLicenseEnum.DE : DriversLicenseEnum.D;
+        DriversLicense = HasTowbar ? LicenseType.DE : LicenseType.D;
 
         // TODO: V8 - Add to database and set ID
     }

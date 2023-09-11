@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="../Data/Data.csproj" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
         <PackageReference Include="dotenv.net" Version="3.1.2" />
     </ItemGroup>
-
 </Project>

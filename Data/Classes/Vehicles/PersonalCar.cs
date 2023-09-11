@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 public abstract class PersonalCar : Vehicle
 {
@@ -11,14 +11,14 @@ public abstract class PersonalCar : Vehicle
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         ushort numberOfSeat,
         TrunkDimensionsStruct trunkDimensions,
-        DriversLicenseEnum driversLicense)
+        LicenseType driversLicense)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType)
     {
         // If drivers license is not B or BE, throw an exception.
-        if (driversLicense is not (DriversLicenseEnum.B or DriversLicenseEnum.BE))
+        if (driversLicense is not (LicenseType.B or LicenseType.BE))
             throw new ArgumentOutOfRangeException(nameof(driversLicense), driversLicense,
                 "Drivers license must be B or BE!");
 

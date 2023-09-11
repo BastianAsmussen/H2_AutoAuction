@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 public abstract class HeavyVehicle : Vehicle
 {
@@ -11,7 +11,7 @@ public abstract class HeavyVehicle : Vehicle
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         VehicleDimensionsStruct vehicleDimensions) : base(name, km, registrationNumber, year, newPrice, hasTowbar,
         engineSize, kmPerLiter, fuelType)
     {

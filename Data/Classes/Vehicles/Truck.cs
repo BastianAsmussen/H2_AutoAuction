@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 internal class Truck : HeavyVehicle
 {
@@ -34,13 +34,13 @@ internal class Truck : HeavyVehicle
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         VehicleDimensionsStruct vehicleDimensions,
         double loadCapacity) : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter,
         fuelType, vehicleDimensions)
     {
         LoadCapacity = loadCapacity;
-        DriversLicense = hasTowbar ? DriversLicenseEnum.CE : DriversLicenseEnum.C;
+        DriversLicense = hasTowbar ? LicenseType.CE : LicenseType.C;
         //TODO: V11 - Add to database and set ID
     }
     #endregion

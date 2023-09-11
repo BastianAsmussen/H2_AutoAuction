@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 public class ProfessionalPersonalCar : PersonalCar
 {
@@ -10,13 +10,13 @@ public class ProfessionalPersonalCar : PersonalCar
         decimal newPrice,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType,
+        FuelType fuelType,
         ushort numberOfSeat,
         TrunkDimensionsStruct trunkDimensions,
         bool hasSafetyBar,
         double loadCapacity,
-        DriversLicenseEnum driversLicense) :
-        base(name, km, registrationNumber, year, newPrice, false, engineSize, kmPerLiter, fuelType, numberOfSeat, trunkDimensions, loadCapacity < 750 ? DriversLicenseEnum.B : DriversLicenseEnum.BE)
+        LicenseType driversLicense) :
+        base(name, km, registrationNumber, year, newPrice, false, engineSize, kmPerLiter, fuelType, numberOfSeat, trunkDimensions, loadCapacity < 750 ? LicenseType.B : LicenseType.BE)
     {
         DriversLicense = driversLicense;
         HasSafetyBar = hasSafetyBar;

@@ -1,34 +1,7 @@
-﻿namespace H2_AutoAuction.Classes.Vehicles;
+﻿namespace Data.Classes.Vehicles;
 
 public abstract class Vehicle
 {
-    public enum DriversLicenseEnum
-    {
-        A,
-        B,
-        C,
-        D,
-        BE,
-        CE,
-        DE
-    }
-
-    public enum EnergyClassEnum
-    {
-        A,
-        B,
-        C,
-        D
-    }
-
-    public enum FuelTypeEnum
-    {
-        Diesel,
-        Benzine
-    }
-
-
-
     /// <summary>
     ///     ID field and property.
     /// </summary>
@@ -77,20 +50,20 @@ public abstract class Vehicle
     /// <summary>
     ///     Drivers license Enum, field and property.
     /// </summary>
-    public DriversLicenseEnum DriversLicense { get; set; }
+    public LicenseType DriversLicense { get; set; }
 
     /// <summary>
     ///     NFuel type Enum, field and property.
     /// </summary>
-    public FuelTypeEnum FuelType { get; set; }
+    public static FuelType FuelType { get; set; }
 
     /// <summary>
     ///     Energy class Enum, field and property.
     /// </summary>
-    public EnergyClassEnum EnergyClass
+    public EnergyType EnergyType
     {
-        get => EnergyClass;
-        set => GetEnergyClass();
+        get => EnergyType;
+        set => GetEnergyType();
     }
     
     
@@ -103,7 +76,7 @@ public abstract class Vehicle
         bool hasTowbar,
         double engineSize,
         double kmPerLiter,
-        FuelTypeEnum fuelType)
+        FuelType fuelType)
     {
         // If the engine size is not between 0.7 and 10.0 L, throw an exception.
         if (engineSize is < 0.7 or > 10.0)
@@ -129,55 +102,55 @@ public abstract class Vehicle
     ///     Energy class is calculated based on year of the car and the efficiency in km/L.
     /// </summary>
     /// <returns>
-    ///     Returns the energy class in EnergyClassEnum (A,B,C,D)
+    ///     Returns the energy class in EnergyType (A,B,C,D)
     /// </returns>
-    private EnergyClassEnum GetEnergyClass()
+    private EnergyType GetEnergyType()
     {
         // If the car is older than 2010, the energy class is calculated differently.
         if (Year < 2010)
         {
             // If the car is diesel, the energy class is calculated differently.
-            if (FuelType == FuelTypeEnum.Diesel)
+            if (FuelType == FuelType.Diesel)
             {
                 return KmPerLiter switch
                 {
-                    >= 23 => EnergyClassEnum.A,
-                    >= 18 => EnergyClassEnum.B,
-                    >= 13 => EnergyClassEnum.C,
-                    _ => EnergyClassEnum.D
+                    >= 23 => EnergyType.A,
+                    >= 18 => EnergyType.B,
+                    >= 13 => EnergyType.C,
+                    _ => EnergyType.D
                 };
             }
             else
             {
                 return KmPerLiter switch
                 {
-                    >= 18 => EnergyClassEnum.A,
-                    >= 14 => EnergyClassEnum.B,
-                    >= 10 => EnergyClassEnum.C,
-                    _ => EnergyClassEnum.D
+                    >= 18 => EnergyType.A,
+                    >= 14 => EnergyType.B,
+                    >= 10 => EnergyType.C,
+                    _ => EnergyType.D
                 };
             }
         }
         else
         {
-            if (FuelType == FuelTypeEnum.Diesel)
+            if (FuelType == FuelType.Diesel)
             {
                 return KmPerLiter switch
                 {
-                    >= 25 => EnergyClassEnum.A,
-                    >= 20 => EnergyClassEnum.B,
-                    >= 15 => EnergyClassEnum.C,
-                    _ => EnergyClassEnum.D
+                    >= 25 => EnergyType.A,
+                    >= 20 => EnergyType.B,
+                    >= 15 => EnergyType.C,
+                    _ => EnergyType.D
                 };
             }
             else
             {
                 return KmPerLiter switch
                 {
-                    >= 20 => EnergyClassEnum.A,
-                    >= 16 => EnergyClassEnum.B,
-                    >= 12 => EnergyClassEnum.C,
-                    _ => EnergyClassEnum.D
+                    >= 20 => EnergyType.A,
+                    >= 16 => EnergyType.B,
+                    >= 12 => EnergyType.C,
+                    _ => EnergyType.D
                 };
             }
         }
@@ -199,6 +172,6 @@ public abstract class Vehicle
                $"Km per liter: {KmPerLiter}\n" +
                $"Drivers license: {DriversLicense}\n" +
                $"Fuel type: {FuelType}\n" +
-               $"Energy class: {EnergyClass}\n";
+               $"Energy type: {EnergyType}\n";
     }
 }
