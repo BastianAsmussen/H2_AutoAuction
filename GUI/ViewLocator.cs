@@ -4,7 +4,7 @@ using Avalonia.Controls.Templates;
 using GUI.ViewModels;
 
 namespace GUI;
-
+#pragma warning disable
 public class ViewLocator : IDataTemplate
 {
     public Control Build(object data)
