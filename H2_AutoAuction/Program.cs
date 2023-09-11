@@ -2,7 +2,7 @@
 using H2_AutoAuction.Classes;
 using H2_AutoAuction.Interfaces;
 
-using Utility;
+using Utility.DatabaseManager;
 
 namespace H2_AutoAuction;
 
@@ -11,9 +11,9 @@ internal class Program
     private static void Main(string[] args)
     {
         var databaseManager = DatabaseManager.Instance;
-        var bussy = databaseManager.GetBusById(1);
+        var buss = databaseManager.GetBusById(1);
 
-        Console.WriteLine(bussy.ToString());
+        Console.WriteLine(buss.ToString());
 
         // AuctionHouse objects init
 
