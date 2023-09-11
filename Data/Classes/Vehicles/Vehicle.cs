@@ -62,8 +62,8 @@ public abstract class Vehicle
     /// </summary>
     public EnergyType EnergyType
     {
-        get => EnergyType;
-        set => GetEnergyType();
+        get => GetEnergyType();
+        set => EnergyType = value;
     }
     
     
