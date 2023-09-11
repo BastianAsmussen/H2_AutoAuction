@@ -7,7 +7,7 @@ public class PrivateUser : User
     {
         //TODO: U10 - Set constructor
         //TODO: U11 - Add to database and set ID
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     public uint CprNumber { get; set; }

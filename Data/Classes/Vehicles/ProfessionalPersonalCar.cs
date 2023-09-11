@@ -22,8 +22,8 @@ public class ProfessionalPersonalCar : PersonalCar
         HasSafetyBar = hasSafetyBar;
         LoadCapacity = loadCapacity;
 
-        //TODO: V17 - Add to database and set ID
-        throw new NotImplementedException();
+        // TODO: V17 - Add to database and set ID
+        // throw new NotImplementedException();
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ public class CorporateUser : User
     {
         //TODO: U7 - Set constructor
         //TODO: U8 - Add to database and set ID
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     public uint CvrNumber { get; set; }
