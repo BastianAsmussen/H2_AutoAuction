@@ -1,7 +1,7 @@
 USE Auction
 GO
 
--- Create the trunkDimensions table if it doesn't exist.
+-- Create the Dimensions table if it doesn't exist.
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Dimensions')
 BEGIN
     CREATE TABLE Dimensions

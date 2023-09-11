@@ -1,17 +1,17 @@
 USE Auction
 GO
 
--- Create the PersonalCar table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCar')
+-- Create the PersonalCars table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCars')
     BEGIN
-        CREATE TABLE PersonalCar
+        CREATE TABLE PersonalCars
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             NumberOfSeats TINYINT NOT NULL,
 
             TrunkDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
-            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicle(Id),
+            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
 GO
