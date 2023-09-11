@@ -10,8 +10,10 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var connection = DatabaseManager.Instance.GetConnection();
-        Console.WriteLine(connection.ToString());
+        var databaseManager = DatabaseManager.Instance;
+        var bussy = databaseManager.GetBusById(1);
+
+        Console.WriteLine(bussy.ToString());
 
         // AuctionHouse objects init
 
