@@ -8,7 +8,7 @@ BEGIN
     (
         Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-        Type VARCHAR(2) NOT NULL,
+        Type VARCHAR(8) NOT NULL,
     )
 END
 GO
