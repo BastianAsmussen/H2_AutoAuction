@@ -1,5 +1,7 @@
+using System.Data;
 using System.Data.SqlClient;
 using System.Security.Authentication;
+using Data.Classes.Vehicles;
 using dotenv.net;
 
 namespace Utility;
@@ -76,4 +78,81 @@ public class DatabaseManager
 
         return (host, uint.Parse(port), database, username, password);
     }
+
+    public LicenseType GetLicenseType(uint id)
+    {
+        var connection = GetConnection();
+
+        var query = "SELECT * FROM LicenseTypes WHERE Id = @Id";
+
+        var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
+        {
+            throw new DataException("License type not found!");
+        }
+
+        reader.Read();
+
+        var licenseType = (LicenseType) reader.GetInt32(0);
+
+        reader.Close();
+
+        return licenseType;
+    }
+
+    public FuelType GetFuelType(uint id)
+    {
+        var connection = GetConnection();
+
+        var query = "SELECT * FROM FuelTypes WHERE Id = @Id";
+
+        var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
+        {
+            throw new DataException("Fuel type not found!");
+        }
+
+        reader.Read();
+
+        var fuelType = (FuelType) reader.GetInt32(0);
+
+        reader.Close();
+
+        return fuelType;
+    }
+
+    public EnergyType GetEnergyType(uint id)
+    {
+        var connection = GetConnection();
+
+        var query = "SELECT * FROM EnergyTypes WHERE Id = @Id";
+
+        var command = new SqlCommand(query, connection);
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
+        {
+            throw new DataException("Energy type not found!");
+        }
+
+        reader.Read();
+
+        var energyType = (EnergyType) reader.GetInt32(0);
+
+        reader.Close();
+
+        return energyType;
+    }
+
+
 }
