@@ -17,8 +17,8 @@ internal class Program
 
         #region init car objects
 
-        var td = new PersonalCar.TrunkDimensionsStruct(14.0, 10.0, 16.0);
-        var vd = new HeavyVehicle.VehicleDimensionsStruct(214.0, 2.59, 12.9);
+        var td = new Dimensions(14.0, 10.0, 16.0);
+        var vd = new Dimensions(214.0, 2.59, 12.9);
 
         var privateCar1 = new PrivatePersonalCar("Some car brand", 300.0, "DF12745", 2009, 10000M, false, 10.0, 20.0,
             FuelType.Diesel, 3, td, true);

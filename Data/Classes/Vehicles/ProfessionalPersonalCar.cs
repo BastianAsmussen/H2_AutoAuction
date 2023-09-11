@@ -12,11 +12,11 @@ public class ProfessionalPersonalCar : PersonalCar
         double kmPerLiter,
         FuelType fuelType,
         ushort numberOfSeat,
-        TrunkDimensionsStruct trunkDimensions,
+        Dimensions trunkDimensionses,
         bool hasSafetyBar,
         double loadCapacity,
         LicenseType driversLicense) :
-        base(name, km, registrationNumber, year, newPrice, false, engineSize, kmPerLiter, fuelType, numberOfSeat, trunkDimensions, loadCapacity < 750 ? LicenseType.B : LicenseType.BE)
+        base(name, km, registrationNumber, year, newPrice, false, engineSize, kmPerLiter, fuelType, numberOfSeat, trunkDimensionses, loadCapacity < 750 ? LicenseType.B : LicenseType.BE)
     {
         DriversLicense = driversLicense;
         HasSafetyBar = hasSafetyBar;

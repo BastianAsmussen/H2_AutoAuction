@@ -12,11 +12,11 @@ public class Bus : HeavyVehicle
         double engineSize,
         double kmPerLiter,
         FuelType fuelType,
-        VehicleDimensionsStruct vehicleDimensions,
+        Dimensions vehicleDimensionses,
         ushort numberOfSeats,
         ushort numberOfSleepingSpaces,
         bool hasToilet) : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter,
-        fuelType, vehicleDimensions)
+        fuelType, vehicleDimensionses)
     {
         NumberOfSeats = numberOfSeats;
         NumberOfSleepingSpaces = numberOfSleepingSpaces;

@@ -13,10 +13,10 @@ public class PrivatePersonalCar : PersonalCar
         double kmPerLiter,
         FuelType fuelType,
         ushort numberOfSeat,
-        TrunkDimensionsStruct trunkDimensions,
+        Dimensions trunkDimensionses,
         bool hasIsofixFittings)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, numberOfSeat,
-            trunkDimensions, LicenseType.B)
+            trunkDimensionses, LicenseType.B)
     {
         if (DriversLicense != LicenseType.B && !hasIsofixFittings)
             throw new ArgumentOutOfRangeException(nameof(hasIsofixFittings), hasIsofixFittings,
