@@ -38,7 +38,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelTypes')
         (
             Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            Type VARCHAR(2) NOT NULL,
+            Type VARCHAR(8) NOT NULL,
         )
     END
 GO
@@ -102,7 +102,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCars')
 
             NumberOfSeats TINYINT NOT NULL,
 
-            TrunkDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
+            TrunkDimensionsId INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
             VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
@@ -122,20 +122,6 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProfessionalPersonalCars')
         )
     END
 GO
-
--- Create the HeavyVehicles table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'HeavyVehicles')
-    BEGIN
-        CREATE TABLE HeavyVehicles
-        (
-            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-
-            VehicleDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
-            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
-        )
-    END
-GO
-
 
 -- Create the PrivatePersonalCars table if it doesn't exist.
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivatePersonalCars')
@@ -158,7 +144,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'HeavyVehicles')
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            VehicleDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
+            VehicleDimensionsId INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
             VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
@@ -170,6 +156,8 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Trucks')
         CREATE TABLE Trucks
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+
+            LoadCapacity FLOAT NOT NULL,
 
             HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id),
         )
@@ -184,7 +172,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Buses')
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             NumberOfSeats TINYINT NOT NULL,
-            NumberOfWheels TINYINT NOT NULL,
+            NumberOfSleepingSpaces TINYINT NOT NULL,
             HasToilet BIT NOT NULL,
 
             HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id)
