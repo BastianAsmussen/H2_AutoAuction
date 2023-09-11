@@ -2,21 +2,21 @@ USE master
 GO
 
 -- Drop the Auction database if it exists.
-IF EXISTS (SELECT * FROM sys.databases WHERE name = 'Auction')
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'Vehicle')
     BEGIN
-        ALTER DATABASE Auction SET SINGLE_USER WITH ROLLBACK IMMEDIATE
-        DROP DATABASE Auction
+        ALTER DATABASE Vehicle SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+        DROP DATABASE Vehicle
     END
 GO
 
 -- Create the Auction database if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Auction')
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Vehicle')
     BEGIN
-        CREATE DATABASE Auction
+        CREATE DATABASE Vehicle
     END
 GO
 
-USE Auction
+USE Vehicle
 GO
 
 -- Create the LicenseTypes table if it does not exist.

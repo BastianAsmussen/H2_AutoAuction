@@ -1,4 +1,4 @@
-USE Auction
+USE Vehicle
 GO
 
 -- Create the Buses table if it doesn't exist.
