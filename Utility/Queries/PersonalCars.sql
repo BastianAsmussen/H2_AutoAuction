@@ -10,7 +10,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCars')
 
             NumberOfSeats TINYINT NOT NULL,
 
-            TrunkDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
+            TrunkDimensionsId INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
             VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
