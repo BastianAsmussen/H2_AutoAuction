@@ -22,7 +22,7 @@ public abstract class User //TODO: U4 - Implement interfaces
         var result = sha.ComputeHash(Encoding.ASCII.GetBytes(password));
         PasswordHash = result;
 
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public abstract class User //TODO: U4 - Implement interfaces
 
         return PasswordHash == result;
 
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
     }
 
     //TODO: U4 - Implement interface properties and methods.
@@ -61,6 +61,7 @@ public abstract class User //TODO: U4 - Implement interfaces
     public override string ToString()
     {
         //TODO: U3 - ToString for User
-        throw new NotImplementedException();
+        // throw new NotImplementedException();
+        return "IMPLEMENT ME!";
     }
 }

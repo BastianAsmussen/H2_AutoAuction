@@ -19,10 +19,10 @@ GO
 USE Auction
 GO
 
--- Create the LicenseType table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'LicenseType')
+-- Create the LicenseTypes table if it does not exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'LicenseTypes')
     BEGIN
-        CREATE TABLE LicenseType
+        CREATE TABLE LicenseTypes
         (
             Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
@@ -31,10 +31,23 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'LicenseType')
     END
 GO
 
--- Create the FuelType table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelType')
+-- Create the FuelTypes table if it does not exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelTypes')
     BEGIN
-        CREATE TABLE FuelType
+        CREATE TABLE FuelTypes
+        (
+            Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+
+            Type VARCHAR(8) NOT NULL,
+        )
+    END
+GO
+
+
+-- Create the EnergyTypes table if it does not exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'EnergyTypes')
+    BEGIN
+        CREATE TABLE EnergyTypes
         (
             Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
@@ -43,23 +56,10 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'FuelType')
     END
 GO
 
-
--- Create the EnergyClass table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'EnergyClass')
+-- Create the Vehicles table if it does not exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicles')
     BEGIN
-        CREATE TABLE EnergyClass
-        (
-            Id TINYINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-
-            Type VARCHAR(2) NOT NULL,
-        )
-    END
-GO
-
--- Create the Vehicle table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicle')
-    BEGIN
-        CREATE TABLE Vehicle
+        CREATE TABLE Vehicles
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
@@ -72,9 +72,9 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicle')
             EngineSize FLOAT NOT NULL,
             KmPerLiter FLOAT NOT NULL,
 
-            LicenseTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES LicenseType(id),
-            FuelTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES FuelType(id),
-            EnergyClassId TINYINT NOT NULL FOREIGN KEY REFERENCES EnergyClass(id),
+            LicenseTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES LicenseTypes(id),
+            FuelTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES FuelTypes(id),
+            EnergyTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES EnergyTypes(id),
         )
     END
 GO
@@ -93,101 +93,89 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Dimensions')
     END
 GO
 
--- Create the PersonalCar table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCar')
+-- Create the PersonalCars table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PersonalCars')
     BEGIN
-        CREATE TABLE PersonalCar
+        CREATE TABLE PersonalCars
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             NumberOfSeats TINYINT NOT NULL,
 
-            TrunkDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
-            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicle(Id),
+            TrunkDimensionsId INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
+            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
 GO
 
--- Create the ProfessionalPersonalCar table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProfessionalPersonalCar')
+-- Create the ProfessionalPersonalCars table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ProfessionalPersonalCars')
     BEGIN
-        CREATE TABLE ProfessionalPersonalCar
+        CREATE TABLE ProfessionalPersonalCars
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             HasSafetyBar BIT NOT NULL,
             LoadCapacity FLOAT NOT NULL,
 
-            PersonalCarId INT NOT NULL FOREIGN KEY REFERENCES PersonalCar(Id),
+            PersonalCarId INT NOT NULL FOREIGN KEY REFERENCES PersonalCars(Id),
         )
     END
 GO
 
--- Create the HeavyVehicle table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'HeavyVehicle')
+-- Create the PrivatePersonalCars table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivatePersonalCars')
     BEGIN
-        CREATE TABLE HeavyVehicle
-        (
-            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-
-            VehicleDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
-            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicle(Id),
-        )
-    END
-GO
-
-
--- Create the PrivatePersonalCar table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivatePersonalCar')
-    BEGIN
-        CREATE TABLE PrivatePersonalCar
+        CREATE TABLE PrivatePersonalCars
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             HasIsofixFittings BIT NOT NULL,
 
-            PersonalCarId INT NOT NULL FOREIGN KEY REFERENCES PersonalCar(Id),
+            PersonalCarId INT NOT NULL FOREIGN KEY REFERENCES PersonalCars(Id),
         )
     END
 GO
 
--- Create the HeavyVehicle table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'HeavyVehicle')
+-- Create the HeavyVehicles table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'HeavyVehicles')
     BEGIN
-        CREATE TABLE HeavyVehicle
+        CREATE TABLE HeavyVehicles
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            VehicleDimensions INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
-            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicle(Id),
+            VehicleDimensionsId INT NOT NULL FOREIGN KEY REFERENCES Dimensions(Id),
+            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
         )
     END
 GO
 
--- Create the Truck table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Truck')
+-- Create the Trucks table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Trucks')
     BEGIN
-        CREATE TABLE Truck
+        CREATE TABLE Trucks
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicle(Id),
+            LoadCapacity FLOAT NOT NULL,
+
+            HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id),
         )
     END
 GO
 
--- Create the Bus table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Bus')
+-- Create the Buses table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Buses')
     BEGIN
-        CREATE TABLE Bus
+        CREATE TABLE Buses
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             NumberOfSeats TINYINT NOT NULL,
-            NumberOfWheels TINYINT NOT NULL,
+            NumberOfSleepingSpaces TINYINT NOT NULL,
             HasToilet BIT NOT NULL,
 
-            HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicle(Id)
+            HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id)
         )
     END
 GO

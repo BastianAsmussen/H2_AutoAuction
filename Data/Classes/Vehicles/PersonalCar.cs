@@ -13,7 +13,7 @@ public abstract class PersonalCar : Vehicle
         double kmPerLiter,
         FuelType fuelType,
         ushort numberOfSeat,
-        TrunkDimensionsStruct trunkDimensions,
+        Dimensions trunkDimensionses,
         LicenseType driversLicense)
         : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType)
     {
@@ -24,7 +24,7 @@ public abstract class PersonalCar : Vehicle
 
         DriversLicense = driversLicense;
         NumberOfSeat = numberOfSeat;
-        TrunkDimensions = trunkDimensions;
+        TrunkDimensionses = trunkDimensionses;
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public abstract class PersonalCar : Vehicle
     /// <summary>
     ///     Trunk dimensions property and struct
     /// </summary>
-    public TrunkDimensionsStruct TrunkDimensions { get; set; }
+    public Dimensions TrunkDimensionses { get; set; }
 
     /// <summary>
     ///     Engine size property.
@@ -60,25 +60,6 @@ public abstract class PersonalCar : Vehicle
     {
         return $"{base.ToString()}\n" +
                $"NumberOfSeat: {NumberOfSeat}\n" +
-               $"TrunkDimensions: {TrunkDimensions.ToString()}";
-    }
-
-    public readonly struct TrunkDimensionsStruct
-    {
-        public TrunkDimensionsStruct(double height, double width, double depth)
-        {
-            Height = height;
-            Width = width;
-            Depth = depth;
-        }
-
-        public double Height { get; }
-        public double Width { get; }
-        public double Depth { get; }
-
-        public override string ToString()
-        {
-            return $"(Height: {Height}, Width: {Width}, Depth: {Depth})";
-        }
+               $"TrunkDimensions: {TrunkDimensionses}\n";
     }
 }

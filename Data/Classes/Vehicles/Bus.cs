@@ -12,11 +12,11 @@ public class Bus : HeavyVehicle
         double engineSize,
         double kmPerLiter,
         FuelType fuelType,
-        VehicleDimensionsStruct vehicleDimensions,
-        ushort numberOfSeats,
-        ushort numberOfSleepingSpaces,
+        Dimensions vehicleDimensionses,
+        byte numberOfSeats,
+        byte numberOfSleepingSpaces,
         bool hasToilet) : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter,
-        fuelType, vehicleDimensions)
+        fuelType, vehicleDimensionses)
     {
         NumberOfSeats = numberOfSeats;
         NumberOfSleepingSpaces = numberOfSleepingSpaces;
@@ -45,12 +45,12 @@ public class Bus : HeavyVehicle
     /// <summary>
     ///     NumberOfSeats property.
     /// </summary>
-    public ushort NumberOfSeats { get; set; }
+    public byte NumberOfSeats { get; set; }
 
     /// <summary>
-    ///     NumberOfSeats property.
+    ///     NumberOfSleepingSpaces property.
     /// </summary>
-    public ushort NumberOfSleepingSpaces { get; set; }
+    public byte NumberOfSleepingSpaces { get; set; }
 
     /// <summary>
     ///     Towbar property.

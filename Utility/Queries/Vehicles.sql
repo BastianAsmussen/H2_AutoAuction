@@ -2,9 +2,9 @@ USE Auction
 GO
 
 -- Create the Vehicle table if it does not exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicle')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Vehicles')
 BEGIN
-    CREATE TABLE Vehicle
+    CREATE TABLE Vehicles
     (
         Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
@@ -17,9 +17,9 @@ BEGIN
         EngineSize FLOAT NOT NULL,
         KmPerLiter FLOAT NOT NULL,
         
-        LicenseTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES LicenseType(id),
-        FuelTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES FuelType(id),
-        EnergyClassId TINYINT NOT NULL FOREIGN KEY REFERENCES EnergyClass(id),
+        LicenseTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES LicenseTypes(id),
+        FuelTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES FuelTypes(id),
+        EnergyTypeId TINYINT NOT NULL FOREIGN KEY REFERENCES EnergyTypes(id),
     )
 END
 GO

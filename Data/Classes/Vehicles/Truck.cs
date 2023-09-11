@@ -1,6 +1,6 @@
 ﻿namespace Data.Classes.Vehicles;
 
-internal class Truck : HeavyVehicle
+public class Truck : HeavyVehicle
 {
     /// <summary>
     ///     Engine size proberty
@@ -35,9 +35,9 @@ internal class Truck : HeavyVehicle
         double engineSize,
         double kmPerLiter,
         FuelType fuelType,
-        VehicleDimensionsStruct vehicleDimensions,
+        Dimensions vehicleDimensionses,
         double loadCapacity) : base(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter,
-        fuelType, vehicleDimensions)
+        fuelType, vehicleDimensionses)
     {
         LoadCapacity = loadCapacity;
         DriversLicense = hasTowbar ? LicenseType.CE : LicenseType.C;
