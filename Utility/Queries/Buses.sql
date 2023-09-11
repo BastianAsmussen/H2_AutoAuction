@@ -9,7 +9,7 @@ BEGIN
         Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
         
         NumberOfSeats TINYINT NOT NULL,
-        NumberOfWheels TINYINT NOT NULL,
+        NumberOfSleepingSpaces TINYINT NOT NULL,
         HasToilet BIT NOT NULL,
         
         HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id)
