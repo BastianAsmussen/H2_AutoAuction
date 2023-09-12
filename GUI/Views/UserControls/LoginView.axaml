@@ -25,16 +25,16 @@
             <!--  UserName Input  -->
             <TextBox
                 FontSize="22"
-                Foreground="White"
+                Foreground="Black"
                 Margin="0,20,0,0"
                 Text="{Binding UserName}"
                 Width="350" />
 
-            <!--  UserName Input  -->
+            <!--  Password Input  -->
             <StackPanel>
                 <TextBox
                     FontSize="22"
-                    Foreground="White"
+                    Foreground="Black"
                     Margin="0,20,0,0"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
