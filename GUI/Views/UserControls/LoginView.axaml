@@ -4,17 +4,74 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.LoginView"
+    x:DataType="vm:LoginViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Label
-            Content="Log in"
-            FontSize="44"
-            Foreground="White" />
 
-        <TextBlock />
+    <UserControl.DataContext>
+        <vm:LoginViewModel />
+    </UserControl.DataContext>
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel>
+            <Label
+                Content="Log in"
+                FontSize="44"
+                Foreground="White" />
+
+            <!--  UserName Input  -->
+            <TextBox
+                FontSize="22"
+                Foreground="White"
+                Margin="0,20,0,0"
+                Text="{Binding UserName}"
+                Width="350" />
+
+            <!--  UserName Input  -->
+            <StackPanel>
+                <TextBox
+                    FontSize="22"
+                    Foreground="White"
+                    Margin="0,20,0,0"
+                    PasswordChar="*"
+                    Text="{Binding PassWord}"
+                    Width="350" />
+
+                <!--  Show pass Button  -->
+                <Button IsEnabled="{Binding Path=BtnLoginEnabled}">
+                    <Image />
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label
+                    Content="Not registered?  "
+                    FontSize="22"
+                    Foreground="White" />
+
+                <Button Background="Transparent" Foreground="Transparent">
+                    <Label
+                        Content="Create user"
+                        FontSize="22"
+                        Foreground="Green" />
+                </Button>
+
+            </StackPanel>
+
+            <Button
+                HorizontalAlignment="Right"
+                IsEnabled="{Binding Path=BtnLoginEnabled}"
+                VerticalAlignment="Bottom">
+
+                <Label
+                    Content="Login"
+                    FontSize="23"
+                    Foreground="White" />
+            </Button>
+        </StackPanel>
 
     </Grid>
 </UserControl>
