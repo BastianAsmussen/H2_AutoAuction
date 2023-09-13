@@ -8,7 +8,7 @@ public partial class ContentArea : UserControl
 {
     private static ContentArea? _instance;
 
-    private ContentArea()
+    public ContentArea()
     {
         InitializeComponent();
         _instance ??= this;

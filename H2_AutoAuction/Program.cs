@@ -1,7 +1,6 @@
-﻿using Data.Classes.Vehicles;
-using H2_AutoAuction.Classes;
-using H2_AutoAuction.Interfaces;
-
+﻿using Data.Classes;
+using Data.Classes.Vehicles;
+using Data.Interfaces;
 using Utility.DatabaseManager;
 
 namespace H2_AutoAuction;

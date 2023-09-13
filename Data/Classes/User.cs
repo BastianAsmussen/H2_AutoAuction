@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace H2_AutoAuction.Classes;
+namespace Data.Classes;
 /*
  * Domæne model
 interface polymorfi via interface

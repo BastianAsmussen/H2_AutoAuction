@@ -12,12 +12,19 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utilities="clr-namespace:GUI.Utilities"
+    xmlns:vc="clr-namespace:GUI.Views.UserControls"
+    xmlns:views="clr-namespace:GUI.Views"
     xmlns:vm="using:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <Grid Background="Red" Margin="0,32,0,0" />
+
+    <UserControl Background="#1b1827" Margin="0,32,0,0">
+        <utilities:ContentArea />
+    </UserControl>
+
 
 </Window>

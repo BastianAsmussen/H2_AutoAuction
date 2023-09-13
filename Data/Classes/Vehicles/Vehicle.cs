@@ -65,8 +65,8 @@ public abstract class Vehicle
         get => GetEnergyType();
         set => EnergyType = value;
     }
-    
-    
+
+
     # region Constructors
     protected Vehicle(string name,
         double km,

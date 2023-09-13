@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Classes;
+﻿namespace Data.Classes;
 
 public class PrivateUser : User
 {
