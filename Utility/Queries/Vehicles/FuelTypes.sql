@@ -1,4 +1,4 @@
-USE Auction
+USE Vehicle
 GO
 
 -- Create the FuelTypes table if it does not exist.

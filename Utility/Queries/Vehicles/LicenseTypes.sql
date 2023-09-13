@@ -1,4 +1,4 @@
-USE Auction
+USE Vehicle
 GO
 
 -- Create the LicenseTypes table if it does not exist.

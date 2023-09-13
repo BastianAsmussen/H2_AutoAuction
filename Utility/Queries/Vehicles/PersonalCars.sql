@@ -1,4 +1,4 @@
-USE Auction
+USE Vehicle
 GO
 
 -- Create the PersonalCars table if it doesn't exist.
