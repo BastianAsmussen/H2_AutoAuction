@@ -46,7 +46,6 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
     public ICommand SignUpCommand { get; }
-    public ReactiveCommand<TextBox, Unit> ShowHidePassCommand { get; }
 
     #endregion
 
@@ -54,18 +53,8 @@ public class LoginViewModel : ViewModelBase
     {
         LoginCommand = ReactiveCommand.Create(GoToHomeScreen);
         SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
-        ShowHidePassCommand = ReactiveCommand.Create<TextBox>(ShowHidePassWord);
 
         ValidateInput();
-    }
-
-
-    private void ShowHidePassWord(TextBox sender)
-    {
-        if (sender is TextBox t)
-        {
-            t.PasswordChar = '\0';
-        }
     }
 
     private void GoToCreateScreen()
@@ -77,7 +66,7 @@ public class LoginViewModel : ViewModelBase
     {
         if (PassWord != "password")
         {
-            Utilities.UserInstance.SetUser(new DemoUser($"{UserName}", 213, 9000));
+            UserInstance.SetUser(new DemoUser($"{UserName}", 213, 9000));
             ContentArea.Navigate(new HomeScreenView());
         }
         else
@@ -86,7 +75,9 @@ public class LoginViewModel : ViewModelBase
         }
     }
 
-
+    /// <summary>
+    /// If the user has entered a username and password, the login button will be enabled.
+    /// </summary>
     private void ValidateInput()
     {
         this.WhenAnyValue(
