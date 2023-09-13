@@ -1,0 +1,80 @@
+﻿<UserControl
+    Background="#1b1827"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="GUI.Views.UserControls.CreateUserView"
+    x:DataType="vm:CreateUserViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.DataContext>
+        <vm:CreateUserViewModel />
+    </UserControl.DataContext>
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel>
+            <Label
+                Content="Create user"
+                FontSize="40"
+                Foreground="White" />
+
+            <!--  UserName Input  -->
+            <TextBox
+                FontSize="22"
+                Foreground="Black"
+                Margin="0,20,0,0"
+                Text="{Binding UserName}"
+                Watermark="Username"
+                Width="350" />
+
+            <!--  Password Input  -->
+            <StackPanel>
+                <TextBox
+                    FontSize="22"
+                    Foreground="Black"
+                    Margin="0,20,0,0"
+                    PasswordChar="*"
+                    Text="{Binding PassWord}"
+                    Watermark="Password"
+                    Width="350" />
+
+                <!--  Show pass Button  -->
+                <!-- <Button IsEnabled="{Binding Path=BtnLoginEnabled}"> -->
+                <!--     <Image /> -->
+                <!-- </Button> -->
+            </StackPanel>
+
+            <TextBox
+                FontSize="22"
+                Foreground="Black"
+                Margin="0,20,0,0"
+                PasswordChar="*"
+                Text="{Binding RPassWord}"
+                Watermark="Password again"
+                Width="350" />
+
+            <StackPanel Orientation="Horizontal">
+                <Button HorizontalAlignment="Left" IsEnabled="{Binding Path=BtnCreateEnabled}">
+
+                    <Label
+                        Content="Cancel"
+                        FontSize="23"
+                        Foreground="White" />
+                </Button>
+
+                <Button HorizontalAlignment="Right" IsEnabled="{Binding Path=BtnCreateEnabled}">
+
+                    <Label
+                        Content="Create"
+                        FontSize="23"
+                        Foreground="White" />
+                </Button>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
