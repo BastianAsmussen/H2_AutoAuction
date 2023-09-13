@@ -46,7 +46,7 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
     public ICommand SignUpCommand { get; }
-    public ReactiveCommand<object, Unit> ShowHidePassCommand { get; }
+    public ReactiveCommand<TextBox, Unit> ShowHidePassCommand { get; }
 
     #endregion
 
@@ -54,13 +54,13 @@ public class LoginViewModel : ViewModelBase
     {
         LoginCommand = ReactiveCommand.Create(GoToHomeScreen);
         SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
-        ShowHidePassCommand = ReactiveCommand.Create<Object>(ShowHidePassWord);
+        ShowHidePassCommand = ReactiveCommand.Create<TextBox>(ShowHidePassWord);
 
         ValidateInput();
     }
 
 
-    private void ShowHidePassWord(Object sender)
+    private void ShowHidePassWord(TextBox sender)
     {
         if (sender is TextBox t)
         {
