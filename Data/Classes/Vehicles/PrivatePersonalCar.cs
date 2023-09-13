@@ -23,7 +23,7 @@ public class PrivatePersonalCar : PersonalCar
                 "Drivers license must be B and hasIsofixFittings must be true!");
 
         // TODO: V20 - Add to database and set ID
-        
+
         HasIsofixFittings = hasIsofixFittings;
     }
 

@@ -1,7 +1,7 @@
 ﻿using Data.Classes.Vehicles;
-using H2_AutoAuction.Interfaces;
+using Data.Interfaces;
 
-namespace H2_AutoAuction.Classes;
+namespace Data.Classes;
 
 public delegate string NotificationDelegate(string message);
 

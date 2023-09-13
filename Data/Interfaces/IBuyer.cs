@@ -1,4 +1,4 @@
-﻿namespace H2_AutoAuction.Interfaces;
+﻿namespace Data.Interfaces;
 
 public interface IBuyer
 {
