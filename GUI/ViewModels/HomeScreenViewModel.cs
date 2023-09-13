@@ -37,7 +37,7 @@ public class HomeScreenViewModel : ViewModelBase
         SetForSaleCommand = ReactiveCommand.Create(ShowBidHistory);
         BidHistoryCommand = ReactiveCommand.Create(ShowSetForSale);
 
-        Auctions = DemoAuction.DemoAuctions();
+        // Auctions = DemoAuction.DemoAuctions();
     }
 
 
@@ -69,24 +69,24 @@ public class DemoAuction
     public string Name { get; set; }
     public int Year { get; set; }
     public int StandingBid { get; set; }
-
-    public static ObservableCollection<DemoAuction> DemoAuctions()
-    {
-        ObservableCollection<DemoAuction> auctions = new();
-        for (int i = 0; i < 10; i++)
-        {
-            DemoAuction d = new()
-            {
-                Name = $"Auction {i}",
-                Year = new Random().Next(0, int.MaxValue) / i,
-                StandingBid = new Random().Next(0, int.MaxValue)
-            };
-
-            auctions.Add(d);
-        }
-
-        return auctions;
-    }
+    
+    // public static ObservableCollection<DemoAuction> DemoAuctions()
+    // {
+    //     ObservableCollection<DemoAuction> auctions = new();
+    //     for (int i = 0; i < 10; i++)
+    //     {
+    //         DemoAuction d = new()
+    //         {
+    //             Name = $"Auction {i}",
+    //             Year = new Random().Next(0, int.MaxValue) / i,
+    //             StandingBid = new Random().Next(0, int.MaxValue)
+    //         };
+    //
+    //         auctions.Add(d);
+    //     }
+    //
+    //     return auctions;
+    // }
 }
 
 #endregion
