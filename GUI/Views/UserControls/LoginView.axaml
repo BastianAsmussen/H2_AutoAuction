@@ -23,28 +23,39 @@
                 Foreground="White" />
 
             <!--  UserName Input  -->
-            <TextBox
-                FontSize="22"
-                Foreground="Black"
-                Margin="0,20,0,0"
-                Text="{Binding UserName}"
-                Width="350" />
+            <WrapPanel HorizontalAlignment="Left">
+                <TextBox
+                    FontSize="22"
+                    Foreground="Black"
+                    Margin="0,20,0,0"
+                    Text="{Binding UserName}"
+                    Watermark="Username"
+                    Width="350" />
+            </WrapPanel>
 
             <!--  Password Input  -->
-            <StackPanel>
+            <WrapPanel HorizontalAlignment="Left">
                 <TextBox
                     FontSize="22"
                     Foreground="Black"
                     Margin="0,20,0,0"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
-                    Width="350" />
+                    Watermark="Password"
+                    Width="350"
+                    x:Name="PasswordBox" />
 
                 <!--  Show pass Button  -->
-                <Button IsEnabled="{Binding Path=BtnLoginEnabled}">
-                    <Image />
+                <Button
+                    Command="{Binding Path=ShowHidePassCommand}"
+                    CommandParameter="{Binding ElementName=PasswordBox}"
+                    VerticalAlignment="Center">
+                    <Image
+                        Source="/Assets/icons8-eye.gif"
+                        VerticalAlignment="Center"
+                        Width="29" />
                 </Button>
-            </StackPanel>
+            </WrapPanel>
 
             <StackPanel Orientation="Horizontal">
                 <Label
@@ -52,7 +63,10 @@
                     FontSize="22"
                     Foreground="White" />
 
-                <Button Background="Transparent" Foreground="Transparent">
+                <Button
+                    Background="Transparent"
+                    Command="{Binding Path=SignUpCommand}"
+                    Foreground="Transparent">
                     <Label
                         Content="Create user"
                         FontSize="22"

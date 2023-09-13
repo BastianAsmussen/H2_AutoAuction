@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Input;
+using Avalonia.Controls;
 using Data.Classes;
 using Data.Interfaces;
 using GUI.Utilities;
@@ -22,14 +24,14 @@ public class LoginViewModel : ViewModelBase
 
     private bool _btnLoginEnabled = false;
 
-    // [Required]
+    [Required]
     public string UserName
     {
         get => _userName;
         set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
-    // [Required]
+    [Required]
     public string PassWord
     {
         get => _passWord;
@@ -44,6 +46,7 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
     public ICommand SignUpCommand { get; }
+    public ReactiveCommand<object, Unit> ShowHidePassCommand { get; }
 
     #endregion
 
@@ -51,17 +54,18 @@ public class LoginViewModel : ViewModelBase
     {
         LoginCommand = ReactiveCommand.Create(GoToHomeScreen);
         SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
-        
+        ShowHidePassCommand = ReactiveCommand.Create<Object>(ShowHidePassWord);
+
         ValidateInput();
     }
 
-    private void ValidateInput()
+
+    private void ShowHidePassWord(Object sender)
     {
-        this.WhenAnyValue(
-                x => x.UserName,
-                x => x.PassWord,
-                (userName, passWord) => !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(passWord))
-            .Subscribe(x => BtnLoginEnabled = x);
+        if (sender is TextBox t)
+        {
+            t.PasswordChar = '\0';
+        }
     }
 
     private void GoToCreateScreen()
@@ -80,6 +84,16 @@ public class LoginViewModel : ViewModelBase
         {
             Console.WriteLine("No Can Do");
         }
+    }
+
+
+    private void ValidateInput()
+    {
+        this.WhenAnyValue(
+                x => x.UserName,
+                x => x.PassWord,
+                (userName, passWord) => !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(passWord))
+            .Subscribe(x => BtnLoginEnabled = x);
     }
 }
 
