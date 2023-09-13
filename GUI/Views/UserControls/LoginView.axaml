@@ -62,6 +62,7 @@
             </StackPanel>
 
             <Button
+                Command="{Binding Path=LoginCommand}"
                 HorizontalAlignment="Right"
                 IsEnabled="{Binding Path=BtnLoginEnabled}"
                 VerticalAlignment="Bottom">
