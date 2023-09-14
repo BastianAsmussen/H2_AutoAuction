@@ -76,7 +76,10 @@
                         Foreground="White" />
                 </Button>
 
-                <Button Command="{Binding Path=CreateCommand}" Margin="40,0,0,0">
+                <Button
+                    Command="{Binding Path=CreateCommand}"
+                    IsEnabled="{Binding Path=BtnCreateEnabled}"
+                    Margin="40,0,0,0">
                     <Label
                         Content="Create"
                         FontSize="23"
