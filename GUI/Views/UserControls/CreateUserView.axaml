@@ -15,7 +15,7 @@
         <vm:CreateUserViewModel />
     </UserControl.DataContext>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel>
             <Label
                 Content="Create user"
@@ -28,8 +28,7 @@
                 Foreground="Black"
                 Margin="0,20,0,0"
                 Text="{Binding UserName}"
-                Watermark="Username"
-                Width="350" />
+                Watermark="Username" />
 
             <!--  Password Input  -->
             <StackPanel>
@@ -39,13 +38,7 @@
                     Margin="0,20,0,0"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
-                    Watermark="Password"
-                    Width="350" />
-
-                <!--  Show pass Button  -->
-                <!-- <Button IsEnabled="{Binding Path=BtnLoginEnabled}"> -->
-                <!--     <Image /> -->
-                <!-- </Button> -->
+                    Watermark="Password" />
             </StackPanel>
 
             <TextBox
@@ -57,24 +50,43 @@
                 Watermark="Password again"
                 Width="350" />
 
-            <StackPanel Orientation="Horizontal">
-                <Button HorizontalAlignment="Left" IsEnabled="{Binding Path=BtnCreateEnabled}">
+            <!--  Corporate or Private Buttons  -->
+            <WrapPanel HorizontalAlignment="Center" Margin="10">
+                <RadioButton
+                    Content="Corporate"
+                    FontSize="23"
+                    Foreground="White"
+                    IsChecked="{Binding Path=IsCorporate}"
+                    Width="150" />
 
+                <RadioButton
+                    Content="Private"
+                    FontSize="23"
+                    Foreground="White"
+                    IsChecked="{Binding Path=IsPrivate}"
+                    Width="150" />
+            </WrapPanel>
+
+            <!--  Create And Cancel Buttons  -->
+            <WrapPanel HorizontalAlignment="Center">
+                <Button Command="{Binding Path=CancelCommand}" Margin="0,0,40,0">
                     <Label
                         Content="Cancel"
                         FontSize="23"
                         Foreground="White" />
                 </Button>
 
-                <Button HorizontalAlignment="Right" IsEnabled="{Binding Path=BtnCreateEnabled}">
-
+                <Button
+                    Command="{Binding Path=CreateCommand}"
+                    IsEnabled="{Binding Path=BtnCreateEnabled}"
+                    Margin="40,0,0,0">
                     <Label
                         Content="Create"
                         FontSize="23"
                         Foreground="White" />
                 </Button>
-            </StackPanel>
+            </WrapPanel>
         </StackPanel>
 
-    </Grid>
+    </StackPanel>
 </UserControl>
