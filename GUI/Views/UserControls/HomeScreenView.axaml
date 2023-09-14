@@ -1,7 +1,7 @@
 ﻿<UserControl
     Background="#1b1827"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    Height="450"
+    Width="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.HomeScreenView"
     x:DataType="vm:HomeScreenViewModel"
@@ -18,70 +18,126 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition />
+            <RowDefinition Height="40" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <!--  Users auctions  -->
         <StackPanel
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Grid.Row="0">
+            <Label
+                Content="Your auctions"
+                FontSize="22"
+                Foreground="White" />
 
-            <ListBox ItemsSource="{Binding Path=Auctions}">
-                <ListBox.ItemTemplate>
+            <DataGrid
+                Height="150"
+                HorizontalScrollBarVisibility="Visible"
+                IsReadOnly="True"
+                ItemsSource="{Binding UserAuctions}"
+                Margin="0,0,200,0"
+                Width="390">
 
-                    <DataTemplate>
+                <DataGrid.Columns>
 
-                        <StackPanel
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                    <DataGridTextColumn
+                        Binding="{Binding Name}"
+                        Foreground="White"
+                        Header="Name"
+                        Width="130" />
 
-                            <TextBlock Foreground="White" Text="{Binding Path=Name}" />
+                    <DataGridTextColumn
+                        Binding="{Binding Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        Width="130" />
 
-                            <TextBlock Foreground="White" Text="{Binding Year}" />
-
-                            <TextBlock Foreground="White" Text="{Binding Path=StandingBid}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    <DataGridTextColumn
+                        Binding="{Binding Year}"
+                        Foreground="White"
+                        Header="Bud"
+                        Width="130" />
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
 
-
+        <!--  Current auctions  -->
         <StackPanel
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.Row="1">
-            <ListBox ItemsSource="{Binding Path=Auctions}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
+            Grid.Row="2">
+            <Label
+                Content="Current Auctions"
+                FontSize="22"
+                Foreground="White" />
 
-                            <TextBlock Foreground="White" Text="{Binding Path=Name}" />
+            <DataGrid
+                Height="150"
+                HorizontalScrollBarVisibility="Visible"
+                IsReadOnly="True"
+                ItemsSource="{Binding CurrentAuctions}"
+                Margin="0,0,200,0"
+                Width="390">
 
-                            <TextBlock Foreground="White" Text="{Binding Year}" />
+                <DataGrid.Columns>
 
-                            <TextBlock Foreground="White" Text="{Binding Path=StandingBid}" />
-                        </StackPanel>
+                    <DataGridTextColumn
+                        Binding="{Binding Name}"
+                        Foreground="White"
+                        Header="Name"
+                        Width="130" />
 
+                    <DataGridTextColumn
+                        Binding="{Binding Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        Width="130" />
 
-                    </DataTemplate>
-
-                </ListBox.ItemTemplate>
-
-            </ListBox>
-
+                    <DataGridTextColumn
+                        Binding="{Binding Year}"
+                        Foreground="White"
+                        Header="Bud"
+                        Width="130" />
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
 
 
-    </Grid>
+        <!--  Buttons  -->
+        <StackPanel Grid.Column="2" Grid.Row="0">
 
+            <Button
+                Background="#5cb85c"
+                Command="{Binding SetForSaleCommand}"
+                Content="+ Set For Sale"
+                FontSize="22"
+                Foreground="White"
+                HorizontalContentAlignment="Center"
+                MinWidth="180" />
+
+            <Button
+                Command="{Binding UserProfileCommand}"
+                Content="User Profile"
+                FontSize="22"
+                Foreground="White"
+                HorizontalContentAlignment="Center"
+                MinWidth="180" />
+
+            <Button
+                Command="{Binding BidHistoryCommand}"
+                Content="Bid History"
+                FontSize="22"
+                Foreground="White"
+                HorizontalContentAlignment="Center"
+                MinWidth="180" />
+
+        </StackPanel>
+    </Grid>
 </UserControl>
