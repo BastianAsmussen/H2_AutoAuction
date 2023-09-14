@@ -6,10 +6,12 @@
     x:Class="GUI.Views.UserControls.LoginView"
     x:DataType="vm:LoginViewModel"
     xmlns="https://github.com/avaloniaui"
+    xmlns:behaviors="clr-namespace:GUI.Utilities"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
 
     <UserControl.DataContext>
         <vm:LoginViewModel />
@@ -23,45 +25,49 @@
                 Foreground="White" />
 
             <!--  UserName Input  -->
-            <TextBox
-                FontSize="22"
-                Foreground="Black"
-                Margin="0,20,0,0"
-                Text="{Binding UserName}"
-                Width="350" />
+            <WrapPanel HorizontalAlignment="Left">
+                <TextBox
+                    FontSize="22"
+                    Foreground="Black"
+                    Margin="0,20,0,0"
+                    Text="{Binding UserName}"
+                    Watermark="Username"
+                    Width="350" />
+            </WrapPanel>
 
             <!--  Password Input  -->
-            <StackPanel>
+            <WrapPanel HorizontalAlignment="Left">
                 <TextBox
                     FontSize="22"
                     Foreground="Black"
                     Margin="0,20,0,0"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
-                    Width="350" />
+                    Watermark="Password"
+                    Width="350"
+                    x:Name="PasswordBox" />
 
-                <!--  Show pass Button  -->
-                <Button IsEnabled="{Binding Path=BtnLoginEnabled}">
-                    <Image />
-                </Button>
-            </StackPanel>
+            </WrapPanel>
 
+            <!--  Sign Up  -->
             <StackPanel Orientation="Horizontal">
                 <Label
-                    Content="Not registered?  "
+                    Content="Not registered? "
                     FontSize="22"
                     Foreground="White" />
 
-                <Button Background="Transparent" Foreground="Transparent">
-                    <Label
-                        Content="Create user"
-                        FontSize="22"
-                        Foreground="Green" />
-                </Button>
+                <Label
+                    Content="Create user"
+                    FontSize="22"
+                    FontWeight="Bold"
+                    Foreground="Green"
+                    behaviors:PointerPressedBehavior.Command="{Binding Path=SignUpCommand}" />
 
             </StackPanel>
 
+            <!--  Sign In  -->
             <Button
+                Command="{Binding Path=LoginCommand}"
                 HorizontalAlignment="Right"
                 IsEnabled="{Binding Path=BtnLoginEnabled}"
                 VerticalAlignment="Bottom">
