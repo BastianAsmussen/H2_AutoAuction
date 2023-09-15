@@ -62,6 +62,8 @@ public abstract class User //TODO: U4 - Implement interfaces
     {
         //TODO: U3 - ToString for User
         // throw new NotImplementedException();
-        return "IMPLEMENT ME!";
+        return $"{base.ToString()}"+
+               $"Id: {Id}\n"+
+               $"PasswordHash: {PasswordHash}\n";
     }
 }
