@@ -14,8 +14,4 @@
         <PackageReference Include="dotenv.net" Version="3.1.2" />
         <Using Include="BCrypt.Net.BCrypt" Alias="BC"/>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Queries\Auctions\" />
-    </ItemGroup>
 </Project>
