@@ -1,4 +1,4 @@
-USE 'Master'
+USE master
 GO
 
 -- Drop the User database if it exists.
