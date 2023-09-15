@@ -4,8 +4,8 @@ GO
 -- Drop the User database if it exists.
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'User')
     BEGIN
-        ALTER DATABASE Vehicle SET SINGLE_USER WITH ROLLBACK IMMEDIATE
-        DROP DATABASE Vehicle
+        ALTER DATABASE 'User' SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+        DROP DATABASE 'User'
     END
 GO
 
