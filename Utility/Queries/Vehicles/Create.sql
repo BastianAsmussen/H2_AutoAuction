@@ -1,7 +1,7 @@
 USE master
 GO
 
--- Drop the Auction database if it exists.
+-- Drop the Vehicle database if it exists.
 IF EXISTS (SELECT * FROM sys.databases WHERE name = 'Vehicle')
     BEGIN
         ALTER DATABASE Vehicle SET SINGLE_USER WITH ROLLBACK IMMEDIATE
@@ -9,7 +9,7 @@ IF EXISTS (SELECT * FROM sys.databases WHERE name = 'Vehicle')
     END
 GO
 
--- Create the Auction database if it does not exist.
+-- Create the Vehicle database if it does not exist.
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Vehicle')
     BEGIN
         CREATE DATABASE Vehicle
