@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using Avalonia.Data;
 using Data.Classes;
@@ -23,48 +24,49 @@ public class CreateUserViewModel : ViewModelBase
 
     #region Properties
 
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string UserName
     {
         get => _userName;
-        set
-        {
-            if (string.IsNullOrEmpty(value))
-                throw new ArgumentException(nameof(UserName), "Not a valid UserName");
-
-            this.RaiseAndSetIfChanged(ref _userName, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string PassWord
     {
         get => _passWord;
         set => this.RaiseAndSetIfChanged(ref _passWord, value);
     }
 
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string RPassWord
     {
         get => _rPassWord;
         set => this.RaiseAndSetIfChanged(ref _rPassWord, value);
     }
 
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string CvrNumber
     {
         get => _cvrNumber;
         set => this.RaiseAndSetIfChanged(ref _cvrNumber, value);
     }
 
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string Credit
     {
         get => _credit;
         set => this.RaiseAndSetIfChanged(ref _credit, value);
     }
 
+    [MinLength(1, ErrorMessage = "Zipcode is required")]
     public string ZipCode
     {
         get => _zipCode;
         set => this.RaiseAndSetIfChanged(ref _zipCode, value);
     }
 
+    [MinLength(1, ErrorMessage = "Cpr number is required")]
     public string CprNumber
     {
         get => _cprNumber;
