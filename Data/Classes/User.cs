@@ -16,31 +16,19 @@ privat og company som klasser
 public abstract class User : IBuyer, ISeller
 {
     public uint Id { get; }
-
-    /// <summary>
-    ///     PasswordHash property.
-    /// </summary>
     private byte[] PasswordHash { get; }
-
     public string UserName { get; set; }
     public decimal Balance { get; set; }
     public uint Zipcode { get; set; }
 
     protected User(string userName, string password, uint zipCode)
     {
-        //TODO: U1 - Set constructor and field
+        UserName = userName;
+        Zipcode = zipCode;
 
         HashAlgorithm sha = SHA256.Create();
         var result = sha.ComputeHash(Encoding.ASCII.GetBytes(password));
         PasswordHash = result;
-
-        // throw new NotImplementedException();
-    }
-
-    public string ReceiveBidNotification(string message)
-    {
-        // TODO: Finish ReceiveBidNotification
-        return $"New Bid: {message}";
     }
 
     /// <summary>
