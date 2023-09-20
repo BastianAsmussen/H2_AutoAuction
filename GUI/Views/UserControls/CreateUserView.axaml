@@ -16,11 +16,12 @@
     </UserControl.DataContext>
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Label
+            Content="Create user"
+            FontSize="40"
+            Foreground="White"
+            HorizontalAlignment="Center" />
         <StackPanel>
-            <Label
-                Content="Create user"
-                FontSize="40"
-                Foreground="White" />
 
             <!--  UserName Input  -->
             <TextBox
