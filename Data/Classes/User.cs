@@ -61,6 +61,25 @@ public abstract class User : IBuyer, ISeller
         // throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Receives a bid notification and returns a formatted string.
+    /// </summary>
+    /// <param name="message">The bid message to format.</param>
+    /// <returns>A string with the formatted message.</returns>
+    public string ReceiveBidNotification(string message)
+    {
+        // TODO: Finish ReceiveBidNotification
+        return $"New Bid: {message}";
+    }
+
+    /// <summary>
+    /// This method subtracts a specified amount from the current balance.
+    /// </summary>
+    /// <param name="amount">The amount to subtract from the current balance.</param>
+    public void SubBalance(decimal amount)
+    {
+        Balance -= amount;
+    }
 
     /// <summary>
     ///     Returns the User in a string with relevant information.

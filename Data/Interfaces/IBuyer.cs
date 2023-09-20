@@ -11,4 +11,6 @@ public interface IBuyer
     ///     Balance property.
     /// </summary>
     decimal Balance { get; set; }
+    
+    void SubBalance(decimal amount);
 }
