@@ -28,6 +28,7 @@
                 FontSize="22"
                 Foreground="Black"
                 Margin="0,20,0,0"
+                MaxWidth="400"
                 Text="{Binding UserName}"
                 Watermark="Username" />
 
@@ -37,6 +38,7 @@
                     FontSize="22"
                     Foreground="Black"
                     Margin="0,20,0,0"
+                    MaxWidth="400"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
                     Watermark="Password" />
@@ -46,26 +48,83 @@
                 FontSize="22"
                 Foreground="Black"
                 Margin="0,20,0,0"
+                MaxWidth="400"
                 PasswordChar="*"
                 Text="{Binding RPassWord}"
-                Watermark="Password again"
-                Width="350" />
+                Watermark="Password again" />
 
             <!--  Corporate or Private Buttons  -->
-            <WrapPanel HorizontalAlignment="Center" Margin="10">
+            <WrapPanel
+                HorizontalAlignment="Center"
+                Margin="10"
+                VerticalAlignment="Center">
                 <RadioButton
+                    Command="{Binding Path=IsCorporateCommand}"
                     Content="Corporate"
                     FontSize="23"
                     Foreground="White"
-                    IsChecked="{Binding Path=IsCorporate}"
-                    Width="150" />
+                    Width="150"
+                    x:Name="IsCorporateButton" />
 
                 <RadioButton
+                    Command="{Binding IsPrivateCommand}"
                     Content="Private"
                     FontSize="23"
                     Foreground="White"
-                    IsChecked="{Binding Path=IsPrivate}"
-                    Width="150" />
+                    HorizontalAlignment="Center"
+                    Width="150"
+                    x:Name="IsPrivateteButton" />
+
+                <!--  CorporateInfo  -->
+                <WrapPanel
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding Path=IsChecked, ElementName=IsCorporateButton, Mode=TwoWay}"
+                    x:Name="CorporateInfo">
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Text="{Binding CvrNumber, Mode=TwoWay}"
+                        Watermark="CVR"
+                        Width="160" />
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Margin="12,0,0,0"
+                        Text="{Binding ZipCode, Mode=TwoWay}"
+                        Watermark="ZipCode"
+                        Width="120" />
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Margin="12,0,0,0"
+                        Text="{Binding Credit}"
+                        Watermark="Credit"
+                        Width="120" />
+                </WrapPanel>
+
+                <!--  PrivateUserInfo  -->
+                <WrapPanel
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding Path=IsChecked, ElementName=IsPrivateteButton, Mode=TwoWay}"
+                    x:Name="PrivateUserInfo">
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Text="{Binding CprNumber, Mode=TwoWay}"
+                        Watermark="CPR-Nummer"
+                        Width="200" />
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Margin="22,0,0,0"
+                        Text="{Binding ZipCode, Mode=TwoWay}"
+                        Watermark="ZipCode"
+                        Width="120" />
+                </WrapPanel>
             </WrapPanel>
 
             <!--  Create And Cancel Buttons  -->
