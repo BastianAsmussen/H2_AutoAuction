@@ -26,4 +26,10 @@ public class PrivateUser : User
 
         Balance -= amount;
     }
+
+    public override string ToString()
+    {
+        return $"{base.ToString()}\n" +
+               $"CprNumber: {CprNumber}\n";
+    }
 }
