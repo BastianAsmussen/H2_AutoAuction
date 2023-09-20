@@ -23,15 +23,15 @@ public class LoginViewModel : ViewModelBase
     private string _passWord;
 
     private bool _btnLoginEnabled = false;
-
-    [Required]
+    
+    [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string UserName
     {
         get => _userName;
         set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
-    [Required]
+    [MinLength(1, ErrorMessage = "Password cannot be empty")]
     public string PassWord
     {
         get => _passWord;
