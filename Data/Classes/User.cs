@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using Data.Interfaces;
 
@@ -31,6 +32,12 @@ public abstract class User : IBuyer, ISeller
         PasswordHash = result;
     }
 
+    public virtual void SubBalance(decimal amount)
+    {
+        // Does Nothing 💩💩💩
+    }
+
+
     /// <summary>
     ///     A method that ...
     /// </summary>
@@ -60,14 +67,6 @@ public abstract class User : IBuyer, ISeller
         return $"New Bid: {message}";
     }
 
-    /// <summary>
-    /// This method subtracts a specified amount from the current balance.
-    /// </summary>
-    /// <param name="amount">The amount to subtract from the current balance.</param>
-    public void SubBalance(decimal amount)
-    {
-        Balance -= amount;
-    }
 
     /// <summary>
     ///     Returns the User in a string with relevant information.
