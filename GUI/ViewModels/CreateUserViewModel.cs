@@ -1,6 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using Avalonia.Data;
+using Data.Classes;
 using GUI.Views.UserControls;
 using ReactiveUI;
 using static GUI.Utilities.ContentArea;
@@ -9,47 +10,65 @@ namespace GUI.ViewModels;
 
 public class CreateUserViewModel : ViewModelBase
 {
-    #region Properties
-
     private string _userName;
     private string _passWord;
     private string _rPassWord;
-    private bool _isCorporate = false;
-    private bool _isPrivate = false;
-    private bool _btnCreateEnabled = false;
+    private bool _isCorporate;
+    private string _cvrNumber;
+    private string _credit;
+    private bool _isPrivate;
+    private string _zipCode;
+    private string _cprNumber;
+    private bool _btnCreateEnabled;
 
+    #region Properties
 
-    [Required]
     public string UserName
     {
         get => _userName;
-        set => this.RaiseAndSetIfChanged(ref _userName, value);
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException(nameof(UserName), "Not a valid UserName");
+
+            this.RaiseAndSetIfChanged(ref _userName, value);
+        }
     }
 
-    [Required]
     public string PassWord
     {
         get => _passWord;
         set => this.RaiseAndSetIfChanged(ref _passWord, value);
     }
 
-    [Required]
     public string RPassWord
     {
         get => _rPassWord;
         set => this.RaiseAndSetIfChanged(ref _rPassWord, value);
     }
 
-    public bool IsCorporate
+    public string CvrNumber
     {
-        get => _isCorporate;
-        set => this.RaiseAndSetIfChanged(ref _isCorporate, value);
+        get => _cvrNumber;
+        set => this.RaiseAndSetIfChanged(ref _cvrNumber, value);
     }
 
-    public bool IsPrivate
+    public string Credit
     {
-        get => _isPrivate;
-        set => this.RaiseAndSetIfChanged(ref _isPrivate, value);
+        get => _credit;
+        set => this.RaiseAndSetIfChanged(ref _credit, value);
+    }
+
+    public string ZipCode
+    {
+        get => _zipCode;
+        set => this.RaiseAndSetIfChanged(ref _zipCode, value);
+    }
+
+    public string CprNumber
+    {
+        get => _cprNumber;
+        set => this.RaiseAndSetIfChanged(ref _cprNumber, value);
     }
 
     public bool BtnCreateEnabled
@@ -62,13 +81,24 @@ public class CreateUserViewModel : ViewModelBase
 
     public ICommand CancelCommand { get; }
     public ICommand CreateCommand { get; }
+    public ICommand IsCorporateCommand { get; }
+    public ICommand IsPrivateCommand { get; }
 
 
     public CreateUserViewModel()
     {
         CancelCommand = ReactiveCommand.Create(Cancel);
         CreateCommand = ReactiveCommand.Create(Create);
-
+        IsCorporateCommand = ReactiveCommand.Create(() =>
+        {
+            _isCorporate = true;
+            _isPrivate = false;
+        });
+        IsPrivateCommand = ReactiveCommand.Create(() =>
+        {
+            _isPrivate = true;
+            _isCorporate = false;
+        });
 
         UserName = string.Empty;
         PassWord = string.Empty;
@@ -82,22 +112,52 @@ public class CreateUserViewModel : ViewModelBase
 
     private void Create()
     {
-        if (IsPrivate)
-            if (CreateUser(UserName, PassWord, RPassWord, IsPrivate))
-            {
+        if (_isPrivate)
+            if (CreatePrivateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                    Convert.ToUInt32(CprNumber)))
                 Navigate(new LoginView());
-                return;
-            }
 
-        if (CreateUser(UserName, PassWord, RPassWord, IsCorporate))
-        {
-            Navigate(new LoginView());
-        }
+            else
+                Console.WriteLine("No Can Do");
+
+        if (_isCorporate)
+            if (CreateCorporateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                    Convert.ToUInt32(CvrNumber), Convert.ToDecimal(Credit)))
+                Navigate(new LoginView());
+
+            else
+                Console.WriteLine("No Can Do");
     }
 
     private void Cancel()
     {
         Navigate(new LoginView());
+    }
+
+    /// <summary>
+    /// Creates a new user with the provided username and password.
+    /// </summary>
+    /// <param name="username">The username of the user to create.</param>
+    /// <param name="password">The password of the user to create.</param>
+    /// <param name="rPassword">The ReWritten password</param>
+    /// <param name="zipCode">Users ZipCOde</param>
+    /// <param name="cprNumber">Users CprNumb</param>
+    /// <exception cref="ArgumentNullException">Thrown when either username or password is null or empty.</exception>
+    /// <remarks>
+    /// This method sends a request to the server to create a new user with the given credentials.
+    /// If the user is created successfully, it will print a success message.
+    /// If any exception occurs during the process, it will be caught and re-thrown.
+    /// </remarks>
+    private bool CreatePrivateUser(string username, string password, string rPassword, uint zipCode, uint cprNumber)
+    {
+        if (string.IsNullOrEmpty(password) && password.Equals(password))
+            return false;
+
+        PrivateUser unused = new(username, rPassword, zipCode, cprNumber);
+
+        //#TODO: Send request to the server
+        Console.WriteLine($"New '{unused.UserName}' has been created successfully");
+        return true;
     }
 
 
@@ -106,25 +166,28 @@ public class CreateUserViewModel : ViewModelBase
     /// </summary>
     /// <param name="username">The username of the user to create.</param>
     /// <param name="password">The password of the user to create.</param>
+    /// <param name="rPassword"></param>
+    /// <param name="zipCode"></param>
+    /// <param name="cvrNumber"></param>
+    /// <param name="credit"></param>
     /// <exception cref="ArgumentNullException">Thrown when either username or password is null or empty.</exception>
     /// <remarks>
     /// This method sends a request to the server to create a new user with the given credentials.
     /// If the user is created successfully, it will print a success message.
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
-    private bool CreateUser(string username, string password, string rPassword, bool isWhat)
+    private bool CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber,
+        decimal credit)
     {
         if (string.IsNullOrEmpty(password) && password.Equals(password))
-        {
-            Console.WriteLine("No Can Do");
             return false;
-        }
+
+        CorporateUser unused = new(username, rPassword, zipCode, cvrNumber, credit);
 
         //#TODO: Send request to the server
-        Console.WriteLine($"New '{username}' has been created successfully");
+        Console.WriteLine($"New '{unused.UserName}' has been created successfully");
         return true;
     }
-
 
     /// <summary>
     /// Initializes the state of the Create button based on the values of user input fields.
@@ -136,15 +199,18 @@ public class CreateUserViewModel : ViewModelBase
     /// valid values, the BtnCreateEnabled property is set to true, enabling the Create button;
     /// otherwise, it is set to false, disabling the button.
     /// </remarks>
-    void InitializeCreateButtonState()
+    private void InitializeCreateButtonState()
     {
         this.WhenAnyValue(
                 x => x.UserName,
                 x => x.PassWord,
                 x => x.RPassWord,
-                (userName, passWord, rpassWord) => !string.IsNullOrWhiteSpace(userName) &&
-                                                   !string.IsNullOrWhiteSpace(passWord) &&
-                                                   !string.IsNullOrWhiteSpace(rpassWord))
+                x => x._isCorporate,
+                x => x._isPrivate,
+                (userName, passWord, rpassWord, isCorporate, isPrivate) =>
+                    !string.IsNullOrWhiteSpace(userName) &&
+                    !string.IsNullOrWhiteSpace(passWord) &&
+                    !string.IsNullOrWhiteSpace(rpassWord) && isCorporate || isPrivate)
             .Subscribe(x => BtnCreateEnabled = x);
     }
 
