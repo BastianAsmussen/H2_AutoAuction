@@ -37,7 +37,6 @@ public abstract class User : IBuyer, ISeller
         // Does Nothing 💩💩💩
     }
 
-
     /// <summary>
     ///     A method that ...
     /// </summary>
@@ -74,8 +73,11 @@ public abstract class User : IBuyer, ISeller
     /// <returns>...</returns>
     public override string ToString()
     {
-        //TODO: U3 - ToString for User
         // throw new NotImplementedException();
-        return "IMPLEMENT ME!";
+        return $"{base.ToString()}" +
+               $"Id: {Id}\n" +
+               $"UserName: {UserName}\n" +
+               $"PasswordHash: {PasswordHash}\n" +
+               $"Zipcode: {Zipcode}\n";
     }
 }
