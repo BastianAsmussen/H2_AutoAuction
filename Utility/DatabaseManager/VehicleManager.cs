@@ -1,357 +1,1935 @@
-using System.Data;
-using System.Data.SqlClient;
 using Data.Classes.Vehicles;
+using Data.Classes.Vehicles.HeavyVehicles;
+using Data.Classes.Vehicles.PersonalCars;
 
 namespace Utility.DatabaseManager;
 
+/// <summary>
+///     The part of the database manager that handles vehicles.
+/// </summary>
 public partial class DatabaseManager
 {
+    #region LicenseType
     /// <summary>
-    ///     Get the license type from the database by id.
+    ///     Get a list of all license types.
     /// </summary>
-    /// <param name="id">The id of the license type.</param>
-    /// <returns>The license type.</returns>
-    /// <exception cref="DataException">If the license type is not found.</exception>
-    public LicenseType GetLicenseTypeById(uint id)
+    /// <returns>A list of all license types.</returns>
+    /// <exception cref="ArgumentException">Thrown if no license types exist.</exception>
+    public static List<LicenseType> GetAllLicenseTypes()
     {
         var connection = Instance.GetConnection();
 
-        var query = "SELECT * FROM LicenseTypes WHERE Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM LicenseType";
 
-        var command = new SqlCommand(query, connection);
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No license types exist!");
+        }
+
+        var licenseTypes = new List<LicenseType>();
+
+        while (reader.Read())
+        {
+            // var licenseTypeId = (uint)reader.GetInt32(0);
+            var name = reader.GetString(1);
+
+            licenseTypes.Add((LicenseType) Enum.Parse(typeof(LicenseType), name));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return licenseTypes;
+    }
+
+    /// <summary>
+    ///     Create a license type in the database.
+    /// </summary>
+    /// <param name="licenseType">The license type to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the license type could not be created.</exception>
+    public static void CreateLicenseType(LicenseType licenseType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO LicenseType (Name) VALUES (@Name)";
+        command.Parameters.AddWithValue("@Name", licenseType.ToString());
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("License type could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a license type by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the license type to get.</param>
+    /// <returns>The license type with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
+    public static LicenseType GetLicenseTypeById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM LicenseType WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
-
         if (!reader.HasRows)
         {
-            throw new DataException("License type not found!");
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No license type with that ID exists!");
         }
 
         reader.Read();
 
-        var licenseType = (LicenseType) reader.GetByte(0);
+        // var licenseTypeId = (uint)reader.GetInt32(0);
+        var name = reader.GetString(1);
 
         reader.Close();
+        connection.Close();
+
+        return (LicenseType) Enum.Parse(typeof(LicenseType), name);
+    }
+
+    /// <summary>
+    ///     Get a license type by its name.
+    /// </summary>
+    /// <param name="name">The name of the license type to get.</param>
+    /// <returns>The license type with the given name.</returns>
+    /// <exception cref="ArgumentException">Thrown if no license type with the given name exists.</exception>
+    public static LicenseType GetLicenseTypeByName(string name)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM LicenseType WHERE Name = @Name";
+        command.Parameters.AddWithValue("@Name", name);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No license type with that name exists!");
+        }
+
+        reader.Read();
+
+        // var licenseTypeId = (uint)reader.GetInt32(0);
+        var licenseTypeName = reader.GetString(1);
+
+        reader.Close();
+        connection.Close();
+
+        return (LicenseType) Enum.Parse(typeof(LicenseType), licenseTypeName);
+    }
+
+    /// <summary>
+    ///     Update a license type in the database.
+    /// </summary>
+    /// <param name="licenseType">The license type to update.</param>
+    /// <returns>The updated license type.</returns>
+    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
+    public static LicenseType UpdateLicenseType(LicenseType licenseType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE LicenseType SET Name = @Name WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", licenseType);
+        command.Parameters.AddWithValue("@Name", licenseType.ToString());
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No license type with that ID exists!");
+        }
+
+        connection.Close();
 
         return licenseType;
     }
 
     /// <summary>
-    ///     Get the fuel type from the database by id.
+    ///    Delete a license type from the database.
     /// </summary>
-    /// <param name="id">The id of the fuel type.</param>
-    /// <returns>The fuel type.</returns>
-    /// <exception cref="DataException">If the fuel type is not found.</exception>
-    public FuelType GetFuelTypeById(uint id)
+    /// <param name="licenseType">The license type to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
+    public static void DeleteLicenseType(LicenseType licenseType)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query = "SELECT * FROM FuelTypes WHERE Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM LicenseType WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", licenseType);
 
-        var command = new SqlCommand(query, connection);
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No license type with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region FuelType
+    /// <summary>
+    ///     Get a list of all fuel types.
+    /// </summary>
+    /// <returns>A list of all fuel types.</returns>
+    /// <exception cref="ArgumentException">Thrown if no fuel types exist.</exception>
+    public static List<FuelType> GetAllFuelTypes()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM FuelType";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No fuel types exist!");
+        }
+
+        var fuelTypes = new List<FuelType>();
+
+        while (reader.Read())
+        {
+            // var fuelTypeId = (uint)reader.GetInt32(0);
+            var name = reader.GetString(1);
+
+            fuelTypes.Add((FuelType) Enum.Parse(typeof(FuelType), name));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return fuelTypes;
+    }
+
+    /// <summary>
+    ///     Create a fuel type in the database.
+    /// </summary>
+    /// <param name="fuelType">The fuel type to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the fuel type could not be created.</exception>
+    public static void CreateFuelType(FuelType fuelType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO FuelType (Name) VALUES (@Name)";
+        command.Parameters.AddWithValue("@Name", fuelType.ToString());
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Fuel type could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a fuel type by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the fuel type to get.</param>
+    /// <returns>The fuel type with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
+    public static FuelType GetFuelTypeById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM FuelType WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
-
         if (!reader.HasRows)
         {
-            throw new DataException("Fuel type not found!");
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No fuel type with that ID exists!");
         }
 
         reader.Read();
 
-        var fuelType = (FuelType) reader.GetByte(0);
+        // var fuelTypeId = (uint)reader.GetInt32(0);
+        var name = reader.GetString(1);
 
         reader.Close();
+        connection.Close();
+
+        return (FuelType) Enum.Parse(typeof(FuelType), name);
+    }
+
+    /// <summary>
+    ///     Get a fuel type by its name.
+    /// </summary>
+    /// <param name="name">The name of the fuel type to get.</param>
+    /// <returns>The fuel type with the given name.</returns>
+    /// <exception cref="ArgumentException">Thrown if no fuel type with the given name exists.</exception>
+    public static FuelType GetFuelTypeByName(string name)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM FuelType WHERE Name = @Name";
+        command.Parameters.AddWithValue("@Name", name);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No fuel type with that name exists!");
+        }
+
+        reader.Read();
+
+        // var fuelTypeId = (uint)reader.GetInt32(0);
+        var fuelTypeName = reader.GetString(1);
+
+        reader.Close();
+        connection.Close();
+
+        return (FuelType) Enum.Parse(typeof(FuelType), fuelTypeName);
+    }
+
+    /// <summary>
+    ///     Update a fuel type in the database.
+    /// </summary>
+    /// <param name="fuelType">The fuel type to update.</param>
+    /// <returns>The updated fuel type.</returns>
+    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
+    public static FuelType UpdateFuelType(FuelType fuelType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE FuelType SET Name = @Name WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", fuelType);
+        command.Parameters.AddWithValue("@Name", fuelType.ToString());
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No fuel type with that ID exists!");
+        }
+
+        connection.Close();
 
         return fuelType;
     }
 
     /// <summary>
-    ///     Get the energy type from the database by id.
+    ///     Delete a fuel type from the database.
     /// </summary>
-    /// <param name="id">The id of the energy type.</param>
-    /// <returns>The energy type.</returns>
-    /// <exception cref="DataException">If the energy type is not found.</exception>
-    public EnergyType GetEnergyTypeById(uint id)
+    /// <param name="fuelType">The fuel type to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
+    public static void DeleteFuelType(FuelType fuelType)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query = "SELECT * FROM EnergyTypes WHERE Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM FuelType WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", fuelType);
 
-        var command = new SqlCommand(query, connection);
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No fuel type with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region EnergyType
+    /// <summary>
+    ///     Get a list of all energy types.
+    /// </summary>
+    /// <returns>A list of all energy types.</returns>
+    /// <exception cref="ArgumentException">Thrown if no energy types exist.</exception>
+    public static List<EnergyType> GetAllEnergyTypes()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM EnergyType";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No energy types exist!");
+        }
+
+        var energyTypes = new List<EnergyType>();
+
+        while (reader.Read())
+        {
+            // var energyTypeId = (uint)reader.GetInt32(0);
+            var name = reader.GetString(1);
+
+            energyTypes.Add((EnergyType) Enum.Parse(typeof(EnergyType), name));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return energyTypes;
+    }
+
+    /// <summary>
+    ///     Create an energy type in the database.
+    /// </summary>
+    /// <param name="energyType">The energy type to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the energy type could not be created.</exception>
+    public static void CreateEnergyType(EnergyType energyType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO EnergyType (Name) VALUES (@Name)";
+        command.Parameters.AddWithValue("@Name", energyType.ToString());
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Energy type could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get an energy type by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the energy type to get.</param>
+    /// <returns>The energy type with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
+    public static EnergyType GetEnergyTypeById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM EnergyType WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
-
         if (!reader.HasRows)
         {
-            throw new DataException("Energy type not found!");
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No energy type with that ID exists!");
         }
 
         reader.Read();
 
-        var energyType = (EnergyType) reader.GetByte(0);
+        // var energyTypeId = (uint)reader.GetInt32(0);
+        var name = reader.GetString(1);
 
         reader.Close();
+        connection.Close();
+
+        return (EnergyType) Enum.Parse(typeof(EnergyType), name);
+    }
+
+    /// <summary>
+    ///     Get an energy type by its name.
+    /// </summary>
+    /// <param name="name">The name of the energy type to get.</param>
+    /// <returns>The energy type with the given name.</returns>
+    /// <exception cref="ArgumentException">Thrown if no energy type with the given name exists.</exception>
+    public static EnergyType GetEnergyTypeByName(string name)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM EnergyType WHERE Name = @Name";
+        command.Parameters.AddWithValue("@Name", name);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No energy type with that name exists!");
+        }
+
+        reader.Read();
+
+        // var energyTypeId = (uint)reader.GetInt32(0);
+        var energyTypeName = reader.GetString(1);
+
+        reader.Close();
+        connection.Close();
+
+        return (EnergyType) Enum.Parse(typeof(EnergyType), energyTypeName);
+    }
+
+    /// <summary>
+    ///     Update an energy type in the database.
+    /// </summary>
+    /// <param name="energyType">The energy type to update.</param>
+    /// <returns>The updated energy type.</returns>
+    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
+    public static EnergyType UpdateEnergyType(EnergyType energyType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE EnergyType SET Name = @Name WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", energyType);
+        command.Parameters.AddWithValue("@Name", energyType.ToString());
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No energy type with that ID exists!");
+        }
+
+        connection.Close();
 
         return energyType;
     }
 
     /// <summary>
-    ///     Get the dimensions from the database by id.
+    ///     Delete an energy type from the database.
     /// </summary>
-    /// <param name="id">The id of the dimensions.</param>
-    /// <returns>The dimensions.</returns>
-    /// <exception cref="DataException">If the dimensions is not found.</exception>
-    public Dimensions GetDimensionsById(uint id)
+    /// <param name="energyType">The energy type to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
+    public static void DeleteEnergyType(EnergyType energyType)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query = "SELECT * FROM Dimensions WHERE Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM EnergyType WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", energyType);
 
-        var command = new SqlCommand(query, connection);
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No energy type with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region Vehicle
+    /// <summary>
+    ///     Gets all vehicles from the database.
+    /// </summary>
+    /// <returns>A list of all vehicles in the database.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicles exist.</exception>
+    public static List<Vehicle> GetAllVehicles()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Vehicle";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicles exist!");
+        }
+
+        var vehicles = new List<Vehicle>();
+
+        while (reader.Read())
+        {
+            var vehicleId = (uint)reader.GetInt32(0);
+            var name = reader.GetString(1);
+            var km = reader.GetFloat(2);
+            var registrationNumber = reader.GetString(3);
+            var year = (ushort)reader.GetInt32(4);
+            var hasTowbar = reader.GetBoolean(5);
+            var licenseType = (LicenseType)reader.GetInt32(6);
+            var engineSize = reader.GetFloat(7);
+            var kmPerLiter = reader.GetFloat(8);
+            var fuelType = (FuelType)reader.GetInt32(9);
+            var energyClass = (EnergyType)reader.GetInt32(10);
+
+            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType, engineSize,
+                kmPerLiter, fuelType, energyClass));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return vehicles;
+    }
+
+    /// <summary>
+    ///     Creates a vehicle in the database.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the vehicle could not be created.</exception>
+    public static void CreateVehicle(Vehicle vehicle)
+    {
+        // Create the vehicle in the database.
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText =
+            "INSERT INTO Vehicle (Name, Km, RegistrationNumber, Year, HasTowbar, LicenseType, EngineSize, KmPerLiter, FuelType, EnergyClass) " +
+            "VALUES (@Name, @Km, @RegistrationNumber, @Year, @HasTowbar, @LicenseType, @EngineSize, @KmPerLiter, @FuelType, @EnergyClass)";
+        command.Parameters.AddWithValue("@Name", vehicle.Name);
+        command.Parameters.AddWithValue("@Km", vehicle.Km);
+        command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
+        command.Parameters.AddWithValue("@Year", vehicle.Year);
+        command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
+        command.Parameters.AddWithValue("@LicenseType", vehicle.LicenseType);
+        command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
+        command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
+        command.Parameters.AddWithValue("@FuelType", vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyClass", vehicle.EnergyClass);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Vehicle could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Gets a vehicle from the database by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the vehicle to get.</param>
+    /// <returns>The vehicle with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given ID exists.</exception>
+    public static Vehicle GetVehicleById(uint id)
+    {
+        // Retrieve the vehicle from the database.
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Vehicle WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
-
         if (!reader.HasRows)
         {
-            throw new DataException("Dimensions not found!");
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that ID exists!");
         }
 
         reader.Read();
 
-        var dimensions = new Dimensions(reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3));
+        var vehicleId = (uint)reader.GetInt32(0);
+        var name = reader.GetString(1);
+        var km = reader.GetFloat(2);
+        var registrationNumber = reader.GetString(3);
+        var year = (ushort)reader.GetInt32(4);
+        var hasTowbar = reader.GetBoolean(5);
+        var licenseType = (LicenseType)reader.GetInt32(6);
+        var engineSize = reader.GetFloat(7);
+        var kmPerLiter = reader.GetFloat(8);
+        var fuelType = (FuelType)reader.GetInt32(9);
+        var energyClass = (EnergyType)reader.GetInt32(10);
 
         reader.Close();
+        connection.Close();
+
+        return new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType, engineSize,
+            kmPerLiter, fuelType, energyClass);
+    }
+
+    /// <summary>
+    ///     Updates a vehicle in the database.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to update.</param>
+    /// <returns>The updated vehicle.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given ID exists.</exception>
+    public static Vehicle UpdateVehicle(Vehicle vehicle)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText =
+            "UPDATE Vehicle " +
+            "SET Name = @Name, Km = @Km, RegistrationNumber = @RegistrationNumber, Year = @Year, HasTowbar = @HasTowbar, LicenseType = @LicenseType, EngineSize = @EngineSize, KmPerLiter = @KmPerLiter, FuelType = @FuelType, EnergyClass = @EnergyClass " +
+            "WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
+        command.Parameters.AddWithValue("@Name", vehicle.Name);
+        command.Parameters.AddWithValue("@Km", vehicle.Km);
+        command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
+        command.Parameters.AddWithValue("@Year", vehicle.Year);
+        command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
+        command.Parameters.AddWithValue("@LicenseType", vehicle.LicenseType);
+        command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
+        command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
+        command.Parameters.AddWithValue("@FuelType", vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyClass", vehicle.EnergyClass);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that ID exists!");
+        }
+
+        connection.Close();
+
+        return vehicle;
+    }
+
+    /// <summary>
+    ///     Deletes a vehicle from the database.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given ID exists.</exception>
+    public static void DeleteVehicle(Vehicle vehicle)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM Vehicle WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No vehicle with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region Dimensions
+    /// <summary>
+    ///     Get a list of all dimensions.
+    /// </summary>
+    /// <returns>A list of all dimensions.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimensions exist.</exception>
+    public static List<Dimensions> GetAllDimensions()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Dimensions";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No dimensions exist!");
+        }
+
+        var dimensions = new List<Dimensions>();
+
+        while (reader.Read())
+        {
+            var dimensionId = (uint) reader.GetInt32(0);
+            var length = reader.GetFloat(1);
+            var width = reader.GetFloat(2);
+            var height = reader.GetFloat(3);
+
+            dimensions.Add(new Dimensions(dimensionId, length, width, height));
+        }
+
+        reader.Close();
+        connection.Close();
 
         return dimensions;
     }
 
     /// <summary>
-    ///     Get the vehicle from the database by id.
+    ///     Create a dimension in the database.
     /// </summary>
-    /// <param name="id">The id of the vehicle.</param>
-    /// <returns>The vehicle.</returns>
-    /// <exception cref="DataException">If the vehicle is not found.</exception>
-    public ProfessionalPersonalCar GetProfessionalPersonalCarById(uint id)
+    /// <param name="dimensions">The dimensions to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the dimensions could not be created.</exception>
+    public static void CreateDimensions(Dimensions dimensions)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query =
-            "SELECT PPC.HasSafetyBar, PPC.LoadCapacity," +
-            "       PC.NumberOfSeats," +
-            "       D.Length, D.Width, D.Height," +
-            "       V.Name, V.Km, V.RegistrationNumber, V.Year, V.NewPrice, V.HasTowbar, V.EngineSize, V.KmPerLiter, V.LicenseTypeId, V.FuelTypeId, V.EnergyTypeId, " +
-            "       LT.Id, FT.Id" +
-            " FROM ProfessionalPersonalCars AS PPC" +
-            "      JOIN PersonalCars PC on PPC.PersonalCarId = PC.Id" +
-            "      JOIN Dimensions D on D.Id = PC.TrunkDimensionsId" +
-            "      JOIN Vehicles V on PC.VehicleId = V.Id" +
-            "      JOIN LicenseTypes LT on V.LicenseTypeId = LT.Id" +
-            "      JOIN FuelTypes FT on V.FuelTypeId = FT.Id" +
-            " WHERE PPC.Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO Dimensions (Length, Width, Height) VALUES (@Length, @Width, @Height)";
+        command.Parameters.AddWithValue("@Length", dimensions.Length);
+        command.Parameters.AddWithValue("@Width", dimensions.Width);
+        command.Parameters.AddWithValue("@Height", dimensions.Height);
 
-        var command = new SqlCommand(query, connection);
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Dimensions could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a dimension by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the dimension to get.</param>
+    /// <returns>The dimension with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given ID exists.</exception>
+    public static Dimensions GetDimensionsById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Dimensions WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
-
         if (!reader.HasRows)
         {
-            throw new DataException("Professional Personal Car not found!");
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No dimension with that ID exists!");
         }
 
         reader.Read();
 
+        var dimensionId = (uint) reader.GetInt32(0);
+        var length = reader.GetFloat(1);
+        var width = reader.GetFloat(2);
+        var height = reader.GetFloat(3);
+
+        reader.Close();
+        connection.Close();
+
+        return new Dimensions(dimensionId, length, width, height);
+    }
+
+    /// <summary>
+    ///     Get a list of dimensions by their length.
+    /// </summary>
+    /// <param name="length">The length of the dimension to get.</param>
+    /// <returns>A list of dimensions with the given length.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given length exists.</exception>
+    public static List<Dimensions> GetDimensionsByLength(float length)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Dimensions WHERE Length = @Length";
+        command.Parameters.AddWithValue("@Length", length);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No dimension with that length exists!");
+        }
+
+        var dimensions = new List<Dimensions>();
+
+        while (reader.Read())
+        {
+            var dimensionId = (uint) reader.GetInt32(0);
+            var width = reader.GetFloat(2);
+            var height = reader.GetFloat(3);
+
+            dimensions.Add(new Dimensions(dimensionId, length, width, height));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return dimensions;
+    }
+
+    /// <summary>
+    ///     Get a list of dimensions by their width.
+    /// </summary>
+    /// <param name="width">The width of the dimension to get.</param>
+    /// <returns>A list of dimensions with the given width.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given width exists.</exception>
+    public static List<Dimensions> GetDimensionsByWidth(float width)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Dimensions WHERE Width = @Width";
+        command.Parameters.AddWithValue("@Width", width);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No dimension with that width exists!");
+        }
+
+        var dimensions = new List<Dimensions>();
+
+        while (reader.Read())
+        {
+            var dimensionId = (uint) reader.GetInt32(0);
+            var length = reader.GetFloat(1);
+            var height = reader.GetFloat(3);
+
+            dimensions.Add(new Dimensions(dimensionId, length, width, height));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return dimensions;
+    }
+
+    /// <summary>
+    ///     Get a list of dimensions by their height.
+    /// </summary>
+    /// <param name="height">The height of the dimension to get.</param>
+    /// <returns>A list of dimensions with the given height.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given height exists.</exception>
+    public static List<Dimensions> GetDimensionsByHeight(float height)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Dimensions WHERE Height = @Height";
+        command.Parameters.AddWithValue("@Height", height);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No dimension with that height exists!");
+        }
+
+        var dimensions = new List<Dimensions>();
+
+        while (reader.Read())
+        {
+            var dimensionId = (uint) reader.GetInt32(0);
+            var length = reader.GetFloat(1);
+            var width = reader.GetFloat(2);
+
+            dimensions.Add(new Dimensions(dimensionId, length, width, height));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return dimensions;
+    }
+
+    /// <summary>
+    ///     Update a dimension in the database.
+    /// </summary>
+    /// <param name="dimensions">The dimension to update.</param>
+    /// <returns>The updated dimension.</returns>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given ID exists.</exception>
+    public static Dimensions UpdateDimensions(Dimensions dimensions)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE Dimensions SET Length = @Length, Width = @Width, Height = @Height WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", dimensions);
+        command.Parameters.AddWithValue("@Length", dimensions.Length);
+        command.Parameters.AddWithValue("@Width", dimensions.Width);
+        command.Parameters.AddWithValue("@Height", dimensions.Height);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No dimension with that ID exists!");
+        }
+
+        connection.Close();
+
+        return dimensions;
+    }
+
+    /// <summary>
+    ///     Delete a dimension from the database.
+    /// </summary>
+    /// <param name="dimensions">The dimension to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no dimension with the given ID exists.</exception>
+    public static void DeleteDimensions(Dimensions dimensions)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM Dimensions WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", dimensions);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No dimension with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region HeavyVehicle
+    /// <summary>
+    ///     Get a list of all heavy vehicles.
+    /// </summary>
+    /// <returns>A list of all heavy vehicles.</returns>
+    /// <exception cref="ArgumentException">Thrown if no heavy vehicles exist.</exception>
+    public static List<HeavyVehicle> GetAllHeavyVehicles()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT VehicleDimensionsId, VehicleId, FROM HeavyVehicle";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No heavy vehicles exist!");
+        }
+
+        var heavyVehicles = new List<HeavyVehicle>();
+
+        while (reader.Read())
+        {
+            var heavyVehicleId = (uint) reader.GetInt32(0);
+
+            var dimensions = GetDimensionsById((uint) reader.GetInt32(1));
+            var vehicle = GetVehicleById((uint) reader.GetInt32(2));
+
+            heavyVehicles.Add(new HeavyVehicle(heavyVehicleId, dimensions, vehicle));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return heavyVehicles;
+    }
+
+    /// <summary>
+    ///     Create a heavy vehicle in the database.
+    /// </summary>
+    /// <param name="heavyVehicle">The heavy vehicle to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the heavy vehicle could not be created.</exception>
+    public static void CreateHeavyVehicle(HeavyVehicle heavyVehicle)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO HeavyVehicle (VehicleDimensionsId, VehicleId) VALUES (@VehicleDimensionsId, @VehicleId)";
+        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
+        command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Heavy vehicle could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a heavy vehicle by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the heavy vehicle to get.</param>
+    /// <returns>The heavy vehicle with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no heavy vehicle with the given ID exists.</exception>
+    public static HeavyVehicle GetHeavyVehicleById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM HeavyVehicle WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No heavy vehicle with that ID exists!");
+        }
+
+        reader.Read();
+
+        var heavyVehicleId = (uint) reader.GetInt32(0);
+
+        var dimensions = GetDimensionsById((uint) reader.GetInt32(1));
+        var vehicle = GetVehicleById((uint) reader.GetInt32(2));
+
+        reader.Close();
+        connection.Close();
+
+        return new HeavyVehicle(heavyVehicleId, dimensions, vehicle);
+    }
+
+    /// <summary>
+    ///     Update a heavy vehicle in the database.
+    /// </summary>
+    /// <param name="heavyVehicle">The heavy vehicle to update.</param>
+    /// <returns>The updated heavy vehicle.</returns>
+    /// <exception cref="ArgumentException">Thrown if no heavy vehicle with the given ID exists.</exception>
+    public static HeavyVehicle UpdateHeavyVehicle(HeavyVehicle heavyVehicle)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE HeavyVehicle SET VehicleDimensionsId = @VehicleDimensionsId, VehicleId = @VehicleId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", heavyVehicle);
+        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
+        command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No heavy vehicle with that ID exists!");
+        }
+
+        connection.Close();
+
+        return heavyVehicle;
+    }
+
+    /// <summary>
+    ///     Delete a heavy vehicle from the database.
+    /// </summary>
+    /// <param name="heavyVehicle">The heavy vehicle to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no heavy vehicle with the given ID exists.</exception>
+    public static void DeleteHeavyVehicle(HeavyVehicle heavyVehicle)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM HeavyVehicle WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", heavyVehicle);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No heavy vehicle with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region Truck
+    /// <summary>
+    ///     Get a list of all trucks.
+    /// </summary>
+    /// <returns>A list of all trucks.</returns>
+    /// <exception cref="ArgumentException">Thrown if no trucks exist.</exception>
+    public static List<Truck> GetAllTrucks()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT LoadCapacity, HeavyVehicleId, FROM Truck";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No trucks exist!");
+        }
+
+        var trucks = new List<Truck>();
+
+        while (reader.Read())
+        {
+            var truckId = (uint) reader.GetInt32(0);
+
+            var loadCapacity = reader.GetFloat(1);
+            var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(2));
+
+            trucks.Add(new Truck(truckId, loadCapacity, heavyVehicle));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return trucks;
+    }
+
+    /// <summary>
+    ///     Create a truck in the database.
+    /// </summary>
+    /// <param name="truck">The truck to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the truck could not be created.</exception>
+    public static void CreateTruck(Truck truck)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO Truck (LoadCapacity, HeavyVehicleId) VALUES (@LoadCapacity, @HeavyVehicleId)";
+        command.Parameters.AddWithValue("@LoadCapacity", truck.LoadCapacity);
+        command.Parameters.AddWithValue("@HeavyVehicleId", truck.HeavyVehicleId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Truck could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a truck by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the truck to get.</param>
+    /// <returns>The truck with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no truck with the given ID exists.</exception>
+    public static Truck GetTruckById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Truck WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No truck with that ID exists!");
+        }
+
+        reader.Read();
+
+        var truckId = (uint) reader.GetInt32(0);
+
+        var loadCapacity = reader.GetFloat(1);
+        var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(2));
+
+        reader.Close();
+        connection.Close();
+
+        return new Truck(truckId, loadCapacity, heavyVehicle);
+    }
+
+    /// <summary>
+    ///     Update a truck in the database.
+    /// </summary>
+    /// <param name="truck">The truck to update.</param>
+    /// <returns>The updated truck.</returns>
+    /// <exception cref="ArgumentException">Thrown if no truck with the given ID exists.</exception>
+    public static Truck UpdateTruck(Truck truck)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE Truck SET LoadCapacity = @LoadCapacity, HeavyVehicleId = @HeavyVehicleId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", truck);
+        command.Parameters.AddWithValue("@LoadCapacity", truck.LoadCapacity);
+        command.Parameters.AddWithValue("@HeavyVehicleId", truck.HeavyVehicleId);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No truck with that ID exists!");
+        }
+
+        connection.Close();
+
+        return truck;
+    }
+
+    /// <summary>
+    ///     Delete a truck from the database.
+    /// </summary>
+    /// <param name="truck">The truck to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no truck with the given ID exists.</exception>
+    public static void DeleteTruck(Truck truck)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM Truck WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", truck);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No truck with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region Bus
+    /// <summary>
+    ///     Get a list of all buses.
+    /// </summary>
+    /// <returns>A list of all buses.</returns>
+    /// <exception cref="ArgumentException">Thrown if no buses exist.</exception>
+    public static List<Bus> GetAllBuses()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId, FROM Bus";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No buses exist!");
+        }
+
+        var buses = new List<Bus>();
+
+        while (reader.Read())
+        {
+            var busId = (uint) reader.GetInt32(0);
+
+            var numberOfSeats = reader.GetByte(1);
+            var numberOfSleepingSpaces = reader.GetByte(2);
+            var hasToilet = reader.GetBoolean(3);
+            var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(4));
+
+            buses.Add(new Bus(busId, numberOfSeats, numberOfSleepingSpaces, hasToilet, heavyVehicle));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return buses;
+    }
+
+    /// <summary>
+    ///     Create a bus in the database.
+    /// </summary>
+    /// <param name="bus">The bus to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the bus could not be created.</exception>
+    public static void CreateBus(Bus bus)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO Bus (NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId) VALUES (@NumberOfSeats, @NumberOfSleepingSpaces, @HasToilet, @HeavyVehicleId)";
+        command.Parameters.AddWithValue("@NumberOfSeats", bus.NumberOfSeats);
+        command.Parameters.AddWithValue("@NumberOfSleepingSpaces", bus.NumberOfSleepingSpaces);
+        command.Parameters.AddWithValue("@HasToilet", bus.HasToilet);
+        command.Parameters.AddWithValue("@HeavyVehicleId", bus.HeavyVehicleId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Bus could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a bus by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the bus to get.</param>
+    /// <returns>The bus with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no bus with the given ID exists.</exception>
+    public static Bus GetBusById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Bus WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No bus with that ID exists!");
+        }
+
+        reader.Read();
+
+        var busId = (uint) reader.GetInt32(0);
+
+        var numberOfSeats = reader.GetByte(1);
+        var numberOfSleepingSpaces = reader.GetByte(2);
+        var hasToilet = reader.GetBoolean(3);
+        var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(4));
+
+        reader.Close();
+        connection.Close();
+
+        return new Bus(busId, numberOfSeats, numberOfSleepingSpaces, hasToilet, heavyVehicle);
+    }
+
+    /// <summary>
+    ///     Update a bus in the database.
+    /// </summary>
+    /// <param name="bus">The bus to update.</param>
+    /// <returns>The updated bus.</returns>
+    /// <exception cref="ArgumentException">Thrown if no bus with the given ID exists.</exception>
+    public static Bus UpdateBus(Bus bus)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE Bus SET NumberOfSeats = @NumberOfSeats, NumberOfSleepingSpaces = @NumberOfSleepingSpaces, HasToilet = @HasToilet, HeavyVehicleId = @HeavyVehicleId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", bus);
+        command.Parameters.AddWithValue("@NumberOfSeats", bus.NumberOfSeats);
+        command.Parameters.AddWithValue("@NumberOfSleepingSpaces", bus.NumberOfSleepingSpaces);
+        command.Parameters.AddWithValue("@HasToilet", bus.HasToilet);
+        command.Parameters.AddWithValue("@HeavyVehicleId", bus.HeavyVehicleId);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No bus with that ID exists!");
+        }
+
+        connection.Close();
+
+        return bus;
+    }
+
+    /// <summary>
+    ///     Delete a bus from the database.
+    /// </summary>
+    /// <param name="bus">The bus to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no bus with the given ID exists.</exception>
+    public static void DeleteBus(Bus bus)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM Bus WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", bus);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No bus with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region PersonalCar
+    /// <summary>
+    ///     Get a list of all personal cars.
+    /// </summary>
+    /// <returns>A list of all personal cars.</returns>
+    /// <exception cref="ArgumentException">Thrown if no personal cars exist.</exception>
+    public static List<PersonalCar> GetAllPersonalCars()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT VehicleDimensionsId, VehicleId, FROM PersonalCar";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No personal cars exist!");
+        }
+
+        var personalCars = new List<PersonalCar>();
+
+        while (reader.Read())
+        {
+            var personalCarId = (uint) reader.GetInt32(0);
+            var numberOfSeats = reader.GetByte(1);
+            var dimensions = GetDimensionsById((uint) reader.GetInt32(2));
+            var vehicle = GetVehicleById((uint) reader.GetInt32(3));
+
+            personalCars.Add(new PersonalCar(personalCarId, numberOfSeats, dimensions, vehicle));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return personalCars;
+    }
+
+    /// <summary>
+    ///     Create a personal car in the database.
+    /// </summary>
+    /// <param name="personalCar">The personal car to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the personal car could not be created.</exception>
+    public static void CreatePersonalCar(PersonalCar personalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO PersonalCar (VehicleDimensionsId, VehicleId) VALUES (@VehicleDimensionsId, @VehicleId)";
+        command.Parameters.AddWithValue("@VehicleDimensionsId", personalCar.TrunkDimensions.DimensionsId);
+        command.Parameters.AddWithValue("@VehicleId", personalCar.VehicleId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Personal car could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a personal car by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the personal car to get.</param>
+    /// <returns>The personal car with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no personal car with the given ID exists.</exception>
+    public static PersonalCar GetPersonalCarById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM PersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No personal car with that ID exists!");
+        }
+
+        reader.Read();
+
+        var personalCarId = (uint) reader.GetInt32(0);
+
+        var numberOfSeats = reader.GetByte(1);
+        var trunkDimensions = GetDimensionsById((uint) reader.GetInt32(2));
+        var vehicle = GetVehicleById((uint) reader.GetInt32(3));
+
+        reader.Close();
+        connection.Close();
+
+        return new PersonalCar(personalCarId, numberOfSeats, trunkDimensions, vehicle);
+    }
+
+    /// <summary>
+    ///     Update a personal car in the database.
+    /// </summary>
+    /// <param name="personalCar">The personal car to update.</param>
+    /// <returns>The updated personal car.</returns>
+    /// <exception cref="ArgumentException">Thrown if no personal car with the given ID exists.</exception>
+    public static PersonalCar UpdatePersonalCar(PersonalCar personalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE PersonalCar SET NumberOfSeats = @NumberOfSeats, TrunkDimensionsId = @TrunkDimensionsId, VehicleId = @VehicleId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", personalCar);
+        command.Parameters.AddWithValue("@NumberOfSeats", personalCar.NumberOfSeats);
+        command.Parameters.AddWithValue("@TrunkDimensionsId", personalCar.TrunkDimensions);
+        command.Parameters.AddWithValue("@VehicleId", personalCar.VehicleId);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No personal car with that ID exists!");
+        }
+
+        connection.Close();
+
+        return personalCar;
+    }
+
+    /// <summary>
+    ///     Delete a personal car from the database.
+    /// </summary>
+    /// <param name="personalCar">The personal car to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no personal car with the given ID exists.</exception>
+    public static void DeletePersonalCar(PersonalCar personalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM PersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", personalCar);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No personal car with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region PrivatePersonalCar
+    /// <summary>
+    ///     Get a list of all private personal cars.
+    /// </summary>
+    /// <returns>A list of all private personal cars.</returns>
+    /// <exception cref="ArgumentException">Thrown if no private personal cars exist.</exception>
+    public static List<PrivatePersonalCar> GetAllPrivatePersonalCars()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT PersonalCarId, FROM PrivatePersonalCar";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No private personal cars exist!");
+        }
+
+        var privatePersonalCars = new List<PrivatePersonalCar>();
+
+        while (reader.Read())
+        {
+            var privatePersonalCarId = (uint) reader.GetInt32(0);
+            var hasIsoFittings = reader.GetBoolean(1);
+            var personalCar = GetPersonalCarById((uint) reader.GetInt32(2));
+
+            privatePersonalCars.Add(new PrivatePersonalCar(privatePersonalCarId, hasIsoFittings, personalCar));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return privatePersonalCars;
+    }
+
+    /// <summary>
+    ///     Create a private personal car in the database.
+    /// </summary>
+    /// <param name="privatePersonalCar">The private personal car to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the private personal car could not be created.</exception>
+    public static void CreatePrivatePersonalCar(PrivatePersonalCar privatePersonalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO PrivatePersonalCar (PersonalCarId) VALUES (@PersonalCarId)";
+        command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Private personal car could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a private personal car by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the private personal car to get.</param>
+    /// <returns>The private personal car with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no private personal car with the given ID exists.</exception>
+    public static PrivatePersonalCar GetPrivatePersonalCarById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM PrivatePersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No private personal car with that ID exists!");
+        }
+
+        reader.Read();
+
+        var privatePersonalCarId = (uint) reader.GetInt32(0);
+        var hasIsoFittings = reader.GetBoolean(1);
+        var personalCar = GetPersonalCarById((uint) reader.GetInt32(2));
+
+        reader.Close();
+        connection.Close();
+
+        return new PrivatePersonalCar(privatePersonalCarId, hasIsoFittings, personalCar);
+    }
+
+    /// <summary>
+    ///     Update a private personal car in the database.
+    /// </summary>
+    /// <param name="privatePersonalCar">The private personal car to update.</param>
+    /// <returns>The updated private personal car.</returns>
+    /// <exception cref="ArgumentException">Thrown if no private personal car with the given ID exists.</exception>
+    public static PrivatePersonalCar UpdatePrivatePersonalCar(PrivatePersonalCar privatePersonalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE PrivatePersonalCar SET HasIsoFittings = @HasIsoFittings, PersonalCarId = @PersonalCarId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", privatePersonalCar);
+        command.Parameters.AddWithValue("@HasIsoFittings", privatePersonalCar.HasIsoFittings);
+        command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
+
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("No private personal car with that ID exists!");
+        }
+
+        connection.Close();
+
+        return privatePersonalCar;
+    }
+
+    /// <summary>
+    ///     Delete a private personal car from the database.
+    /// </summary>
+    /// <param name="privatePersonalCar">The private personal car to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no private personal car with the given ID exists.</exception>
+    public static void DeletePrivatePersonalCar(PrivatePersonalCar privatePersonalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM PrivatePersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", privatePersonalCar);
+
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            throw new ArgumentException("No private personal car with that ID exists!");
+        }
+
+        connection.Close();
+    }
+    #endregion
+
+    #region ProfessionalPersonalCar
+    /// <summary>
+    ///     Get a list of all professional personal cars.
+    /// </summary>
+    /// <returns>A list of all professional personal cars.</returns>
+    /// <exception cref="ArgumentException">Thrown if no professional personal cars exist.</exception>
+    public static List<ProfessionalPersonalCar> GetAllProfessionalPersonalCars()
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT PersonalCarId, FROM ProfessionalPersonalCar";
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No professional personal cars exist!");
+        }
+
+        var professionalPersonalCars = new List<ProfessionalPersonalCar>();
+
+        while (reader.Read())
+        {
+            var professionalPersonalCarId = (uint) reader.GetInt32(0);
+            var hasSafetyBar = reader.GetBoolean(1);
+            var loadCapacity = reader.GetFloat(2);
+            var personalCar = GetPersonalCarById((uint) reader.GetInt32(3));
+
+            professionalPersonalCars.Add(new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar, loadCapacity, personalCar));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return professionalPersonalCars;
+    }
+
+    /// <summary>
+    ///     Create a professional personal car in the database.
+    /// </summary>
+    /// <param name="professionalPersonalCar">The professional personal car to create.</param>
+    /// <exception cref="ArgumentException">Thrown if the professional personal car could not be created.</exception>
+    public static void CreateProfessionalPersonalCar(ProfessionalPersonalCar professionalPersonalCar)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO ProfessionalPersonalCar (PersonalCarId) VALUES (@PersonalCarId)";
+        command.Parameters.AddWithValue("@PersonalCarId", professionalPersonalCar.PersonalCarId);
+
+        // If it fails, throw an exception and close the connection.
+        if (command.ExecuteNonQuery() == 0)
+        {
+            connection.Close();
+
+            throw new ArgumentException("Professional personal car could not be created!");
+        }
+
+        connection.Close();
+    }
+
+    /// <summary>
+    ///     Get a professional personal car by its ID.
+    /// </summary>
+    /// <param name="id">The ID of the professional personal car to get.</param>
+    /// <returns>The professional personal car with the given ID.</returns>
+    /// <exception cref="ArgumentException">Thrown if no professional personal car with the given ID exists.</exception>
+    public static ProfessionalPersonalCar GetProfessionalPersonalCarById(uint id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM ProfessionalPersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No professional personal car with that ID exists!");
+        }
+
+        reader.Read();
+
+        var professionalPersonalCarId = (uint) reader.GetInt32(0);
         var hasSafetyBar = reader.GetBoolean(1);
         var loadCapacity = reader.GetFloat(2);
+        var personalCar = GetPersonalCarById((uint) reader.GetInt32(3));
 
-        var numberOfSeats = reader.GetByte(3);
+        reader.Close();
+        connection.Close();
 
-        var dimensions = new Dimensions(reader.GetDouble(4), reader.GetDouble(5), reader.GetDouble(6));
-
-        var name = reader.GetString(3);
-        var km = reader.GetDouble(4);
-        var registrationNumber = reader.GetString(5);
-        var year = (ushort) reader.GetSqlInt16(6).Value;
-        var newPrice = reader.GetDecimal(7);
-        // var hasTowbar = reader.GetBoolean(8);
-        var engineSize = reader.GetDouble(9);
-        var kmPerLiter = reader.GetDouble(10);
-
-        var licenseType = (LicenseType)reader.GetByte(15);
-        var fuelType = (FuelType)reader.GetByte(16);
-
-        return new ProfessionalPersonalCar(name, km, registrationNumber, year, newPrice, engineSize, kmPerLiter,
-            fuelType, numberOfSeats, dimensions, hasSafetyBar, loadCapacity, licenseType);
+        return new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar, loadCapacity, personalCar);
     }
 
     /// <summary>
-    ///     Get the vehicle from the database by id.
+    ///     Update a professional personal car in the database.
     /// </summary>
-    /// <param name="id">The id of the vehicle.</param>
-    /// <returns>The vehicle.</returns>
-    /// <exception cref="DataException">If the vehicle is not found.</exception>
-    public PrivatePersonalCar GetPrivatePersonalCarById(uint id)
+    /// <param name="professionalPersonalCar">The professional personal car to update.</param>
+    /// <returns>The updated professional personal car.</returns>
+    /// <exception cref="ArgumentException">Thrown if no professional personal car with the given ID exists.</exception>
+    public static ProfessionalPersonalCar UpdateProfessionalPersonalCar(ProfessionalPersonalCar professionalPersonalCar)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query =
-            "SELECT PPC.HasIsofixFittings," +
-            "       PC.NumberOfSeats," +
-            "       D.Length, D.Width, D.Height," +
-            "       V.Name, V.Km, V.RegistrationNumber, V.Year, V.NewPrice, V.HasTowbar, V.EngineSize, V.KmPerLiter" +
-            "       FT.Id" +
-            " FROM PrivatePersonalCars PPC" +
-            "     JOIN PersonalCars PC on PPC.PersonalCarId = PC.Id" +
-            "     JOIN Dimensions D on D.Id = PC.TrunkDimensionsId" +
-            "     JOIN Vehicles V on PC.VehicleId = V.Id" +
-            "     JOIN FuelTypes FT on V.FuelTypeId = FT.Id" +
-            " WHERE PPC.Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "UPDATE ProfessionalPersonalCar SET HasSafetyBar = @HasSafetyBar, LoadCapacity = @LoadCapacity, PersonalCarId = @PersonalCarId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", professionalPersonalCar);
+        command.Parameters.AddWithValue("@HasSafetyBar", professionalPersonalCar.HasSafetyBar);
+        command.Parameters.AddWithValue("@LoadCapacity", professionalPersonalCar.LoadCapacity);
+        command.Parameters.AddWithValue("@PersonalCarId", professionalPersonalCar.PersonalCarId);
 
-        var command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Id", id);
-
-        var reader = command.ExecuteReader();
-
-        if (!reader.HasRows)
+        if (command.ExecuteNonQuery() == 0)
         {
-            throw new DataException("Private Personal Car not found!");
+            connection.Close();
+
+            throw new ArgumentException("No professional personal car with that ID exists!");
         }
 
-        reader.Read();
+        connection.Close();
 
-        var hasIsofixFittings = reader.GetBoolean(1);
-
-        var numberOfSeats = reader.GetByte(2);
-
-        var dimensions = new Dimensions(reader.GetDouble(3), reader.GetDouble(4), reader.GetDouble(5));
-
-        var name = reader.GetString(3);
-        var km = reader.GetDouble(4);
-        var registrationNumber = reader.GetString(5);
-        var year = (ushort) reader.GetSqlInt16(6).Value;
-        var newPrice = reader.GetDecimal(7);
-        var hasTowbar = reader.GetBoolean(8);
-        var engineSize = reader.GetDouble(9);
-        var kmPerLiter = reader.GetDouble(10);
-
-        var fuelType = (FuelType)reader.GetByte(14);
-
-        return new PrivatePersonalCar(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter,
-            fuelType, numberOfSeats, dimensions, hasIsofixFittings);
+        return professionalPersonalCar;
     }
 
     /// <summary>
-    ///     Get the vehicle from the database by id.
+    ///     Delete a professional personal car from the database.
     /// </summary>
-    /// <param name="id">The id of the vehicle.</param>
-    /// <returns>The vehicle.</returns>
-    /// <exception cref="DataException">If the vehicle is not found.</exception>
-    public Truck GetTruckById(uint id)
+    /// <param name="professionalPersonalCar">The professional personal car to delete.</param>
+    /// <exception cref="ArgumentException">Thrown if no professional personal car with the given ID exists.</exception>
+    public static void DeleteProfessionalPersonalCar(ProfessionalPersonalCar professionalPersonalCar)
     {
-        var connection = GetConnection();
+        var connection = Instance.GetConnection();
 
-        var query =
-            "SELECT T.LoadCapacity," +
-            "       V.Name, V.Km, V.RegistrationNumber, V.Year, V.NewPrice, V.HasTowbar, V.EngineSize, V.KmPerLiter," +
-            "       D.Length, D.Width, D.Height," +
-            "       FT.Id" +
-            " FROM Trucks T" +
-            "     JOIN HeavyVehicles HV ON T.HeavyVehicleId = HV.Id" +
-            "     JOIN Dimensions D on D.Id = HV.VehicleDimensionsId" +
-            "     JOIN Vehicles V on HV.VehicleId = V.Id" +
-            "     JOIN FuelTypes FT on V.FuelTypeId = FT.Id" +
-            " WHERE T.Id = @Id";
+        var command = connection.CreateCommand();
+        command.CommandText = "DELETE FROM ProfessionalPersonalCar WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", professionalPersonalCar);
 
-        var command = new SqlCommand(query, connection);
-        command.Parameters.AddWithValue("@Id", id);
-
-        var reader = command.ExecuteReader();
-
-        if (!reader.HasRows)
+        // If it fails, throw an exception.
+        if (command.ExecuteNonQuery() == 0)
         {
-            throw new DataException("Truck not found!");
+            throw new ArgumentException("No professional personal car with that ID exists!");
         }
 
-        reader.Read();
-
-        var loadCapacity = reader.GetFloat(0);
-
-        var name = reader.GetString(3);
-        var km = reader.GetDouble(4);
-        var registrationNumber = reader.GetString(5);
-        var year = (ushort) reader.GetSqlInt16(6).Value;
-        var newPrice = reader.GetDecimal(7);
-        var hasTowbar = reader.GetBoolean(8);
-        var engineSize = reader.GetDouble(9);
-        var kmPerLiter = reader.GetDouble(10);
-
-        var dimensions = new Dimensions(reader.GetDouble(9), reader.GetDouble(10), reader.GetDouble(11));
-
-        var fuelType = (FuelType)reader.GetByte(12);
-
-        return new Truck(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, dimensions, loadCapacity);
+        connection.Close();
     }
-
-    /// <summary>
-    ///     Get the vehicle from the database by id.
-    /// </summary>
-    /// <param name="id">The id of the vehicle.</param>
-    /// <returns>The vehicle.</returns>
-    /// <exception cref="DataException">If the vehicle is not found.</exception>
-    public Bus GetBusById(uint id)
-    {
-        var connection = GetConnection();
-
-        var query =
-            "SELECT B.NumberOfSeats, B.NumberOfSleepingSpaces, B.HasToilet," +
-            "       V.Name, V.Km, V.RegistrationNumber, V.Year, V.NewPrice, V.HasTowbar, V.EngineSize, V.KmPerLiter," +
-            "       D.Length, D.Width, D.Height," +
-            "       FT.Id" +
-            " FROM Buses B" +
-            "     JOIN HeavyVehicles HV ON B.HeavyVehicleId = HV.Id" +
-            "     JOIN Dimensions D on D.Id = HV.VehicleDimensionsId" +
-            "     JOIN Vehicles V on HV.VehicleId = V.Id" +
-            "     JOIN FuelTypes FT on V.FuelTypeId = FT.Id" +
-            " WHERE B.Id = @Id";
-
-        var command = new SqlCommand(query, connection);
-
-        var idParameter = new SqlParameter("@Id", SqlDbType.Int, 0) { Value = id };
-        command.Parameters.Add(idParameter);
-
-        command.Prepare();
-
-        var reader = command.ExecuteReader();
-
-        if (!reader.HasRows)
-        {
-            throw new DataException("Bus not found!");
-        }
-
-        reader.Read();
-
-        var numberOfSeats = reader.GetByte(0);
-        var numberOfSleepingSpaces = reader.GetByte(1);
-        var hasToilet = reader.GetBoolean(2);
-
-        var name = reader.GetString(3);
-        var km = reader.GetDouble(4);
-        var registrationNumber = reader.GetString(5);
-        var year = (ushort) reader.GetSqlInt16(6).Value;
-        var newPrice = reader.GetDecimal(7);
-        var hasTowbar = reader.GetBoolean(8);
-        var engineSize = reader.GetDouble(9);
-        var kmPerLiter = reader.GetDouble(10);
-
-        var dimensions = new Dimensions(reader.GetDouble(11), reader.GetDouble(12), reader.GetDouble(13));
-
-        var fuelType = (FuelType)reader.GetByte(14);
-
-        return new Bus(name, km, registrationNumber, year, newPrice, hasTowbar, engineSize, kmPerLiter, fuelType, dimensions, numberOfSeats, numberOfSleepingSpaces, hasToilet);
-    }
+    #endregion
 }

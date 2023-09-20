@@ -10,27 +10,8 @@ internal class Program
     private static void Main(string[] args)
     {
         var databaseManager = DatabaseManager.Instance;
-        var buss = databaseManager.GetBusById(1);
-
-        Console.WriteLine(buss.ToString());
 
         // AuctionHouse objects init
-
-        #region init car objects
-
-        var td = new Dimensions(14.0, 10.0, 16.0);
-        var vd = new Dimensions(214.0, 2.59, 12.9);
-
-        var privateCar1 = new PrivatePersonalCar("Some car brand", 300.0, "DF12745", 2009, 10000M, false, 10.0, 20.0,
-            FuelType.Diesel, 3, td, true);
-        var privateCar2 = new PrivatePersonalCar("Another car brand", 300.0, "DF12345", 2020, 12000M, true, 10.0, 20.0,
-            FuelType.Benzine, 5, td, false);
-        var professionalCar = new ProfessionalPersonalCar("Suzuki Swift", 500.0, "XY12345", 2012, 10000M, 10.0, 20.0,
-            FuelType.Benzine, 2, td, true, 400.0, LicenseType.B);
-        var bus = new Bus("City bus", 800.0, "HE24745", 2012, 30000M, true, 10.0, 15.0, FuelType.Diesel, vd,
-            24, 10, true);
-
-        #endregion
 
         #region init user objects
 
