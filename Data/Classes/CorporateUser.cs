@@ -28,14 +28,10 @@ public class CorporateUser : User
 
         Balance -= amount;
     }
-    
+
     public override string ToString()
     {
         return $"{base.ToString()}\n" +
-               $"Id: {Id}\n" +
-               $"UserName: {UserName}\n" +
-               $"Balance: {Balance}\n" +
-               $"Zipcode: {Zipcode}\n" +
                $"CvrNumber: {CvrNumber}\n" +
                $"Credit: {Credit}\n";
     }

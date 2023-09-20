@@ -62,8 +62,7 @@ public abstract class User : IBuyer, ISeller
     /// <returns>A string with the formatted message.</returns>
     public string ReceiveBidNotification(string message)
     {
-        // TODO: Finish ReceiveBidNotification
-        return $"New Bid: {message}";
+        return $"New Bid Received: {message}";
     }
 
 
