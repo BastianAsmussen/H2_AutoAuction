@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using Data.Interfaces;
 
 namespace Data.Classes;
 /*
@@ -12,8 +13,19 @@ køber og sælger som interfaces
 privat og company som klasser
  */
 
-public abstract class User //TODO: U4 - Implement interfaces
+public abstract class User : IBuyer, ISeller
 {
+    public uint Id { get; }
+
+    /// <summary>
+    ///     PasswordHash property.
+    /// </summary>
+    private byte[] PasswordHash { get; }
+
+    public string UserName { get; set; }
+    public decimal Balance { get; set; }
+    public uint Zipcode { get; set; }
+
     protected User(string userName, string password, uint zipCode)
     {
         //TODO: U1 - Set constructor and field
@@ -25,15 +37,11 @@ public abstract class User //TODO: U4 - Implement interfaces
         // throw new NotImplementedException();
     }
 
-    /// <summary>
-    ///     ID property.
-    /// </summary>
-    public uint Id { get; }
-
-    /// <summary>
-    ///     PasswordHash property.
-    /// </summary>
-    private byte[] PasswordHash { get; }
+    public string ReceiveBidNotification(string message)
+    {
+        // TODO: Finish ReceiveBidNotification
+        return $"New Bid: {message}";
+    }
 
     /// <summary>
     ///     A method that ...
@@ -45,14 +53,14 @@ public abstract class User //TODO: U4 - Implement interfaces
 
         HashAlgorithm sha = SHA256.Create(); //Make a HashAlgorithm object for making hash computations.
         var result =
-            sha.ComputeHash(Encoding.ASCII.GetBytes(loginPassword)); // Encodes the password into a hash in a Byte array.
+            sha.ComputeHash(
+                Encoding.ASCII.GetBytes(loginPassword)); // Encodes the password into a hash in a Byte array.
 
         return PasswordHash == result;
 
         // throw new NotImplementedException();
     }
 
-    //TODO: U4 - Implement interface properties and methods.
 
     /// <summary>
     ///     Returns the User in a string with relevant information.
