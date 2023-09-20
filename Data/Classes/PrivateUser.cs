@@ -7,7 +7,7 @@ public class PrivateUser : User
     public PrivateUser(string userName, string password, uint zipCode, uint cprNumber) : base(userName, password,
         zipCode)
     {
-        cprNumber = CprNumber;
+        CprNumber = cprNumber;
 
         //TODO: U11 - Add to database and set ID
         // throw new NotImplementedException();
