@@ -89,7 +89,7 @@ public class CreateUserViewModel : ViewModelBase
 
     public CreateUserViewModel()
     {
-        CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView());});
+        CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView()); });
         CreateCommand = ReactiveCommand.Create(Create);
         IsCorporateCommand = ReactiveCommand.Create(Corporate);
         IsPrivateCommand = ReactiveCommand.Create(Private);
@@ -106,20 +106,28 @@ public class CreateUserViewModel : ViewModelBase
     private void Create()
     {
         if (_isPrivate)
-            if (CreatePrivateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
-                    Convert.ToUInt32(CprNumber)))
-                Navigate(new LoginView());
-
-            else
-                Console.WriteLine("No Can Do");
+            try
+            {
+                CreatePrivateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                    Convert.ToUInt32(CprNumber));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
         if (_isCorporate)
-            if (CreateCorporateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
-                    Convert.ToUInt32(CvrNumber), Convert.ToDecimal(Credit)))
-                Navigate(new LoginView());
+            try
+            {
+                CreateCorporateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                    Convert.ToUInt32(CvrNumber), Convert.ToDecimal(Credit));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
-            else
-                Console.WriteLine("No Can Do");
+        Navigate(new LoginView());
     }
 
     /// <summary>
@@ -136,18 +144,20 @@ public class CreateUserViewModel : ViewModelBase
     /// If the user is created successfully, it will print a success message.
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
-    private bool CreatePrivateUser(string username, string password, string rPassword, uint zipCode, uint cprNumber)
+    private void CreatePrivateUser(string username, string password, string rPassword, uint zipCode, uint cprNumber)
     {
-        if (string.IsNullOrEmpty(password) && password.Equals(password))
-            return false;
+        if (!password.Equals(rPassword))
+            throw new Exception("Password does not match");
+
+        if (string.IsNullOrEmpty(ZipCode) || string.IsNullOrEmpty(CprNumber))
+            throw new Exception("ZipCode or CprNumber is empty");
 
         PrivateUser unused = new(username, rPassword, zipCode, cprNumber);
 
         //#TODO: Send request to the server
         Console.WriteLine($"New '{unused.UserName}' has been created successfully");
-        return true;
     }
-    
+
     /// <summary>
     /// Creates a new user with the provided username and password.
     /// </summary>
@@ -163,17 +173,20 @@ public class CreateUserViewModel : ViewModelBase
     /// If the user is created successfully, it will print a success message.
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
-    private bool CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber,
+    private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber,
         decimal credit)
     {
-        if (string.IsNullOrEmpty(password) && password.Equals(password))
-            return false;
+        if (!password.Equals(rPassword))
+            throw new Exception("Password does not match");
+
+        if (string.IsNullOrEmpty(CvrNumber) || string.IsNullOrEmpty(Credit))
+            throw new Exception("ZipCode, CvrNumber or Credit is empty");
+
 
         CorporateUser unused = new(username, rPassword, zipCode, cvrNumber, credit);
 
         //#TODO: Send request to the server
         Console.WriteLine($"New '{unused.UserName}' has been created successfully");
-        return true;
     }
 
     /// <summary>
@@ -211,9 +224,11 @@ public class CreateUserViewModel : ViewModelBase
                 x => x.UserName,
                 x => x.PassWord,
                 x => x.RPassWord,
-                (userName, passWord, rpassWord) =>
+                x => x.ZipCode,
+                (userName, passWord, rpassWord, zipCode) =>
                     !string.IsNullOrWhiteSpace(userName) &&
                     !string.IsNullOrWhiteSpace(passWord) &&
+                    !string.IsNullOrWhiteSpace(zipCode) &&
                     !string.IsNullOrWhiteSpace(rpassWord))
             .Subscribe(x => BtnCreateEnabled = x);
     }
