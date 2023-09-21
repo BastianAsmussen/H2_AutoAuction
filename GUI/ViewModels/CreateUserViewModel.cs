@@ -31,28 +31,28 @@ public class CreateUserViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
-    [MinLength(1, ErrorMessage = "Username cannot be empty")]
+    [MinLength(1, ErrorMessage = "Password cannot be empty")]
     public string PassWord
     {
         get => _passWord;
         set => this.RaiseAndSetIfChanged(ref _passWord, value);
     }
 
-    [MinLength(1, ErrorMessage = "Username cannot be empty")]
+    [MinLength(1, ErrorMessage = "Rewrite the password")]
     public string RPassWord
     {
         get => _rPassWord;
         set => this.RaiseAndSetIfChanged(ref _rPassWord, value);
     }
 
-    [MinLength(1, ErrorMessage = "Username cannot be empty")]
+    [MinLength(1, ErrorMessage = "Cvr number is required")]
     public string CvrNumber
     {
         get => _cvrNumber;
         set => this.RaiseAndSetIfChanged(ref _cvrNumber, value);
     }
 
-    [MinLength(1, ErrorMessage = "Username cannot be empty")]
+    [MinLength(1, ErrorMessage = "Credit is required")]
     public string Credit
     {
         get => _credit;
@@ -89,18 +89,10 @@ public class CreateUserViewModel : ViewModelBase
 
     public CreateUserViewModel()
     {
-        CancelCommand = ReactiveCommand.Create(Cancel);
+        CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView());});
         CreateCommand = ReactiveCommand.Create(Create);
-        IsCorporateCommand = ReactiveCommand.Create(() =>
-        {
-            _isCorporate = true;
-            _isPrivate = false;
-        });
-        IsPrivateCommand = ReactiveCommand.Create(() =>
-        {
-            _isPrivate = true;
-            _isCorporate = false;
-        });
+        IsCorporateCommand = ReactiveCommand.Create(Corporate);
+        IsPrivateCommand = ReactiveCommand.Create(Private);
 
         UserName = string.Empty;
         PassWord = string.Empty;
@@ -108,7 +100,6 @@ public class CreateUserViewModel : ViewModelBase
 
         InitializeCreateButtonState();
     }
-
 
     #region Methods
 
@@ -129,11 +120,6 @@ public class CreateUserViewModel : ViewModelBase
 
             else
                 Console.WriteLine("No Can Do");
-    }
-
-    private void Cancel()
-    {
-        Navigate(new LoginView());
     }
 
     /// <summary>
@@ -161,8 +147,7 @@ public class CreateUserViewModel : ViewModelBase
         Console.WriteLine($"New '{unused.UserName}' has been created successfully");
         return true;
     }
-
-
+    
     /// <summary>
     /// Creates a new user with the provided username and password.
     /// </summary>
@@ -192,6 +177,25 @@ public class CreateUserViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// Sets the user type to Corporate 
+    /// </summary>
+    private void Corporate()
+    {
+        _isPrivate = false;
+        _isCorporate = true;
+    }
+
+    /// <summary>
+    /// Sets the user type to Private 
+    /// </summary>
+    private void Private()
+    {
+        _isCorporate = false;
+        _isPrivate = true;
+    }
+
+
+    /// <summary>
     /// Initializes the state of the Create button based on the values of user input fields.
     /// </summary>
     /// <remarks>
@@ -207,12 +211,10 @@ public class CreateUserViewModel : ViewModelBase
                 x => x.UserName,
                 x => x.PassWord,
                 x => x.RPassWord,
-                x => x._isCorporate,
-                x => x._isPrivate,
-                (userName, passWord, rpassWord, isCorporate, isPrivate) =>
+                (userName, passWord, rpassWord) =>
                     !string.IsNullOrWhiteSpace(userName) &&
                     !string.IsNullOrWhiteSpace(passWord) &&
-                    !string.IsNullOrWhiteSpace(rpassWord) && isCorporate || isPrivate)
+                    !string.IsNullOrWhiteSpace(rpassWord))
             .Subscribe(x => BtnCreateEnabled = x);
     }
 
