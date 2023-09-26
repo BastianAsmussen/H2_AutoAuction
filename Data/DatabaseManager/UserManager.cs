@@ -10,7 +10,200 @@ namespace Data.DatabaseManager;
 /// </summary>
 public partial class DatabaseManager
 {
+    #region Signup
+
+    /// <summary>
+    ///     Signs up a user.
+    /// </summary>
+    /// <param name="user">The user to sign up.</param>
+    /// <returns>The signed up user.</returns>
+    /// <exception cref="DataException">Thrown when the username is already taken or the password could not be hashed.</exception>
+    public static User SignUp(User user)
+    {
+        // Check if the username is already taken.
+        if (IsUsernameTaken(user.Username))
+        {
+            throw new DataException("Username is already taken!");
+        }
+
+        // Hash the password.
+        var hashedPassword = HashPassword(user.Password);
+
+        // Make sure the password was hashed successfully.
+        if (string.IsNullOrWhiteSpace(hashedPassword))
+        {
+            throw new DataException("Password could not be hashed!");
+        }
+
+        // Create the user.
+        var userToCreate = new User(0, user.Username, hashedPassword, user.Zipcode, user.Balance);
+        var createdUser = CreateUser(userToCreate);
+
+        return createdUser;
+    }
+
+    /// <summary>
+    ///     Signs up a private user.
+    /// </summary>
+    /// <param name="privateUser">The private user to sign up.</param>
+    /// <returns>The signed up private user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username, password or CPR number is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
+    public static PrivateUser SignUp(PrivateUser privateUser)
+    {
+        ValidateUser(privateUser);
+
+        var user = SignUp(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode,
+            privateUser.Balance));
+
+        // Create the private user.
+        var privateUserToCreate = new PrivateUser(0, privateUser.Cpr, user);
+        var createdPrivateUser = CreatePrivateUser(privateUserToCreate);
+
+        return createdPrivateUser;
+    }
+
+    /// <summary>
+    ///     Signs up a corporate user.
+    /// </summary>
+    /// <param name="corporateUser">The corporate user to sign up.</param>
+    /// <returns>The signed up corporate user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username, password or CVR number is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
+    public static CorporateUser SignUp(CorporateUser corporateUser)
+    {
+        ValidateUser(corporateUser);
+
+        // Create the user.
+        var user = SignUp(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode,
+            corporateUser.Balance));
+
+        // Create the corporate user.
+        var corporateUserToCreate = new CorporateUser(0, corporateUser.Cvr, corporateUser.Credit, user);
+        var createdCorporateUser = CreateCorporateUser(corporateUserToCreate);
+
+        return createdCorporateUser;
+    }
+
+    #endregion
+
+    #region Signin
+
+    /// <summary>
+    ///     Logs a user in.
+    /// </summary>
+    /// <param name="user">The user to log in.</param>
+    /// <returns>The logged in user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the user does not exist.</exception>
+    /// <exception cref="InvalidCredentialException">Thrown when the password is incorrect.</exception>
+    public static User Login(User user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Username))
+        {
+            throw new ArgumentException("Username cannot be empty!");
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Password))
+        {
+            throw new ArgumentException("Password cannot be empty!");
+        }
+
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+
+        // Get the hashed password from the database.
+        command.CommandText = "SELECT Password FROM Users" +
+                              " WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", user.Username);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new DataException("User does not exist!");
+        }
+
+        reader.Read();
+
+        var hashedPassword = reader.GetString(0);
+
+        reader.Close();
+
+        // Check if the password is correct.
+        if (!IsValidPassword(user.Password, hashedPassword))
+        {
+            connection.Close();
+
+            throw new InvalidCredentialException("Password is incorrect!");
+        }
+
+        // Get the user from the database.
+        command.CommandText = "SELECT Id FROM Users" +
+                              " WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", user.Username);
+
+        reader = command.ExecuteReader();
+
+        reader.Read();
+
+        var userId = (uint)reader.GetInt32(0);
+
+        reader.Close();
+        connection.Close();
+
+        return GetUserById(userId);
+    }
+
+    /// <summary>
+    ///     Logs a private user in.
+    /// </summary>
+    /// <param name="privateUser">The private user to log in.</param>
+    /// <returns>The logged in private user.</returns>
+    /// <exception cref="InvalidCredentialException">Thrown when the CPR number is incorrect.</exception>
+    public static PrivateUser Login(PrivateUser privateUser)
+    {
+        var user = Login(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode,
+            privateUser.Balance));
+
+        var privateUserFromDatabase = GetPrivateUserByCpr(privateUser.Cpr);
+
+        if (privateUserFromDatabase.UserId != user.UserId)
+        {
+            throw new InvalidCredentialException("CPR number is incorrect!");
+        }
+
+        return privateUserFromDatabase;
+    }
+
+    /// <summary>
+    ///     Logs a corporate user in.
+    /// </summary>
+    /// <param name="corporateUser">The corporate user to log in.</param>
+    /// <returns>The logged in corporate user.</returns>
+    /// <exception cref="InvalidCredentialException">Thrown when the CVR number is incorrect.</exception>
+    public static CorporateUser Login(CorporateUser corporateUser)
+    {
+        var user = Login(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode,
+            corporateUser.Balance));
+
+        var corporateUsersFromDatabase = GetCorporateUsersByCvr(corporateUser.Cvr);
+        foreach (var corporateUserFromDatabase in corporateUsersFromDatabase.Where(corporateUserFromDatabase =>
+                     corporateUserFromDatabase.UserId == user.UserId))
+        {
+            return corporateUserFromDatabase;
+        }
+
+        throw new InvalidCredentialException("CVR number is incorrect!");
+    }
+
+    #endregion
+
     #region User
+
     /// <summary>
     ///     Gets all users from the database.
     /// </summary>
@@ -235,184 +428,6 @@ public partial class DatabaseManager
     }
 
     /// <summary>
-    ///     Logs a user in.
-    /// </summary>
-    /// <param name="user">The user to log in.</param>
-    /// <returns>The logged in user.</returns>
-    /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
-    /// <exception cref="DataException">Thrown when the user does not exist.</exception>
-    /// <exception cref="InvalidCredentialException">Thrown when the password is incorrect.</exception>
-    public static User Login(User user)
-    {
-        if (string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("Username cannot be empty!");
-        }
-
-        if (string.IsNullOrWhiteSpace(user.Password))
-        {
-            throw new ArgumentException("Password cannot be empty!");
-        }
-
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-
-        // Get the hashed password from the database.
-        command.CommandText = "SELECT Password FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", user.Username);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new DataException("User does not exist!");
-        }
-
-        reader.Read();
-
-        var hashedPassword = reader.GetString(0);
-
-        reader.Close();
-
-        // Check if the password is correct.
-        if (!IsValidPassword(user.Password, hashedPassword))
-        {
-            connection.Close();
-
-            throw new InvalidCredentialException("Password is incorrect!");
-        }
-
-        // Get the user from the database.
-        command.CommandText = "SELECT Id FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", user.Username);
-
-        reader = command.ExecuteReader();
-
-        reader.Read();
-
-        var userId = (uint)reader.GetInt32(0);
-
-        reader.Close();
-        connection.Close();
-
-        return GetUserById(userId);
-    }
-
-    /// <summary>
-    ///     Logs a private user in.
-    /// </summary>
-    /// <param name="privateUser">The private user to log in.</param>
-    /// <returns>The logged in private user.</returns>
-    /// <exception cref="InvalidCredentialException">Thrown when the CPR number is incorrect.</exception>
-    public static PrivateUser Login(PrivateUser privateUser)
-    {
-        var user = Login(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode, privateUser.Balance));
-
-        var privateUserFromDatabase = GetPrivateUserByCpr(privateUser.Cpr);
-
-        if (privateUserFromDatabase.UserId != user.UserId)
-        {
-            throw new InvalidCredentialException("CPR number is incorrect!");
-        }
-
-        return privateUserFromDatabase;
-    }
-
-    /// <summary>
-    ///     Logs a corporate user in.
-    /// </summary>
-    /// <param name="corporateUser">The corporate user to log in.</param>
-    /// <returns>The logged in corporate user.</returns>
-    /// <exception cref="InvalidCredentialException">Thrown when the CVR number is incorrect.</exception>
-    public static CorporateUser Login(CorporateUser corporateUser)
-    {
-        var user = Login(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode, corporateUser.Balance));
-
-        var corporateUsersFromDatabase = GetCorporateUsersByCvr(corporateUser.Cvr);
-        foreach (var corporateUserFromDatabase in corporateUsersFromDatabase.Where(corporateUserFromDatabase => corporateUserFromDatabase.UserId == user.UserId))
-        {
-            return corporateUserFromDatabase;
-        }
-
-        throw new InvalidCredentialException("CVR number is incorrect!");
-    }
-
-    /// <summary>
-    ///     Signs up a user.
-    /// </summary>
-    /// <param name="user">The user to sign up.</param>
-    /// <returns>The signed up user.</returns>
-    /// <exception cref="DataException">Thrown when the username is already taken or the password could not be hashed.</exception>
-    public static User SignUp(User user)
-    {
-        // Check if the username is already taken.
-        if (IsUsernameTaken(user.Username)) {
-            throw new DataException("Username is already taken!");
-        }
-
-        // Hash the password.
-        var hashedPassword = HashPassword(user.Password);
-
-        // Make sure the password was hashed successfully.
-        if (string.IsNullOrWhiteSpace(hashedPassword))
-        {
-            throw new DataException("Password could not be hashed!");
-        }
-
-        // Create the user.
-        var userToCreate = new User(0, user.Username, hashedPassword, user.Zipcode, user.Balance);
-        var createdUser = CreateUser(userToCreate);
-
-        return createdUser;
-    }
-
-    /// <summary>
-    ///     Signs up a private user.
-    /// </summary>
-    /// <param name="privateUser">The private user to sign up.</param>
-    /// <returns>The signed up private user.</returns>
-    /// <exception cref="ArgumentException">Thrown when the username, password or CPR number is null or empty.</exception>
-    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
-    public static PrivateUser SignUp(PrivateUser privateUser)
-    {
-        ValidateUser(privateUser);
-
-        var user = SignUp(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode, privateUser.Balance));
-
-        // Create the private user.
-        var privateUserToCreate = new PrivateUser(0, privateUser.Cpr, user);
-        var createdPrivateUser = CreatePrivateUser(privateUserToCreate);
-
-        return createdPrivateUser;
-    }
-
-    /// <summary>
-    ///     Signs up a corporate user.
-    /// </summary>
-    /// <param name="corporateUser">The corporate user to sign up.</param>
-    /// <returns>The signed up corporate user.</returns>
-    /// <exception cref="ArgumentException">Thrown when the username, password or CVR number is null or empty.</exception>
-    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
-    public static CorporateUser SignUp(CorporateUser corporateUser)
-    {
-        ValidateUser(corporateUser);
-
-        // Create the user.
-        var user = SignUp(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode, corporateUser.Balance));
-
-        // Create the corporate user.
-        var corporateUserToCreate = new CorporateUser(0, corporateUser.Cvr, corporateUser.Credit, user);
-        var createdCorporateUser = CreateCorporateUser(corporateUserToCreate);
-
-        return createdCorporateUser;
-    }
-
-    /// <summary>
     ///     Validates a user.
     /// </summary>
     /// <param name="user">The user to validate.</param>
@@ -500,9 +515,11 @@ public partial class DatabaseManager
 
         return false;
     }
+
     #endregion
 
     #region PrivateUser
+
     /// <summary>
     ///     Gets all private users from the database.
     /// </summary>
@@ -709,9 +726,11 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
     #endregion
 
     #region CorporateUser
+
     /// <summary>
     ///     Gets all corporate users from the database.
     /// </summary>
@@ -787,7 +806,8 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new CorporateUser(corporateUserId, corporateUser.Cvr, corporateUser.Credit, GetUserById(corporateUser.UserId));
+        return new CorporateUser(corporateUserId, corporateUser.Cvr, corporateUser.Credit,
+            GetUserById(corporateUser.UserId));
     }
 
     /// <summary>
@@ -929,5 +949,6 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
     #endregion
 }
