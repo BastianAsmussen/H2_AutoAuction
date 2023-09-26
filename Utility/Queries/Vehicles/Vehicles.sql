@@ -12,7 +12,7 @@ BEGIN
         Km FLOAT NOT NULL,
         RegistrationNumber VARCHAR(7) NOT NULL,
         Year SMALLINT NOT NULL,
-        NewPrice DECIMAL NOT NULL ,
+        NewPrice DECIMAL NOT NULL,
         HasTowbar BIT NOT NULL,
         EngineSize FLOAT NOT NULL,
         KmPerLiter FLOAT NOT NULL,

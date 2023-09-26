@@ -1,115 +1,102 @@
 ﻿namespace Data.Classes.Vehicles;
 
-public abstract class Vehicle
+/// <summary>
+///     The vehicle class is the base class for all vehicles.
+/// </summary>
+public class Vehicle
 {
     /// <summary>
-    ///     ID field and property.
+    ///     The ID of the vehicle in the database.
     /// </summary>
-    public uint Id { get; }
+    public uint VehicleId { get; set; }
 
     /// <summary>
-    ///     Name field and property.
+    ///     The name of the vehicle.
     /// </summary>
     public string Name { get; set; }
 
     /// <summary>
-    ///     Km field and property.
+    ///     The number of kilometers the vehicle has driven.
     /// </summary>
-    public double Km { get; set; }
+    public float Km { get; set; }
 
     /// <summary>
-    ///     Registration number field and property.
+    ///     The registration number of the vehicle.
     /// </summary>
     public string RegistrationNumber { get; set; }
 
     /// <summary>
-    ///     Year field and property.
+    ///     The year the vehicle was manufactured.
     /// </summary>
-    public int Year { get; set; }
+    public ushort Year { get; set; }
 
     /// <summary>
-    ///     New price field and property.
-    /// </summary>
-    public decimal NewPrice { get; set; }
-
-    /// <summary>
-    ///     Towbar field and property.
+    ///     Whether the vehicle has a towbar or not.
     /// </summary>
     public bool HasTowbar { get; set; }
 
     /// <summary>
-    ///     Engine size field and property.
+    ///     The vehicles type of drivers license.
     /// </summary>
-    public virtual double EngineSize { get; set; }
+    public LicenseType LicenseType { get; set; }
 
     /// <summary>
-    ///     Km per liter field and property.
+    ///     The size of the engine.
     /// </summary>
-    public double KmPerLiter { get; set; }
+    public float EngineSize { get; set; }
 
     /// <summary>
-    ///     Drivers license Enum, field and property.
+    ///     How many kilometers the vehicle drives per liter.
     /// </summary>
-    public LicenseType DriversLicense { get; set; }
+    public float KmPerLiter { get; set; }
 
     /// <summary>
-    ///     NFuel type Enum, field and property.
+    ///     What type of fuel the vehicle uses.
     /// </summary>
-    public static FuelType FuelType { get; set; }
+    public FuelType FuelType { get; set; }
 
     /// <summary>
-    ///     Energy class Enum, field and property.
+    ///     The energy class of a vehicle.
     /// </summary>
-    public EnergyType EnergyType
+    public EnergyType EnergyClass { get; set; }
+
+    /// <summary>
+    ///     The constructor for the vehicle class.
+    /// </summary>
+    /// <param name="id">The ID of the vehicle in the database.</param>
+    /// <param name="name">The name of the vehicle.</param>
+    /// <param name="km">The number of kilometers the vehicle has driven.</param>
+    /// <param name="registrationNumber">The registration number of the vehicle.</param>
+    /// <param name="year">The year the vehicle was manufactured.</param>
+    /// <param name="hasTowbar">Whether the vehicle has a towbar or not.</param>
+    /// <param name="licenseType">The vehicles type of drivers license.</param>
+    /// <param name="engineSize">The size of the engine.</param>
+    /// <param name="kmPerLiter">How many kilometers the vehicle drives per liter.</param>
+    /// <param name="fuelType">What type of fuel the vehicle uses.</param>
+    /// <param name="energyClass">The energy class of a vehicle.</param>
+    public Vehicle(uint id, string name, float km, string registrationNumber, ushort year, bool hasTowbar, LicenseType licenseType, float engineSize, float kmPerLiter, FuelType fuelType, EnergyType energyClass)
     {
-        get => GetEnergyType();
-        set => EnergyType = value;
-    }
-
-
-    # region Constructors
-    protected Vehicle(string name,
-        double km,
-        string registrationNumber,
-        int year,
-        decimal newPrice,
-        bool hasTowbar,
-        double engineSize,
-        double kmPerLiter,
-        FuelType fuelType)
-    {
-        // If the engine size is not between 0.7 and 10.0 L, throw an exception.
-        if (engineSize is < 0.7 or > 10.0)
-            throw new ArgumentOutOfRangeException(nameof(engineSize), engineSize, "Engine size must be between 0.7 and 10.0 L!");
-
+        VehicleId = id;
         Name = name;
         Km = km;
         RegistrationNumber = registrationNumber;
         Year = year;
-        NewPrice = newPrice;
         HasTowbar = hasTowbar;
+        LicenseType = licenseType;
         EngineSize = engineSize;
         KmPerLiter = kmPerLiter;
         FuelType = fuelType;
-
-        // TODO: V2 - Add to database and set ID
+        EnergyClass = energyClass;
     }
 
-    # endregion
-
-
     /// <summary>
-    ///     Energy class is calculated based on year of the car and the efficiency in km/L.
+    ///     Calculates the energy class of a vehicle based on the year and fuel type.
     /// </summary>
-    /// <returns>
-    ///     Returns the energy class in EnergyType (A,B,C,D)
-    /// </returns>
-    private EnergyType GetEnergyType()
+    /// <returns>The energy class of the vehicle.</returns>
+    public EnergyType GetEnergyClass()
     {
-        // If the car is older than 2010, the energy class is calculated differently.
         if (Year < 2010)
         {
-            // If the car is diesel, the energy class is calculated differently.
             if (FuelType == FuelType.Diesel)
             {
                 return KmPerLiter switch
@@ -154,24 +141,21 @@ public abstract class Vehicle
                 };
             }
         }
+
+        // Return a default value if none of the conditions match.
+        return EnergyType.D;
     }
 
-    /// <summary>
-    ///     Returns the vehicle in a string with relevant information.
-    /// </summary>
-    /// <returns>The Vehicle as a string.</returns>
-    public new virtual string ToString()
-    {
-        return $"Name: {Name}\n" +
-               $"Km: {Km}\n" +
-               $"Registration number: {RegistrationNumber}\n" +
-               $"Year: {Year}\n" +
-               $"New price: {NewPrice}\n" +
-               $"Has towbar: {HasTowbar}\n" +
-               $"Engine size: {EngineSize}\n" +
-               $"Km per liter: {KmPerLiter}\n" +
-               $"Drivers license: {DriversLicense}\n" +
-               $"Fuel type: {FuelType}\n" +
-               $"Energy type: {EnergyType}\n";
-    }
+    public override string ToString() =>
+        $"Id: {VehicleId}\n" +
+        $"Name: {Name}\n" +
+        $"Km: {Km}\n" +
+        $"Registration Number: {RegistrationNumber}\n" +
+        $"Year: {Year}\n" +
+        $"Has Towbar: {HasTowbar}\n" +
+        $"License Type: {LicenseType}\n" +
+        $"Engine Size: {EngineSize}\n" +
+        $"Km Per Liter: {KmPerLiter}\n" +
+        $"Fuel Type: {FuelType}\n" +
+        $"Energy Class: {EnergyClass}";
 }

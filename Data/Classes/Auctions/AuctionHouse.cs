@@ -1,7 +1,7 @@
 ﻿using Data.Classes.Vehicles;
 using Data.Interfaces;
 
-namespace Data.Classes;
+namespace Data.Classes.Auctions;
 
 public delegate string NotificationDelegate(string message);
 

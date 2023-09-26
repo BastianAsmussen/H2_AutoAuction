@@ -4,6 +4,9 @@ using dotenv.net;
 
 namespace Utility.DatabaseManager;
 
+/// <summary>
+///     Singleton class for handling database connections.
+/// </summary>
 public partial class DatabaseManager
 {
     private static DatabaseManager? _instance;
@@ -16,6 +19,10 @@ public partial class DatabaseManager
         _instance ??= this;
     }
 
+    /// <summary>
+    ///     Returns a connection to the database.
+    /// </summary>
+    /// <returns>The connection.</returns>
     public SqlConnection GetConnection()
     {
         var credentials = GetCredentials();
@@ -36,6 +43,11 @@ public partial class DatabaseManager
         return _connection;
     }
 
+    /// <summary>
+    ///    Returns the credentials for the database.
+    /// </summary>
+    /// <returns>The credentials.</returns>
+    /// <exception cref="InvalidCredentialException">If the credentials are invalid.</exception>
     private static (string, uint, string, string, string) GetCredentials()
     {
         // Fetch credentials from file.

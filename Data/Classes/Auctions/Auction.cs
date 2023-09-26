@@ -1,30 +1,14 @@
 ﻿using Data.Classes.Vehicles;
 using Data.Interfaces;
 
-namespace Data.Classes;
+namespace Data.Classes.Auctions;
 
 public class Auction
 {
     /// <summary>
-    ///     Constructor for Auction
-    /// </summary>
-    /// <param name="vehicle"></param>
-    /// <param name="seller"></param>
-    /// <param name="minimumPrice"></param>
-    public Auction(Vehicle vehicle, ISeller seller, decimal minimumPrice)
-    {
-        Vehicle = vehicle;
-        Seller = seller;
-        MinimumPrice = minimumPrice;
-
-        //TODO: A2 - Add to database and set ID
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
     ///     ID of the auction
     /// </summary>
-    public uint ID { get; }
+    public uint AuctionId { get; }
 
     /// <summary>
     ///     The minimum price of the auction
@@ -39,17 +23,27 @@ public class Auction
     /// <summary>
     ///     The vehicle of the auction
     /// </summary>
-    internal Vehicle Vehicle { get; set; }
+    public Vehicle Vehicle { get; set; }
 
     /// <summary>
     ///     The seller of the auction
     /// </summary>
-    internal ISeller Seller { get; set; }
+    public ISeller Seller { get; set; }
 
     /// <summary>
     ///     The buyer or potential buyer of the auction
     /// </summary>
-    internal IBuyer Buyer { get; set; }
+    public IBuyer? Buyer { get; set; }
+
+    public Auction(uint id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal standingBid = 0)
+    {
+        AuctionId = id;
+        Vehicle = vehicle;
+        Seller = seller;
+        Buyer = buyer;
+        MinimumPrice = minimumPrice;
+        StandingBid = standingBid;
+    }
 
     public override string ToString()
     {

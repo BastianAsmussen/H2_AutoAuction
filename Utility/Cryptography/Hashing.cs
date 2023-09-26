@@ -1,10 +1,8 @@
-using System.Security.Cryptography;
-using System.Text;
 using BCrypt.Net;
 
 namespace Utility.Cryptography;
 
-public class Hashing
+public static class Hashing
 {
     /// <summary>
     ///     Hashes a password using BCrypt.
