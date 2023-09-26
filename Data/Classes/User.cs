@@ -26,6 +26,11 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
+    public uint PlaceBid(Auction auction, decimal newBid)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Receives a bid notification and returns a formatted string.
     /// </summary>
@@ -45,8 +50,6 @@ public class User : IBuyer, ISeller
                $"Zipcode: {Zipcode}\n" +
                $"Balance: {Balance}\n";
     }
-
-    
     
     /// <summary>
     /// Set's a vehicle for sale
@@ -69,20 +72,6 @@ public class User : IBuyer, ISeller
             throw;
         }
         
-        return auction.AuctionId ;
-    }
-    
-    
-    /// <summary>
-    ///  Notifies the seller the when a bid is over minimum bid
-    /// </summary>
-    /// <param name="auction"></param>
-    /// <param name="newBid"></param>
-    /// <returns></returns>
-    public uint PlaceBid(Auction auction, decimal newBid)
-    {
-        auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
-
-        return 0;
-    }
+        return auction.AuctionId;
+    } 
 }

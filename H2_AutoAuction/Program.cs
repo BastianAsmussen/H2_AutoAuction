@@ -9,6 +9,12 @@ internal class Program
     private static void Main(string[] args)
     {
         var databaseManager = DatabaseManager.Instance;
+
+        var users = DatabaseManager.GetAllUsers();
+        foreach (var user in users)
+        {
+            Console.WriteLine(user);
+        }
     }
 
     /// <summary>
