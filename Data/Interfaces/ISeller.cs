@@ -2,20 +2,7 @@
 
 public interface ISeller
 {
-    /// <summary>
-    ///     UserName property.
-    /// </summary>
-    public string UserName { get; set; }
-
-    /// <summary>
-    ///     Balance property.
-    /// </summary>
-    decimal Balance { get; set; }
-
-    /// <summary>
-    ///     Zipcode property.
-    /// </summary>
-    uint Zipcode { get; set; }
+    public uint UserId { get; set; }
 
     /// <summary>
     ///     Receives a message for the user.

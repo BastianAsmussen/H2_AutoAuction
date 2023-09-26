@@ -2,15 +2,13 @@
 
 public class PrivateUser : User
 {
-    public uint CprNumber { get; set; }
+    public uint PrivateUserId { get; set; }
+    public string Cpr { get; set; }
 
-    public PrivateUser(string userName, string password, uint zipCode, uint cprNumber) : base(userName, password,
-        zipCode)
+    public PrivateUser(uint id, string cpr, User user) : base(user.UserId, user.Username, user.PasswordHash, user.Zipcode, user.Balance)
     {
-        CprNumber = cprNumber;
-
-        //TODO: U11 - Add to database and set ID
-        // throw new NotImplementedException();
+        PrivateUserId = id;
+        Cpr = cpr;
     }
 
     /// <summary>
@@ -30,6 +28,6 @@ public class PrivateUser : User
     public override string ToString()
     {
         return $"{base.ToString()}\n" +
-               $"CprNumber: {CprNumber}\n";
+               $"CPR: {Cpr}\n";
     }
 }

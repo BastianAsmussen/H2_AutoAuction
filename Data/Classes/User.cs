@@ -1,58 +1,27 @@
-﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-using Data.Interfaces;
+﻿using Data.Interfaces;
 
 namespace Data.Classes;
-/*
- * Domæne model
-interface polymorfi via interface
-interface til at kunne køde og sælge til
 
-køber og sælger som interfaces
-
-privat og company som klasser
- */
-
-public abstract class User : IBuyer, ISeller
+public class User : IBuyer, ISeller
 {
-    public uint Id { get; }
-    private byte[] PasswordHash { get; }
-    public string UserName { get; set; }
-    public decimal Balance { get; set; }
+    public uint UserId { get; set; }
+    public string PasswordHash { get; }
+    public string Username { get; set; }
     public uint Zipcode { get; set; }
+    public decimal Balance { get; set; }
 
-    protected User(string userName, string password, uint zipCode)
+    public User(uint id, string username, string password, uint zipcode, decimal balance = 0)
     {
-        UserName = userName;
-        Zipcode = zipCode;
-
-        HashAlgorithm sha = SHA256.Create();
-        var result = sha.ComputeHash(Encoding.ASCII.GetBytes(password));
-        PasswordHash = result;
+        UserId = id;
+        Username = username;
+        PasswordHash = ""; // Cryptography.Hashing.HashPassword(password);
+        Zipcode = zipcode;
+        Balance = balance;
     }
 
     public virtual void SubBalance(decimal amount)
     {
-        // Does Nothing 💩💩💩
-    }
-
-    /// <summary>
-    ///     A method that ...
-    /// </summary>
-    /// <returns>Whether login is valid</returns>
-    private bool ValidateLogin(string loginUserName, string loginPassword)
-    {
-        //TODO: U5 - Implement the rest of validation for password and user name
-
-        HashAlgorithm sha = SHA256.Create(); //Make a HashAlgorithm object for making hash computations.
-        var result =
-            sha.ComputeHash(
-                Encoding.ASCII.GetBytes(loginPassword)); // Encodes the password into a hash in a Byte array.
-
-        return PasswordHash == result;
-
-        // throw new NotImplementedException();
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -65,18 +34,13 @@ public abstract class User : IBuyer, ISeller
         return $"New Bid Received: {message}";
     }
 
-
-    /// <summary>
-    ///     Returns the User in a string with relevant information.
-    /// </summary>
-    /// <returns>...</returns>
     public override string ToString()
     {
-        // throw new NotImplementedException();
         return $"{base.ToString()}" +
-               $"Id: {Id}\n" +
-               $"UserName: {UserName}\n" +
+               $"UserId: {UserId}\n" +
+               $"UserName: {Username}\n" +
                $"PasswordHash: {PasswordHash}\n" +
-               $"Zipcode: {Zipcode}\n";
+               $"Zipcode: {Zipcode}\n" +
+               $"Balance: {Balance}\n";
     }
 }

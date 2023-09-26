@@ -12,9 +12,6 @@ BEGIN
        Password NCHAR(60) NOT NULL,
        ZipCode INT NOT NULL,
        Balance DECIMAL NOT NULL,
-       
-       CorporateUserId INT FOREIGN KEY REFERENCES Users(Id), -- Null if private user
-       PrivateUserId INT FOREIGN KEY REFERENCES Users(Id), -- Null if corporate user 
    )
 END
 GO
