@@ -16,7 +16,6 @@ public class CreateUserViewModel : ViewModelBase
     private string _rPassWord;
     private bool _isCorporate;
     private string _cvrNumber;
-    private string _credit;
     private bool _isPrivate;
     private string _zipCode;
     private string _cprNumber;
@@ -45,32 +44,53 @@ public class CreateUserViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _rPassWord, value);
     }
 
-    [MinLength(1, ErrorMessage = "Cvr number is required")]
     public string CvrNumber
     {
         get => _cvrNumber;
-        set => this.RaiseAndSetIfChanged(ref _cvrNumber, value);
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+                if (!value.All(char.IsDigit))
+                    throw new DataValidationException("Numbers only");
+
+            this.RaiseAndSetIfChanged(ref _cvrNumber, value);
+        }
     }
 
-    [MinLength(1, ErrorMessage = "Credit is required")]
-    public string Credit
-    {
-        get => _credit;
-        set => this.RaiseAndSetIfChanged(ref _credit, value);
-    }
-
-    [MinLength(1, ErrorMessage = "Zipcode is required")]
+    [MinLength(1, ErrorMessage = "")]
     public string ZipCode
     {
         get => _zipCode;
-        set => this.RaiseAndSetIfChanged(ref _zipCode, value);
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+                if (!value.All(char.IsDigit))
+                    throw new DataValidationException("Numbers only");
+
+            this.RaiseAndSetIfChanged(ref _zipCode, value);
+        }
     }
 
-    [MinLength(1, ErrorMessage = "Cpr number is required")]
+    [MinLength(1, ErrorMessage = "")]
     public string CprNumber
     {
         get => _cprNumber;
-        set => this.RaiseAndSetIfChanged(ref _cprNumber, value);
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+                if (!value.All(char.IsDigit))
+                    if (!value.Contains("-"))
+                    {
+                        throw new DataValidationException("Numbers only");
+                    }
+
+            if (value.Length == 10)
+            {
+                value = value.Insert(6, "-");
+            }
+
+            this.RaiseAndSetIfChanged(ref _cprNumber, value);
+        }
     }
 
     public bool BtnCreateEnabled
@@ -93,10 +113,6 @@ public class CreateUserViewModel : ViewModelBase
         CreateCommand = ReactiveCommand.Create(Create);
         IsCorporateCommand = ReactiveCommand.Create(Corporate);
         IsPrivateCommand = ReactiveCommand.Create(Private);
-
-        UserName = string.Empty;
-        PassWord = string.Empty;
-        RPassWord = string.Empty;
 
         InitializeCreateButtonState();
     }
