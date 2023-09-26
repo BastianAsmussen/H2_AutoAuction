@@ -1,5 +1,6 @@
 ﻿using Data.Classes.Vehicles;
 using Data.Interfaces;
+using Utility.DatabaseManager;
 
 namespace Data.Classes.Auctions;
 
@@ -144,4 +145,45 @@ public static class AuctionHouse
     }
 
     #endregion
+
+
+    /// <summary>
+    /// Set's a vehicle for sale
+    /// </summary>
+    /// <param name="vehicle">property form Vehicle class</param>
+    /// <param name="Seller">property form User class</param>
+    /// <param name="minBid"></param>
+    /// <exception cref="ArgumentException">If it fails to create an auction</exception>
+    /// <returns>The id of the auction</returns>
+    public static uint SetForSale(Vehicle vehicle, User Seller, decimal minBid)
+    {
+        Auction auction = new Auction(0, vehicle, Seller, null, minBid);
+        try
+        {
+            auction = DatabaseManager.CreateAuction(auction);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Error in SetForSale: " + e.Message);
+            throw;
+        }
+
+        return auction.AuctionId;
+    }
+
+
+    /// <summary>
+    ///  Notifies the seller the when a bid is over minimum bid
+    /// </summary>
+    /// <param name="auction"></param>
+    /// <param name="newBid"></param>
+    /// <returns></returns>
+    public static void PlaceBid(Auction auction, decimal newBid)
+    {
+        auction = DatabaseManager.GetAuctionById(auction.AuctionId);
+        if (newBid > auction.MinimumPrice)
+        {
+            auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
+        }
+    }
 }
