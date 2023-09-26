@@ -133,11 +133,13 @@ public class CreateUserViewModel : ViewModelBase
             try
             {
                 CreatePrivateUser(UserName, PassWord, RepeatPassword, Convert.ToUInt32(ZipCode),
-                    Convert.ToUInt32(CprNumber));
+                    CprNumber);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error : {e.Message}");
+                Console.ResetColor();
             }
 
         if (_isCorporate)
@@ -148,7 +150,9 @@ public class CreateUserViewModel : ViewModelBase
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error : {e.Message}");
+                Console.ResetColor();
             }
 
         Navigate(new LoginView());
@@ -162,16 +166,19 @@ public class CreateUserViewModel : ViewModelBase
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
     /// </summary>
-    private void CreatePrivateUser(string username, string password, string rPassword, uint zipCode, uint cprNumber)
+    private void CreatePrivateUser(string username, string password, string rPassword, uint zipCode, string cprNumber)
     {
-        PrivateUser privateUser = new(0, $"{CprNumber}", new(0, username, password, zipCode));
+        PrivateUser privateUser = new(0, cprNumber, new(0, username, password, zipCode, 0));
         try
         {
             DatabaseManager.SignUp(privateUser);
         }
         catch (Exception e)
         {
-            throw new Exception($"Error : {e.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
         }
     }
 
@@ -180,14 +187,16 @@ public class CreateUserViewModel : ViewModelBase
     /// </summary>
     private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber)
     {
-        CorporateUser corporateUser = new(0, $"{CvrNumber}", 0, new(0, username, password, zipCode));
+        CorporateUser corporateUser = new(0, $"{CvrNumber}", 0, new(0, username, password, zipCode, 0));
         try
         {
             DatabaseManager.SignUp(corporateUser);
         }
         catch (Exception e)
         {
-            throw new Exception($"Error : {e.Message}");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
         }
     }
 
