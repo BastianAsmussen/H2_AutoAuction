@@ -9,5 +9,7 @@ BEGIN
         
         CVR INT NOT NULL,
         Credit DECIMAL NOT NULL,
+
+        UserId INT FOREIGN KEY NOT NULL REFERENCES Users(Id),
     )
 END
