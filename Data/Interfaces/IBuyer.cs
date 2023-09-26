@@ -1,6 +1,4 @@
-﻿using Data.Classes;
-using Data.Classes.Auctions;
-using Data.Classes.Vehicles;
+﻿using Data.Classes.Auctions;
 
 namespace Data.Interfaces;
 

@@ -2,15 +2,15 @@ using System.Data.SqlClient;
 using System.Security.Authentication;
 using dotenv.net;
 
-namespace Utility.DatabaseManager;
+namespace Data.DatabaseManager;
 
 /// <summary>
 ///     Singleton class for handling database connections.
 /// </summary>
 public partial class DatabaseManager
 {
-    private static DatabaseManager? _instance;
-    public static DatabaseManager Instance => _instance ??= new DatabaseManager();
+    private static Data.DatabaseManager.DatabaseManager? _instance;
+    public static Data.DatabaseManager.DatabaseManager Instance => _instance ??= new Data.DatabaseManager.DatabaseManager();
 
     private SqlConnection? _connection;
 
