@@ -1,4 +1,4 @@
-USE 'Auction'
+USE AutoAuction
 GO
 
 -- Create the Auctions table if it doesn't exist.

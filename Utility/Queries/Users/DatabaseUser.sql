@@ -1,3 +1,6 @@
+USE AutoAuction
+GO
+
 CREATE PROCEDURE createUser (@username TEXT, @sql TEXT)
 AS
 BEGIN

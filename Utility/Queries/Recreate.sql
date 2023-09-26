@@ -1,3 +1,21 @@
+USE master
+GO
+
+-- Drop the AutoAuction database if it exists.
+IF EXISTS (SELECT * FROM sys.databases WHERE name = 'AutoAuction')
+    BEGIN
+        ALTER DATABASE AutoAuction SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+        DROP DATABASE AutoAuction
+    END
+GO
+
+-- Create the AutoAuction database if it does not exist.
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'AutoAuction')
+    BEGIN
+        CREATE DATABASE AutoAuction
+    END
+GO
+
 -- Use the AutoAuction database.
 USE AutoAuction
 GO
@@ -159,6 +177,82 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Buses')
             HasToilet BIT NOT NULL,
 
             HeavyVehicleId INT NOT NULL FOREIGN KEY REFERENCES HeavyVehicles(Id)
+        )
+    END
+GO
+
+
+-- Create the Users table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
+    BEGIN
+        CREATE TABLE Users
+        (
+            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+
+            Username NVARCHAR(64) NOT NULL UNIQUE,
+            Password NCHAR(60) NOT NULL,
+            ZipCode INT NOT NULL,
+            Balance DECIMAL NOT NULL,
+        )
+    END
+GO
+
+-- Create the PrivateUser table if it does not exist
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivateUser')
+    BEGIN
+        CREATE TABLE PrivateUser(
+            Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+
+            CPR CHAR(11) UNIQUE NOT NULL,
+
+            UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+        )
+    END
+GO
+
+-- Create the CorporateUser table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUser')
+    BEGIN
+        CREATE TABLE CorporateUser(
+            Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+
+            CVR INT NOT NULL,
+            Credit DECIMAL NOT NULL,
+
+            UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+        )
+    END
+GO
+
+-- Create the Auctions table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Auctions')
+    BEGIN
+        CREATE TABLE Auctions
+        (
+            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+
+            MinimumPrice DECIMAL NOT NULL,
+            StartingBid DECIMAL NOT NULL,
+
+            VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
+            SellerId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+            BuyerId INT FOREIGN KEY REFERENCES Users(Id), -- Null if there's no buyer yet.
+        )
+    END
+GO
+
+-- Create the Bids table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Bids')
+    BEGIN
+        CREATE TABLE Bids
+        (
+            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+
+            Date DATETIME NOT NULL,
+            Amount DECIMAL NOT NULL,
+
+            BidderId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+            AuctionId INT NOT NULL FOREIGN KEY REFERENCES Auctions(Id),
         )
     END
 GO
