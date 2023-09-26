@@ -1,6 +1,5 @@
 ﻿using Data.Classes.Vehicles;
 using Data.Interfaces;
-using Utility.DatabaseManager;
 
 namespace Data.Classes.Auctions;
 
@@ -160,7 +159,7 @@ public static class AuctionHouse
         Auction auction = new Auction(0, vehicle, Seller, null, minBid);
         try
         {
-            auction = DatabaseManager.CreateAuction(auction);
+            auction = DatabaseManager.DatabaseManager.CreateAuction(auction);
         }
         catch (ArgumentException e)
         {
@@ -180,7 +179,7 @@ public static class AuctionHouse
     /// <returns></returns>
     public static void PlaceBid(Auction auction, decimal newBid)
     {
-        auction = DatabaseManager.GetAuctionById(auction.AuctionId);
+        auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
         if (newBid < auction.MinimumPrice)
             return;
         

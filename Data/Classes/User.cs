@@ -26,6 +26,11 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
+    public uint PlaceBid(Auction auction, decimal newBid)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Receives a bid notification and returns a formatted string.
     /// </summary>
