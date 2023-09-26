@@ -679,6 +679,187 @@ public partial class DatabaseManager
     }
 
     /// <summary>
+    ///     Gets a list of vehicles from the database by their name.
+    /// </summary>
+    /// <param name="name">The name of the vehicles to get.</param>
+    /// <returns>The vehicles with the given name.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given name exists.</exception>
+    public static List<Vehicle> GetVehiclesByName(string name)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Vehicle WHERE Name = @Name";
+        command.Parameters.AddWithValue("@Name", name);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that name exists!");
+        }
+
+        var vehicles = new List<Vehicle>();
+
+        while (reader.Read())
+        {
+            var vehicleId = (uint)reader.GetInt32(0);
+            var km = reader.GetFloat(2);
+            var registrationNumber = reader.GetString(3);
+            var year = (ushort)reader.GetInt32(4);
+            var hasTowbar = reader.GetBoolean(5);
+            var licenseType = (LicenseType)reader.GetInt32(6);
+            var engineSize = reader.GetFloat(7);
+            var kmPerLiter = reader.GetFloat(8);
+            var fuelType = (FuelType)reader.GetInt32(9);
+            var energyClass = (EnergyType)reader.GetInt32(10);
+
+            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType,
+                engineSize, kmPerLiter, fuelType, energyClass));
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return vehicles;
+    }
+
+    /// <summary>
+    ///     Gets a list of vehicles from the database by their number of seats.
+    /// </summary>
+    /// <param name="seats">The number of seats of the vehicles to get.</param>
+    /// <returns>A list of vehicles with the given number of seats.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given number of seats exists.</exception>
+    public static List<Vehicle> GetVehiclesByNumberOfSeats(ushort seats)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT V.Id" +
+                              "    FROM Vehicles AS V" +
+                              "    WHERE EXISTS (" +
+                              "        SELECT 1" +
+                              "        FROM Buses AS B" +
+                              "        INNER JOIN HeavyVehicles AS H ON B.HeavyVehicleId = H.Id" +
+                              "        WHERE H.VehicleId = V.Id" +
+                              "            AND B.NumberOfSeats = @NumberOfSeats" +
+                              ")" +
+                              "OR EXISTS (" +
+                              "    SELECT 1" +
+                              "    FROM PersonalCars AS P" +
+                              "    WHERE P.VehicleId = V.Id" +
+                              "        AND P.NumberOfSeats = @NumberOfSeats" +
+                              ")";
+        command.Parameters.AddWithValue("@NumberOfSeats", seats);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that number of seats exists!");
+        }
+
+        var vehicles = new List<Vehicle>();
+
+        while (reader.Read())
+        {
+            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicle = GetVehicleById(vehicleId);
+
+            vehicles.Add(vehicle);
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return vehicles;
+    }
+
+    /// <summary>
+    ///     Gets a list of vehicles from the database by their license type.
+    /// </summary>
+    /// <param name="licenseType">The license type of the vehicles to get.</param>
+    /// <returns>A list of vehicles with the given license type.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given license type exists.</exception>
+    public static List<Vehicle> GetVehiclesByLicenseType(LicenseType licenseType)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM Vehicles WHERE LicenseTypeId = @LicenseType";
+        command.Parameters.AddWithValue("@LicenseType", (uint) licenseType);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that driver's license type exists!");
+        }
+
+        var vehicles = new List<Vehicle>();
+
+        while (reader.Read())
+        {
+            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicle = GetVehicleById(vehicleId);
+
+            vehicles.Add(vehicle);
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return vehicles;
+    }
+
+    /// <summary>
+    ///     Gets a list of vehicles from the database by the number of kilometers they have driven and their price when new.
+    /// </summary>
+    /// <param name="km">The number of kilometers the vehicles have driven.</param>
+    /// <param name="newPrice">The price of the vehicles when new.</param>
+    /// <returns>A list of vehicles with the given number of kilometers driven and price when new.</returns>
+    /// <exception cref="ArgumentException">Thrown if no vehicle with the given number of kilometers driven and price when new exists.</exception>
+    public static List<Vehicle> GetVehiclesByKmAndPrice(float km, decimal newPrice)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM Vehicles WHERE Km = @Km AND NewPrice = @NewPrice";
+        command.Parameters.AddWithValue("@Km", km);
+        command.Parameters.AddWithValue("@NewPrice", newPrice);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No vehicle with that number of kilometers driven and price when new exists!");
+        }
+
+        var vehicles = new List<Vehicle>();
+
+        while (reader.Read())
+        {
+            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicle = GetVehicleById(vehicleId);
+
+            vehicles.Add(vehicle);
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return vehicles;
+    }
+
+    /// <summary>
     ///     Updates a vehicle in the database.
     /// </summary>
     /// <param name="vehicle">The vehicle to update.</param>
