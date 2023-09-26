@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Windows.Input;
 using Avalonia.Data;
 using Data.Classes;
@@ -136,7 +138,7 @@ public class CreateUserViewModel : ViewModelBase
             try
             {
                 CreateCorporateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
-                    Convert.ToUInt32(CvrNumber), Convert.ToDecimal(Credit));
+                    Convert.ToUInt32(CvrNumber));
             }
             catch (Exception e)
             {
@@ -165,13 +167,13 @@ public class CreateUserViewModel : ViewModelBase
         if (!password.Equals(rPassword))
             throw new Exception("Password does not match");
 
-        if (string.IsNullOrEmpty(ZipCode) || string.IsNullOrEmpty(CprNumber))
+        if (string.IsNullOrEmpty(zipCode.ToString()) || string.IsNullOrEmpty(cprNumber.ToString()))
             throw new Exception("ZipCode or CprNumber is empty");
 
-        PrivateUser unused = new(username, rPassword, zipCode, cprNumber);
+        User user = new(0, username, password, zipCode);
+        PrivateUser newUser = new(0, $"{CprNumber}", user);
 
-        //#TODO: Send request to the server
-        Console.WriteLine($"New '{unused.UserName}' has been created successfully");
+        CreateUserServerRequest(newUser);
     }
 
     /// <summary>
@@ -182,28 +184,36 @@ public class CreateUserViewModel : ViewModelBase
     /// <param name="rPassword"></param>
     /// <param name="zipCode"></param>
     /// <param name="cvrNumber"></param>
-    /// <param name="credit"></param>
     /// <exception cref="ArgumentNullException">Thrown when either username or password is null or empty.</exception>
     /// <remarks>
     /// This method sends a request to the server to create a new user with the given credentials.
     /// If the user is created successfully, it will print a success message.
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
-    private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber,
-        decimal credit)
+    private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber)
     {
         if (!password.Equals(rPassword))
             throw new Exception("Password does not match");
 
-        if (string.IsNullOrEmpty(CvrNumber) || string.IsNullOrEmpty(Credit))
-            throw new Exception("ZipCode, CvrNumber or Credit is empty");
+        if (string.IsNullOrEmpty(cvrNumber.ToString()) || string.IsNullOrEmpty(zipCode.ToString()))
+            throw new Exception("ZipCode, CvrNumber is empty");
 
+        User user = new(0, username, password, zipCode);
+        CorporateUser newUser = new(0, $"{CvrNumber}", 0, user);
 
-        CorporateUser unused = new(username, rPassword, zipCode, cvrNumber, credit);
-
-        //#TODO: Send request to the server
-        Console.WriteLine($"New '{unused.UserName}' has been created successfully");
+        CreateUserServerRequest(newUser);
     }
+
+
+    /// <summary>
+    /// Sends a request to the server to create a new user.
+    /// </summary>
+    /// <param name="user">The User object containing user data.</param>
+    public void CreateUserServerRequest(User user)
+    {
+        //#TODO: Send request to the server
+    }
+
 
     /// <summary>
     /// Sets the user type to Corporate 
