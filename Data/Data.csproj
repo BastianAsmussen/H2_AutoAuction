@@ -6,6 +6,10 @@
         <Nullable>enable</Nullable>
         <RootNamespace>Data</RootNamespace>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <ProjectReference Include="../Utility/Utility.csproj" />
+    </ItemGroup>
 
 
 </Project>
