@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reactive;
 using System.Windows.Input;
-using Avalonia.Controls;
-using Data.Classes;
-using Data.Interfaces;
 using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
@@ -19,11 +11,11 @@ public class LoginViewModel : ViewModelBase
 {
     #region Properties
 
-    private string _userName;
-    private string _passWord;
+    private string _userName = null!;
+    private string _passWord = null!;
 
-    private bool _btnLoginEnabled = false;
-    
+    private bool _btnLoginEnabled;
+
     [MinLength(1, ErrorMessage = "Username cannot be empty")]
     public string UserName
     {
@@ -64,15 +56,7 @@ public class LoginViewModel : ViewModelBase
 
     void GoToHomeScreen()
     {
-        if (PassWord != "password")
-        {
-            UserInstance.SetUser(new DemoUser($"{UserName}", 213, 9000));
-            ContentArea.Navigate(new HomeScreenView());
-        }
-        else
-        {
-            Console.WriteLine("No Can Do");
-        }
+        ContentArea.Navigate(new HomeScreenView());
     }
 
     /// <summary>
@@ -85,24 +69,5 @@ public class LoginViewModel : ViewModelBase
                 x => x.PassWord,
                 (userName, passWord) => !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(passWord))
             .Subscribe(x => BtnLoginEnabled = x);
-    }
-}
-
-public class DemoUser : ISeller
-{
-    public string UserName { get; set; }
-    public decimal Balance { get; set; }
-    public uint Zipcode { get; set; }
-
-    public DemoUser(string UserName, decimal Balance, uint Zipcode)
-    {
-        this.UserName = UserName;
-        this.Balance = Balance;
-        this.Zipcode = Zipcode;
-    }
-
-    public string ReceiveBidNotification(string message)
-    {
-        return "ReceiveBidNotification !!";
     }
 }
