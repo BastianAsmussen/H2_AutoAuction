@@ -5,7 +5,7 @@ public class PrivateUser : User
     public uint PrivateUserId { get; set; }
     public string Cpr { get; set; }
 
-    public PrivateUser(uint id, string cpr, User user) : base(user.UserId, user.Username, user.PasswordHash, user.Zipcode, user.Balance)
+    public PrivateUser(uint id, string cpr, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
     {
         PrivateUserId = id;
         Cpr = cpr;

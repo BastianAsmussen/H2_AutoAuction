@@ -1,15 +1,14 @@
 ﻿using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.Interfaces;
-using Utility.DatabaseManager;
 
 namespace Data.Classes;
 
 public class User : IBuyer, ISeller
 {
     public uint UserId { get; set; }
-    public string PasswordHash { get; }
     public string Username { get; set; }
+    public string Password { get; set; }
     public uint Zipcode { get; set; }
     public decimal Balance { get; set; }
 
@@ -17,7 +16,7 @@ public class User : IBuyer, ISeller
     {
         UserId = id;
         Username = username;
-        PasswordHash = ""; // Cryptography.Hashing.HashPassword(password);
+        Password = password;
         Zipcode = zipcode;
         Balance = balance;
     }
@@ -41,13 +40,33 @@ public class User : IBuyer, ISeller
     {
         return $"{base.ToString()}" +
                $"UserId: {UserId}\n" +
-               $"UserName: {Username}\n" +
-               $"PasswordHash: {PasswordHash}\n" +
+               $"Username: {Username}\n" +
+               $"Password: {Password}\n" +
                $"Zipcode: {Zipcode}\n" +
                $"Balance: {Balance}\n";
     }
-
     
-    
-    
+    /// <summary>
+    /// Set's a vehicle for sale
+    /// </summary>
+    /// <param name="vehicle">property form Vehicle class</param>
+    /// <param name="Seller">property form User class</param>
+    /// <param name="minBid"></param>
+    /// <exception cref="ArgumentException">If it fails to create an auction</exception>
+    /// <returns>The id of the auction</returns>
+    public uint SetForSale(Vehicle vehicle, User Seller, decimal minBid)
+    {
+        Auction auction = new Auction(0, vehicle, Seller, null, minBid);
+        try
+        {
+            auction = DatabaseManager.DatabaseManager.CreateAuction(auction);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Error in SetForSale: " + e.Message);
+            throw;
+        }
+        
+        return auction.AuctionId;
+    } 
 }

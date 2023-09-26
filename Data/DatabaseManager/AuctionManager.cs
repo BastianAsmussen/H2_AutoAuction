@@ -2,7 +2,7 @@ using Data.Classes;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 
-namespace Utility.DatabaseManager;
+namespace Data.DatabaseManager;
 
 /// <summary>
 ///     The part of the database manager that handles auctions.
@@ -40,7 +40,7 @@ public partial class DatabaseManager
             var standingBid = reader.GetDecimal(2);
 
             var vehicleId = (uint)reader.GetInt32(3);
-            var vehicle = GetVehicleById(vehicleId);
+            var vehicle = DatabaseManager.GetVehicleById(vehicleId);
 
             var sellerId = (uint)reader.GetInt32(4);
             var seller = GetUserById(sellerId);
@@ -96,7 +96,7 @@ public partial class DatabaseManager
             var standingBid = reader.GetDecimal(2);
 
             var vehicleId = (uint)reader.GetInt32(3);
-            var vehicle = GetVehicleById(vehicleId);
+            var vehicle = DatabaseManager.GetVehicleById(vehicleId);
 
             var sellerId = (uint)reader.GetInt32(4);
             var seller = GetUserById(sellerId);
@@ -190,7 +190,7 @@ public partial class DatabaseManager
         var standingBid = reader.GetDecimal(2);
 
         var vehicleId = (uint)reader.GetInt32(3);
-        var vehicle = GetVehicleById(vehicleId);
+        var vehicle = DatabaseManager.GetVehicleById(vehicleId);
 
         var sellerId = (uint)reader.GetInt32(4);
         var seller = GetUserById(sellerId);

@@ -47,6 +47,11 @@ public class Auction
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"Auction ID: {AuctionId}\n" +
+               $"Vehicle: {Vehicle}\n" +
+               $"Seller: {Seller}\n" +
+               $"Buyer: {Buyer}\n" +
+               $"Minimum Price: {MinimumPrice}\n" +
+               $"Starting Bid: {StartingBid}";
     }
 }
