@@ -3,13 +3,13 @@
 public class CorporateUser : User
 {
     public uint CorporateUserId { get; set; }
-    public string CvrNumber { get; set; }
+    public string Cvr { get; set; }
     public decimal Credit { get; set; }
 
-    public CorporateUser(uint id, string cvrNumber, decimal credit, User user) : base(user.UserId, user.Username, user.PasswordHash, user.Zipcode, user.Balance)
+    public CorporateUser(uint id, string cvr, decimal credit, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
     {
         CorporateUserId = id;
-        CvrNumber = cvrNumber;
+        Cvr = cvr;
         Credit = credit;
     }
 
@@ -31,7 +31,7 @@ public class CorporateUser : User
     {
         return $"{base.ToString()}\n" +
                $"CorporateUserId: {CorporateUserId}\n" +
-               $"CvrNumber: {CvrNumber}\n" +
+               $"CvrNumber: {Cvr}\n" +
                $"Credit: {Credit}\n";
     }
 }

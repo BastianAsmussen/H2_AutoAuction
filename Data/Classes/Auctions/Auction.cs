@@ -18,7 +18,7 @@ public class Auction
     /// <summary>
     ///     The standing bid of the auction
     /// </summary>
-    public decimal StandingBid { get; set; }
+    public decimal StartingBid { get; set; }
 
     /// <summary>
     ///     The vehicle of the auction
@@ -35,18 +35,23 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(uint id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal standingBid = 0)
+    public Auction(uint id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
     {
         AuctionId = id;
         Vehicle = vehicle;
         Seller = seller;
         Buyer = buyer;
         MinimumPrice = minimumPrice;
-        StandingBid = standingBid;
+        StartingBid = startingBid;
     }
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"Auction ID: {AuctionId}\n" +
+               $"Vehicle: {Vehicle}\n" +
+               $"Seller: {Seller}\n" +
+               $"Buyer: {Buyer}\n" +
+               $"Minimum Price: {MinimumPrice}\n" +
+               $"Starting Bid: {StartingBid}";
     }
 }

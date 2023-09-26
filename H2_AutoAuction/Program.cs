@@ -1,6 +1,6 @@
 ﻿using Data.Classes.Vehicles;
 using Data.Interfaces;
-using Utility.DatabaseManager;
+using DatabaseManager = Data.DatabaseManager.DatabaseManager;
 
 namespace H2_AutoAuction;
 
