@@ -51,24 +51,37 @@ public partial class DatabaseManager
     ///     Create a license type in the database.
     /// </summary>
     /// <param name="licenseType">The license type to create.</param>
+    /// <returns>The ID of the created license type.</returns>
     /// <exception cref="ArgumentException">Thrown if the license type could not be created.</exception>
-    public static void CreateLicenseType(LicenseType licenseType)
+    public static uint CreateLicenseType(LicenseType licenseType)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO LicenseType (Name) VALUES (@Name)";
+        command.CommandText = "INSERT INTO LicenseType (Name)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Name)";
         command.Parameters.AddWithValue("@Name", licenseType.ToString());
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("License type could not be created!");
         }
 
+        reader.Read();
+
+        var licenseTypeId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return licenseTypeId;
     }
 
     /// <summary>
@@ -82,7 +95,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseType WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM LicenseType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -116,7 +130,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseType WHERE Name = @Name";
+        command.CommandText = "SELECT * FROM LicenseType" +
+                              "    WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
         var reader = command.ExecuteReader();
@@ -150,7 +165,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE LicenseType SET Name = @Name WHERE Id = @Id";
+        command.CommandText = "UPDATE LicenseType" +
+                              "    SET Name = @Name" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", licenseType);
         command.Parameters.AddWithValue("@Name", licenseType.ToString());
 
@@ -176,7 +193,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM LicenseType WHERE Id = @Id";
+        command.CommandText = "DELETE FROM LicenseType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", licenseType);
 
         // If it fails, throw an exception.
@@ -231,24 +249,37 @@ public partial class DatabaseManager
     ///     Create a fuel type in the database.
     /// </summary>
     /// <param name="fuelType">The fuel type to create.</param>
+    /// <returns>The ID of the created fuel type.</returns>
     /// <exception cref="ArgumentException">Thrown if the fuel type could not be created.</exception>
-    public static void CreateFuelType(FuelType fuelType)
+    public static uint CreateFuelType(FuelType fuelType)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO FuelType (Name) VALUES (@Name)";
+        command.CommandText = "INSERT INTO FuelType (Name)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Name)";
         command.Parameters.AddWithValue("@Name", fuelType.ToString());
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Fuel type could not be created!");
         }
 
+        reader.Read();
+
+        var fuelTypeId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return fuelTypeId;
     }
 
     /// <summary>
@@ -262,7 +293,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelType WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM FuelType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -296,7 +328,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelType WHERE Name = @Name";
+        command.CommandText = "SELECT * FROM FuelType" +
+                              "    WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
         var reader = command.ExecuteReader();
@@ -330,7 +363,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE FuelType SET Name = @Name WHERE Id = @Id";
+        command.CommandText = "UPDATE FuelType" +
+                              "    SET Name = @Name" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", fuelType);
         command.Parameters.AddWithValue("@Name", fuelType.ToString());
 
@@ -356,7 +391,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM FuelType WHERE Id = @Id";
+        command.CommandText = "DELETE FROM FuelType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", fuelType);
 
         // If it fails, throw an exception.
@@ -411,24 +447,37 @@ public partial class DatabaseManager
     ///     Create an energy type in the database.
     /// </summary>
     /// <param name="energyType">The energy type to create.</param>
+    /// <returns>The ID of the created energy type.</returns>
     /// <exception cref="ArgumentException">Thrown if the energy type could not be created.</exception>
-    public static void CreateEnergyType(EnergyType energyType)
+    public static uint CreateEnergyType(EnergyType energyType)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO EnergyType (Name) VALUES (@Name)";
+        command.CommandText = "INSERT INTO EnergyType (Name)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Name)";
         command.Parameters.AddWithValue("@Name", energyType.ToString());
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Energy type could not be created!");
         }
 
+        reader.Read();
+
+        var energyTypeId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return energyTypeId;
     }
 
     /// <summary>
@@ -442,7 +491,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyType WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM EnergyType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -476,7 +526,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyType WHERE Name = @Name";
+        command.CommandText = "SELECT * FROM EnergyType" +
+                              "    WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
         var reader = command.ExecuteReader();
@@ -510,7 +561,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE EnergyType SET Name = @Name WHERE Id = @Id";
+        command.CommandText = "UPDATE EnergyType" +
+                              "    SET Name = @Name" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", energyType);
         command.Parameters.AddWithValue("@Name", energyType.ToString());
 
@@ -536,7 +589,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM EnergyType WHERE Id = @Id";
+        command.CommandText = "DELETE FROM EnergyType" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", energyType);
 
         // If it fails, throw an exception.
@@ -601,16 +655,18 @@ public partial class DatabaseManager
     ///     Creates a vehicle in the database.
     /// </summary>
     /// <param name="vehicle">The vehicle to create.</param>
+    /// <returns>The created vehicle.</returns>
     /// <exception cref="ArgumentException">Thrown if the vehicle could not be created.</exception>
-    public static void CreateVehicle(Vehicle vehicle)
+    public static Vehicle CreateVehicle(Vehicle vehicle)
     {
         // Create the vehicle in the database.
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText =
-            "INSERT INTO Vehicle (Name, Km, RegistrationNumber, Year, HasTowbar, LicenseType, EngineSize, KmPerLiter, FuelType, EnergyClass) " +
-            "VALUES (@Name, @Km, @RegistrationNumber, @Year, @HasTowbar, @LicenseType, @EngineSize, @KmPerLiter, @FuelType, @EnergyClass)";
+            "INSERT INTO Vehicle (Name, Km, RegistrationNumber, Year, HasTowbar, LicenseType, EngineSize, KmPerLiter, FuelType, EnergyClass)" +
+            "    OUTPUT inserted.Id" +
+            "    VALUES (@Name, @Km, @RegistrationNumber, @Year, @HasTowbar, @LicenseType, @EngineSize, @KmPerLiter, @FuelType, @EnergyClass)";
         command.Parameters.AddWithValue("@Name", vehicle.Name);
         command.Parameters.AddWithValue("@Km", vehicle.Km);
         command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
@@ -622,15 +678,25 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@FuelType", vehicle.FuelType);
         command.Parameters.AddWithValue("@EnergyClass", vehicle.EnergyClass);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Vehicle could not be created!");
         }
 
+        reader.Read();
+
+        var vehicleId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetVehicleById(vehicleId);
     }
 
     /// <summary>
@@ -645,7 +711,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Vehicle WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM Vehicle" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -689,7 +756,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Vehicle WHERE Name = @Name";
+        command.CommandText = "SELECT * FROM Vehicle" +
+                              "    WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
         var reader = command.ExecuteReader();
@@ -965,26 +1033,39 @@ public partial class DatabaseManager
     ///     Create a dimension in the database.
     /// </summary>
     /// <param name="dimensions">The dimensions to create.</param>
+    /// <returns>The created dimensions.</returns>
     /// <exception cref="ArgumentException">Thrown if the dimensions could not be created.</exception>
-    public static void CreateDimensions(Dimensions dimensions)
+    public static Dimensions CreateDimensions(Dimensions dimensions)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Dimensions (Length, Width, Height) VALUES (@Length, @Width, @Height)";
+        command.CommandText = "INSERT INTO Dimensions (Length, Width, Height)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Length, @Width, @Height)";
         command.Parameters.AddWithValue("@Length", dimensions.Length);
         command.Parameters.AddWithValue("@Width", dimensions.Width);
         command.Parameters.AddWithValue("@Height", dimensions.Height);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Dimensions could not be created!");
         }
 
+        reader.Read();
+
+        var dimensionId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetDimensionsById(dimensionId);
     }
 
     /// <summary>
@@ -1240,24 +1321,36 @@ public partial class DatabaseManager
     /// </summary>
     /// <param name="heavyVehicle">The heavy vehicle to create.</param>
     /// <exception cref="ArgumentException">Thrown if the heavy vehicle could not be created.</exception>
-    public static void CreateHeavyVehicle(HeavyVehicle heavyVehicle)
+    public static HeavyVehicle CreateHeavyVehicle(HeavyVehicle heavyVehicle)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO HeavyVehicle (VehicleDimensionsId, VehicleId) VALUES (@VehicleDimensionsId, @VehicleId)";
+        command.CommandText = "INSERT INTO HeavyVehicle (VehicleDimensionsId, VehicleId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@VehicleDimensionsId, @VehicleId)";
         command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
         command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Heavy vehicle could not be created!");
         }
 
+        reader.Read();
+
+        var heavyVehicleId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetHeavyVehicleById(heavyVehicleId);
     }
 
     /// <summary>
@@ -1391,25 +1484,38 @@ public partial class DatabaseManager
     ///     Create a truck in the database.
     /// </summary>
     /// <param name="truck">The truck to create.</param>
+    /// <returns>The created truck.</returns>
     /// <exception cref="ArgumentException">Thrown if the truck could not be created.</exception>
-    public static void CreateTruck(Truck truck)
+    public static Truck CreateTruck(Truck truck)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Truck (LoadCapacity, HeavyVehicleId) VALUES (@LoadCapacity, @HeavyVehicleId)";
+        command.CommandText = "INSERT INTO Truck (LoadCapacity, HeavyVehicleId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@LoadCapacity, @HeavyVehicleId)";
         command.Parameters.AddWithValue("@LoadCapacity", truck.LoadCapacity);
         command.Parameters.AddWithValue("@HeavyVehicleId", truck.HeavyVehicleId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Truck could not be created!");
         }
 
+        reader.Read();
+
+        var truckId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetTruckById(truckId);
     }
 
     /// <summary>
@@ -1545,27 +1651,40 @@ public partial class DatabaseManager
     ///     Create a bus in the database.
     /// </summary>
     /// <param name="bus">The bus to create.</param>
+    /// <returns>The created bus.</returns>
     /// <exception cref="ArgumentException">Thrown if the bus could not be created.</exception>
-    public static void CreateBus(Bus bus)
+    public static Bus CreateBus(Bus bus)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Bus (NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId) VALUES (@NumberOfSeats, @NumberOfSleepingSpaces, @HasToilet, @HeavyVehicleId)";
+        command.CommandText = "INSERT INTO Bus (NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@NumberOfSeats, @NumberOfSleepingSpaces, @HasToilet, @HeavyVehicleId)";
         command.Parameters.AddWithValue("@NumberOfSeats", bus.NumberOfSeats);
         command.Parameters.AddWithValue("@NumberOfSleepingSpaces", bus.NumberOfSleepingSpaces);
         command.Parameters.AddWithValue("@HasToilet", bus.HasToilet);
         command.Parameters.AddWithValue("@HeavyVehicleId", bus.HeavyVehicleId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Bus could not be created!");
         }
 
+        reader.Read();
+
+        var busId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetBusById(busId);
     }
 
     /// <summary>
@@ -1703,25 +1822,38 @@ public partial class DatabaseManager
     ///     Create a personal car in the database.
     /// </summary>
     /// <param name="personalCar">The personal car to create.</param>
+    /// <returns>The created personal car.</returns>
     /// <exception cref="ArgumentException">Thrown if the personal car could not be created.</exception>
-    public static void CreatePersonalCar(PersonalCar personalCar)
+    public static PersonalCar CreatePersonalCar(PersonalCar personalCar)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO PersonalCar (VehicleDimensionsId, VehicleId) VALUES (@VehicleDimensionsId, @VehicleId)";
+        command.CommandText = "INSERT INTO PersonalCar (VehicleDimensionsId, VehicleId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@VehicleDimensionsId, @VehicleId)";
         command.Parameters.AddWithValue("@VehicleDimensionsId", personalCar.TrunkDimensions.DimensionsId);
         command.Parameters.AddWithValue("@VehicleId", personalCar.VehicleId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Personal car could not be created!");
         }
 
+        reader.Read();
+
+        var personalCarId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetPersonalCarById(personalCarId);
     }
 
     /// <summary>
@@ -1856,24 +1988,37 @@ public partial class DatabaseManager
     ///     Create a private personal car in the database.
     /// </summary>
     /// <param name="privatePersonalCar">The private personal car to create.</param>
+    /// <returns>The created private personal car.</returns>
     /// <exception cref="ArgumentException">Thrown if the private personal car could not be created.</exception>
-    public static void CreatePrivatePersonalCar(PrivatePersonalCar privatePersonalCar)
+    public static PrivatePersonalCar CreatePrivatePersonalCar(PrivatePersonalCar privatePersonalCar)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO PrivatePersonalCar (PersonalCarId) VALUES (@PersonalCarId)";
+        command.CommandText = "INSERT INTO PrivatePersonalCar (PersonalCarId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@PersonalCarId)";
         command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Private personal car could not be created!");
         }
 
+        reader.Read();
+
+        var privatePersonalCarId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetPrivatePersonalCarById(privatePersonalCarId);
     }
 
     /// <summary>
@@ -2006,24 +2151,37 @@ public partial class DatabaseManager
     ///     Create a professional personal car in the database.
     /// </summary>
     /// <param name="professionalPersonalCar">The professional personal car to create.</param>
+    /// <returns>The created professional personal car.</returns>
     /// <exception cref="ArgumentException">Thrown if the professional personal car could not be created.</exception>
-    public static void CreateProfessionalPersonalCar(ProfessionalPersonalCar professionalPersonalCar)
+    public static ProfessionalPersonalCar CreateProfessionalPersonalCar(ProfessionalPersonalCar professionalPersonalCar)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO ProfessionalPersonalCar (PersonalCarId) VALUES (@PersonalCarId)";
+        command.CommandText = "INSERT INTO ProfessionalPersonalCar (PersonalCarId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@PersonalCarId)";
         command.Parameters.AddWithValue("@PersonalCarId", professionalPersonalCar.PersonalCarId);
 
+        var reader = command.ExecuteReader();
+
         // If it fails, throw an exception and close the connection.
-        if (command.ExecuteNonQuery() == 0)
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Professional personal car could not be created!");
         }
 
+        reader.Read();
+
+        var professionalPersonalCarId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetProfessionalPersonalCarById(professionalPersonalCarId);
     }
 
     /// <summary>

@@ -51,26 +51,39 @@ public partial class DatabaseManager
     ///     Creates a user in the database.
     /// </summary>
     /// <param name="user">The user to create.</param>
+    /// <returns>The created user.</returns>
     /// <exception cref="ArgumentException">Thrown when the user already exists.</exception>
-    public static void CreateUser(User user)
+    public static User CreateUser(User user)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Users (Username, Password, Zipcode, Balance) VALUES (@Username, @Password, @Zipcode, @Balance)";
+        command.CommandText = "INSERT INTO Users (Username, Password, Zipcode, Balance)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Username, @Password, @Zipcode, @Balance)";
         command.Parameters.AddWithValue("@Username", user.Username);
         command.Parameters.AddWithValue("@Password", user.PasswordHash);
         command.Parameters.AddWithValue("@Zipcode", user.Zipcode);
         command.Parameters.AddWithValue("@Balance", user.Balance);
 
-        if (command.ExecuteNonQuery() == 0)
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("User already exists!");
         }
 
+        reader.Read();
+
+        var userId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return new User(userId, user.Username, user.PasswordHash, user.Zipcode, user.Balance);
     }
 
     /// <summary>
@@ -84,7 +97,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Users WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM Users" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -121,7 +135,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Users WHERE Username = @Username";
+        command.CommandText = "SELECT * FROM Users" +
+                              "    WHERE Username = @Username";
         command.Parameters.AddWithValue("@Username", name);
 
         var reader = command.ExecuteReader();
@@ -158,7 +173,12 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Users SET Username = @Username, Password = @Password, Zipcode = @Zipcode, Balance = @Balance WHERE Id = @Id";
+        command.CommandText = "UPDATE Users" +
+                              "    SET Username = @Username," +
+                              "        Password = @Password," +
+                              "        Zipcode = @Zipcode," +
+                              "        Balance = @Balance" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Username", user.Username);
         command.Parameters.AddWithValue("@Password", user.PasswordHash);
         command.Parameters.AddWithValue("@Zipcode", user.Zipcode);
@@ -187,7 +207,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Users WHERE Id = @Id";
+        command.CommandText = "DELETE FROM Users" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", user.UserId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -245,24 +266,37 @@ public partial class DatabaseManager
     ///     Creates a private user in the database.
     /// </summary>
     /// <param name="privateUser">The private user to create.</param>
+    /// <returns>The created private user.</returns>
     /// <exception cref="ArgumentException">Thrown when the private user already exists.</exception>
-    public static void CreatePrivateUser(PrivateUser privateUser)
+    public static PrivateUser CreatePrivateUser(PrivateUser privateUser)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO PrivateUsers (Cpr, UserId) VALUES (@Cpr, @UserId)";
+        command.CommandText = "INSERT INTO PrivateUsers (Cpr, UserId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Cpr, @UserId)";
         command.Parameters.AddWithValue("@Cpr", privateUser.Cpr);
         command.Parameters.AddWithValue("@UserId", privateUser.UserId);
 
-        if (command.ExecuteNonQuery() == 0)
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Private user already exists!");
         }
 
+        reader.Read();
+
+        var privateUserId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return GetPrivateUserById(privateUserId);
     }
 
     /// <summary>
@@ -276,7 +310,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM PrivateUsers WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM PrivateUsers" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -313,7 +348,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM PrivateUsers WHERE Cpr = @Cpr";
+        command.CommandText = "SELECT * FROM PrivateUsers" +
+                              "    WHERE Cpr = @Cpr";
         command.Parameters.AddWithValue("@Cpr", cpr);
 
         var reader = command.ExecuteReader();
@@ -350,7 +386,10 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE PrivateUsers SET Cpr = @Cpr, UserId = @UserId WHERE Id = @Id";
+        command.CommandText = "UPDATE PrivateUsers" +
+                              "    SET Cpr = @Cpr," +
+                              "        UserId = @UserId" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Cpr", privateUser.Cpr);
         command.Parameters.AddWithValue("@UserId", privateUser.UserId);
         command.Parameters.AddWithValue("@Id", privateUser.PrivateUserId);
@@ -377,7 +416,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM PrivateUsers WHERE Id = @Id";
+        command.CommandText = "DELETE FROM PrivateUsers" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", privateUser.PrivateUserId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -436,25 +476,38 @@ public partial class DatabaseManager
     ///     Creates a corporate user in the database.
     /// </summary>
     /// <param name="corporateUser">The corporate user to create.</param>
+    /// <returns>The created corporate user.</returns>
     /// <exception cref="ArgumentException">Thrown when the corporate user already exists.</exception>
-    public static void CreateCorporateUser(CorporateUser corporateUser)
+    public static CorporateUser CreateCorporateUser(CorporateUser corporateUser)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO CorporateUsers (Cvr, Credit, UserId) VALUES (@Cvr, @Credit, @UserId)";
+        command.CommandText = "INSERT INTO CorporateUsers (Cvr, Credit, UserId)" +
+                              "    OUTPUT inserted.Id" +
+                              "    VALUES (@Cvr, @Credit, @UserId)";
         command.Parameters.AddWithValue("@Cvr", corporateUser.CvrNumber);
         command.Parameters.AddWithValue("@Credit", corporateUser.Credit);
         command.Parameters.AddWithValue("@UserId", corporateUser.UserId);
 
-        if (command.ExecuteNonQuery() == 0)
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
         {
+            reader.Close();
             connection.Close();
 
             throw new ArgumentException("Corporate user already exists!");
         }
 
+        reader.Read();
+
+        var corporateUserId = (uint)reader.GetInt32(0);
+
+        reader.Close();
         connection.Close();
+
+        return new CorporateUser(corporateUserId, corporateUser.CvrNumber, corporateUser.Credit, GetUserById(corporateUser.UserId));
     }
 
     /// <summary>
@@ -468,7 +521,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM CorporateUsers WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM CorporateUsers" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -506,7 +560,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM CorporateUsers WHERE Cvr = @Cvr";
+        command.CommandText = "SELECT * FROM CorporateUsers" +
+                              "    WHERE Cvr = @Cvr";
         command.Parameters.AddWithValue("@Cvr", cvr);
 
         var reader = command.ExecuteReader();
@@ -549,7 +604,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE CorporateUsers SET Cvr = @Cvr, Credit = @Credit, UserId = @UserId WHERE Id = @Id";
+        command.CommandText = "UPDATE CorporateUsers" +
+                              "    SET Cvr = @Cvr," +
+                              "        Credit = @Credit," +
+                              "        UserId = @UserId" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Cvr", corporateUser.CvrNumber);
         command.Parameters.AddWithValue("@Credit", corporateUser.Credit);
         command.Parameters.AddWithValue("@UserId", corporateUser.UserId);
@@ -577,7 +636,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM CorporateUsers WHERE Id = @Id";
+        command.CommandText = "DELETE FROM CorporateUsers" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", corporateUser.CorporateUserId);
 
         if (command.ExecuteNonQuery() == 0)
