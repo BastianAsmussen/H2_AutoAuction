@@ -2,7 +2,7 @@ using Data.Classes.Vehicles;
 using Data.Classes.Vehicles.HeavyVehicles;
 using Data.Classes.Vehicles.PersonalCars;
 
-namespace Utility.DatabaseManager;
+namespace Data.DatabaseManager;
 
 /// <summary>
 ///     The part of the database manager that handles vehicles.

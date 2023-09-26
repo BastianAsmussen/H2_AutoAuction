@@ -1,15 +1,14 @@
 ﻿using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.Interfaces;
-using Utility.DatabaseManager;
 
 namespace Data.Classes;
 
 public class User : IBuyer, ISeller
 {
     public uint UserId { get; set; }
-    public string PasswordHash { get; }
     public string Username { get; set; }
+    public string Password { get; set; }
     public uint Zipcode { get; set; }
     public decimal Balance { get; set; }
 
@@ -17,7 +16,7 @@ public class User : IBuyer, ISeller
     {
         UserId = id;
         Username = username;
-        PasswordHash = ""; // Cryptography.Hashing.HashPassword(password);
+        Password = password;
         Zipcode = zipcode;
         Balance = balance;
     }
@@ -41,8 +40,8 @@ public class User : IBuyer, ISeller
     {
         return $"{base.ToString()}" +
                $"UserId: {UserId}\n" +
-               $"UserName: {Username}\n" +
-               $"PasswordHash: {PasswordHash}\n" +
+               $"Username: {Username}\n" +
+               $"Password: {Password}\n" +
                $"Zipcode: {Zipcode}\n" +
                $"Balance: {Balance}\n";
     }
@@ -62,7 +61,7 @@ public class User : IBuyer, ISeller
         Auction auction = new Auction(0, vehicle, Seller, null, minBid);
         try
         {
-            auction = DatabaseManager.CreateAuction(auction);
+            auction = DatabaseManager.DatabaseManager.CreateAuction(auction);
         }
         catch (ArgumentException e)
         {

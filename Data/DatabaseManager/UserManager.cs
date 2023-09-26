@@ -1,6 +1,9 @@
+using System.Data;
+using System.Security.Authentication;
+using BCrypt.Net;
 using Data.Classes;
 
-namespace Utility.DatabaseManager;
+namespace Data.DatabaseManager;
 
 /// <summary>
 ///     The part of the database manager that handles users.
@@ -15,7 +18,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when no users exist.</exception>
     public static List<User> GetAllUsers()
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Users";
@@ -55,14 +58,14 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the user already exists.</exception>
     public static User CreateUser(User user)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "INSERT INTO Users (Username, Password, Zipcode, Balance)" +
                               "    OUTPUT inserted.Id" +
                               "    VALUES (@Username, @Password, @Zipcode, @Balance)";
         command.Parameters.AddWithValue("@Username", user.Username);
-        command.Parameters.AddWithValue("@Password", user.PasswordHash);
+        command.Parameters.AddWithValue("@Password", user.Password);
         command.Parameters.AddWithValue("@Zipcode", user.Zipcode);
         command.Parameters.AddWithValue("@Balance", user.Balance);
 
@@ -83,7 +86,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new User(userId, user.Username, user.PasswordHash, user.Zipcode, user.Balance);
+        return new User(userId, user.Username, user.Password, user.Zipcode, user.Balance);
     }
 
     /// <summary>
@@ -94,7 +97,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the user does not exist.</exception>
     public static User GetUserById(uint id)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Users" +
@@ -132,7 +135,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the user does not exist.</exception>
     public static User GetUserByName(string name)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Users" +
@@ -170,7 +173,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the user does not exist.</exception>
     public static User UpdateUser(User user)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE Users" +
@@ -180,7 +183,7 @@ public partial class DatabaseManager
                               "        Balance = @Balance" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Username", user.Username);
-        command.Parameters.AddWithValue("@Password", user.PasswordHash);
+        command.Parameters.AddWithValue("@Password", user.Password);
         command.Parameters.AddWithValue("@Zipcode", user.Zipcode);
         command.Parameters.AddWithValue("@Balance", user.Balance);
         command.Parameters.AddWithValue("@Id", user.UserId);
@@ -204,7 +207,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the user does not exist.</exception>
     public static void DeleteUser(User user)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM Users" +
@@ -220,6 +223,235 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
+    /// <summary>
+    ///     Logs a user in.
+    /// </summary>
+    /// <param name="username">The username of the user to log in.</param>
+    /// <param name="password">The password of the user to log in.</param>
+    /// <returns>The logged in user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the user does not exist.</exception>
+    /// <exception cref="InvalidCredentialException">Thrown when the password is incorrect.</exception>
+    public static User Login(string username, string password)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            throw new ArgumentException("Username cannot be empty!");
+        }
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            throw new ArgumentException("Password cannot be empty!");
+        }
+
+        var connection = DatabaseManager.Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+
+        // Get the hashed password from the database.
+        command.CommandText = "SELECT Password FROM Users" +
+                              "    WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new DataException("User does not exist!");
+        }
+
+        reader.Read();
+
+        var hashedPassword = reader.GetString(0);
+
+        reader.Close();
+
+        // Check if the password is correct.
+        if (!IsValidPassword(password, hashedPassword))
+        {
+            connection.Close();
+
+            throw new InvalidCredentialException("Password is incorrect!");
+        }
+
+        // Get the user from the database.
+        command.CommandText = "SELECT Id FROM Users" +
+                              "    WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        reader = command.ExecuteReader();
+
+        reader.Read();
+
+        var userId = (uint)reader.GetInt32(0);
+
+        reader.Close();
+        connection.Close();
+
+        return GetUserById(userId);
+    }
+
+    /// <summary>
+    ///     Signs up a user.
+    /// </summary>
+    /// <param name="user">The user to sign up.</param>
+    /// <returns>The signed up user.</returns>
+    /// <exception cref="DataException">Thrown when the username is already taken or the password could not be hashed.</exception>
+    public static User SignUp(User user)
+    {
+        // Check if the username is already taken.
+        if (IsUsernameTaken(user.Username)) {
+            throw new DataException("Username is already taken!");
+        }
+
+        // Hash the password.
+        var hashedPassword = HashPassword(user.Password);
+
+        // Make sure the password was hashed successfully.
+        if (string.IsNullOrWhiteSpace(hashedPassword))
+        {
+            throw new DataException("Password could not be hashed!");
+        }
+
+        // Create the user.
+        var userToCreate = new User(0, user.Username, hashedPassword, user.Zipcode, user.Balance);
+        var createdUser = CreateUser(userToCreate);
+
+        return createdUser;
+    }
+
+    /// <summary>
+    ///     Signs up a private user.
+    /// </summary>
+    /// <param name="privateUser">The private user to sign up.</param>
+    /// <returns>The signed up private user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username, password or CPR number is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
+    public static PrivateUser SignUp(PrivateUser privateUser)
+    {
+        ValidateUser(privateUser);
+
+        var user = SignUp(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode, privateUser.Balance));
+
+        // Create the private user.
+        var privateUserToCreate = new PrivateUser(0, privateUser.Cpr, user);
+        var createdPrivateUser = CreatePrivateUser(privateUserToCreate);
+
+        return createdPrivateUser;
+    }
+
+    /// <summary>
+    ///     Signs up a corporate user.
+    /// </summary>
+    /// <param name="corporateUser">The corporate user to sign up.</param>
+    /// <returns>The signed up corporate user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username, password or CVR number is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the username is already taken.</exception>
+    public static CorporateUser SignUp(CorporateUser corporateUser)
+    {
+        ValidateUser(corporateUser);
+
+        // Create the user.
+        var user = SignUp(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode, corporateUser.Balance));
+
+        // Create the corporate user.
+        var corporateUserToCreate = new CorporateUser(0, corporateUser.Cvr, corporateUser.Credit, user);
+        var createdCorporateUser = CreateCorporateUser(corporateUserToCreate);
+
+        return createdCorporateUser;
+    }
+
+    /// <summary>
+    ///     Validates a user.
+    /// </summary>
+    /// <param name="user">The user to validate.</param>
+    /// <exception cref="ArgumentException">Thrown when a value is detected as invalid.</exception>
+    private static void ValidateUser(User user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Username))
+        {
+            throw new ArgumentException("Username cannot be empty!");
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Password))
+        {
+            throw new ArgumentException("Password cannot be empty!");
+        }
+
+        if (user.Zipcode == 0)
+        {
+            throw new ArgumentException("Zipcode cannot be empty!");
+        }
+
+        switch (user)
+        {
+            // If the user is a private user, make sure the CPR number is not empty.
+            case PrivateUser privateUser when string.IsNullOrWhiteSpace(privateUser.Cpr):
+                throw new ArgumentException("CPR number cannot be empty!");
+            // If the user is a corporate user, make sure the CVR number is not empty.
+            case CorporateUser corporateUser when string.IsNullOrWhiteSpace(corporateUser.Cvr):
+                throw new ArgumentException("CVR number cannot be empty!");
+        }
+    }
+
+    /// <summary>
+    ///     Hashes a password using BCrypt.
+    /// </summary>
+    /// <param name="password">The plaintext password.</param>
+    /// <returns>The hashed password.</returns>
+    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
+    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
+    private static string? HashPassword(string password)
+    {
+        var hash = BC.HashPassword(password, BC.GenerateSalt());
+
+        return hash;
+    }
+
+    /// <summary>
+    ///     Checks if a given password matches a given hash.
+    /// </summary>
+    /// <param name="password">The plaintext password.</param>
+    /// <param name="hash">The hashed password.</param>
+    /// <returns>True if the password matches the hash, false otherwise.</returns>
+    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
+    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
+    private static bool IsValidPassword(string password, string hash)
+    {
+        return BC.Verify(password, hash);
+    }
+
+    /// <summary>
+    ///     Checks if a username is already taken.
+    /// </summary>
+    /// <param name="username">The username to check.</param>
+    /// <returns>True if the username is taken, false otherwise.</returns>
+    private static bool IsUsernameTaken(string username)
+    {
+        var connection = DatabaseManager.Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM Users" +
+                              "    WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
+    }
     #endregion
 
     #region PrivateUser
@@ -230,7 +462,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException"></exception>
     public static List<PrivateUser> GetAllPrivateUsers()
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM PrivateUsers";
@@ -270,7 +502,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the private user already exists.</exception>
     public static PrivateUser CreatePrivateUser(PrivateUser privateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "INSERT INTO PrivateUsers (Cpr, UserId)" +
@@ -307,7 +539,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
     public static PrivateUser GetPrivateUserById(uint id)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM PrivateUsers" +
@@ -345,7 +577,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
     public static PrivateUser GetPrivateUserByCpr(string cpr)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM PrivateUsers" +
@@ -383,7 +615,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
     public static PrivateUser UpdatePrivateUser(PrivateUser privateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE PrivateUsers" +
@@ -413,7 +645,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
     public static void DeletePrivateUser(PrivateUser privateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM PrivateUsers" +
@@ -439,7 +671,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException"></exception>
     public static List<CorporateUser> GetAllCorporateUsers()
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM CorporateUsers";
@@ -480,13 +712,13 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the corporate user already exists.</exception>
     public static CorporateUser CreateCorporateUser(CorporateUser corporateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "INSERT INTO CorporateUsers (Cvr, Credit, UserId)" +
                               "    OUTPUT inserted.Id" +
                               "    VALUES (@Cvr, @Credit, @UserId)";
-        command.Parameters.AddWithValue("@Cvr", corporateUser.CvrNumber);
+        command.Parameters.AddWithValue("@Cvr", corporateUser.Cvr);
         command.Parameters.AddWithValue("@Credit", corporateUser.Credit);
         command.Parameters.AddWithValue("@UserId", corporateUser.UserId);
 
@@ -507,7 +739,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new CorporateUser(corporateUserId, corporateUser.CvrNumber, corporateUser.Credit, GetUserById(corporateUser.UserId));
+        return new CorporateUser(corporateUserId, corporateUser.Cvr, corporateUser.Credit, GetUserById(corporateUser.UserId));
     }
 
     /// <summary>
@@ -518,7 +750,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the corporate user does not exist.</exception>
     public static CorporateUser GetCorporateUserById(uint id)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM CorporateUsers" +
@@ -557,7 +789,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the corporate users do not exist.</exception>
     public static List<CorporateUser> GetCorporateUsersByCvr(string cvr)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM CorporateUsers" +
@@ -601,7 +833,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the corporate user does not exist.</exception>
     public static CorporateUser UpdateCorporateUser(CorporateUser corporateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE CorporateUsers" +
@@ -609,7 +841,7 @@ public partial class DatabaseManager
                               "        Credit = @Credit," +
                               "        UserId = @UserId" +
                               "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Cvr", corporateUser.CvrNumber);
+        command.Parameters.AddWithValue("@Cvr", corporateUser.Cvr);
         command.Parameters.AddWithValue("@Credit", corporateUser.Credit);
         command.Parameters.AddWithValue("@UserId", corporateUser.UserId);
         command.Parameters.AddWithValue("@Id", corporateUser.CorporateUserId);
@@ -633,7 +865,7 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the corporate user does not exist.</exception>
     public static void DeleteCorporateUser(CorporateUser corporateUser)
     {
-        var connection = Instance.GetConnection();
+        var connection = DatabaseManager.Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM CorporateUsers" +
