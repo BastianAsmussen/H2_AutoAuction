@@ -15,7 +15,7 @@ public class CreateUserViewModel : ViewModelBase
 {
     private string _userName;
     private string _passWord;
-    private string _rPassWord;
+    private string _repeatPassword;
     private bool _isCorporate;
     private string _cvrNumber;
     private bool _isPrivate;
@@ -25,25 +25,31 @@ public class CreateUserViewModel : ViewModelBase
 
     #region Properties
 
-    [MinLength(1, ErrorMessage = "Username cannot be empty")]
+    [MinLength(1, ErrorMessage = "Username is required")]
     public string UserName
     {
         get => _userName;
         set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
-    [MinLength(1, ErrorMessage = "Password cannot be empty")]
+    [MinLength(1, ErrorMessage = "Password is required")]
     public string PassWord
     {
         get => _passWord;
         set => this.RaiseAndSetIfChanged(ref _passWord, value);
     }
-
-    [MinLength(1, ErrorMessage = "Rewrite the password")]
-    public string RPassWord
+    
+    public string RepeatPassword
     {
-        get => _rPassWord;
-        set => this.RaiseAndSetIfChanged(ref _rPassWord, value);
+        get => _repeatPassword;
+        set
+        {
+            if (!PassWord.Equals(value))
+            {
+                throw new DataValidationException("Password does not match");
+            }
+            this.RaiseAndSetIfChanged(ref _repeatPassword, value);
+        }
     }
 
     public string CvrNumber
@@ -58,8 +64,7 @@ public class CreateUserViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _cvrNumber, value);
         }
     }
-
-    [MinLength(1, ErrorMessage = "")]
+    
     public string ZipCode
     {
         get => _zipCode;
@@ -72,8 +77,7 @@ public class CreateUserViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _zipCode, value);
         }
     }
-
-    [MinLength(1, ErrorMessage = "")]
+    
     public string CprNumber
     {
         get => _cprNumber;
@@ -126,7 +130,7 @@ public class CreateUserViewModel : ViewModelBase
         if (_isPrivate)
             try
             {
-                CreatePrivateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                CreatePrivateUser(UserName, PassWord, RepeatPassword, Convert.ToUInt32(ZipCode),
                     Convert.ToUInt32(CprNumber));
             }
             catch (Exception e)
@@ -137,7 +141,7 @@ public class CreateUserViewModel : ViewModelBase
         if (_isCorporate)
             try
             {
-                CreateCorporateUser(UserName, PassWord, RPassWord, Convert.ToUInt32(ZipCode),
+                CreateCorporateUser(UserName, PassWord, RepeatPassword, Convert.ToUInt32(ZipCode),
                     Convert.ToUInt32(CvrNumber));
             }
             catch (Exception e)
@@ -249,7 +253,7 @@ public class CreateUserViewModel : ViewModelBase
         this.WhenAnyValue(
                 x => x.UserName,
                 x => x.PassWord,
-                x => x.RPassWord,
+                x => x.RepeatPassword,
                 x => x.ZipCode,
                 (userName, passWord, rpassWord, zipCode) =>
                     !string.IsNullOrWhiteSpace(userName) &&

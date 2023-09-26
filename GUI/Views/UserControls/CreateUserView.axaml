@@ -50,7 +50,7 @@
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 PasswordChar="*"
-                Text="{Binding RPassWord}"
+                Text="{Binding RepeatPassword}"
                 Watermark="Password again" />
 
             <!--  Corporate or Private Buttons  -->
@@ -94,6 +94,7 @@
                         FontSize="22"
                         Foreground="Black"
                         Margin="22,0,0,0"
+                        MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="Zip code"
@@ -119,6 +120,7 @@
                         FontSize="22"
                         Foreground="Black"
                         Margin="22,0,0,0"
+                        MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="Zip code"
