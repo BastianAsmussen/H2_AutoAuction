@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using Avalonia.Data;
 using Data.Classes;
+using Data.DatabaseManager;
 using GUI.Views.UserControls;
 using ReactiveUI;
 using static GUI.Utilities.ContentArea;
@@ -38,7 +39,7 @@ public class CreateUserViewModel : ViewModelBase
         get => _passWord;
         set => this.RaiseAndSetIfChanged(ref _passWord, value);
     }
-    
+
     public string RepeatPassword
     {
         get => _repeatPassword;
@@ -48,6 +49,7 @@ public class CreateUserViewModel : ViewModelBase
             {
                 throw new DataValidationException("Password does not match");
             }
+
             this.RaiseAndSetIfChanged(ref _repeatPassword, value);
         }
     }
@@ -64,7 +66,7 @@ public class CreateUserViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _cvrNumber, value);
         }
     }
-    
+
     public string ZipCode
     {
         get => _zipCode;
@@ -77,7 +79,7 @@ public class CreateUserViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _zipCode, value);
         }
     }
-    
+
     public string CprNumber
     {
         get => _cprNumber;
@@ -154,68 +156,39 @@ public class CreateUserViewModel : ViewModelBase
 
     /// <summary>
     /// Creates a new user with the provided username and password.
-    /// </summary>
-    /// <param name="username">The username of the user to create.</param>
-    /// <param name="password">The password of the user to create.</param>
-    /// <param name="rPassword">The ReWritten password</param>
-    /// <param name="zipCode">Users ZipCOde</param>
-    /// <param name="cprNumber">Users CprNumb</param>
-    /// <exception cref="ArgumentNullException">Thrown when either username or password is null or empty.</exception>
     /// <remarks>
     /// This method sends a request to the server to create a new user with the given credentials.
     /// If the user is created successfully, it will print a success message.
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
+    /// </summary>
     private void CreatePrivateUser(string username, string password, string rPassword, uint zipCode, uint cprNumber)
     {
-        if (!password.Equals(rPassword))
-            throw new Exception("Password does not match");
-
-        if (string.IsNullOrEmpty(zipCode.ToString()) || string.IsNullOrEmpty(cprNumber.ToString()))
-            throw new Exception("ZipCode or CprNumber is empty");
-
-        User user = new(0, username, password, zipCode);
-        PrivateUser newUser = new(0, $"{CprNumber}", user);
-
-        CreateUserServerRequest(newUser);
+        PrivateUser privateUser = new(0, $"{CprNumber}", new(0, username, password, zipCode));
+        try
+        {
+            DatabaseManager.SignUp(privateUser);
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Error : {e.Message}");
+        }
     }
 
     /// <summary>
     /// Creates a new user with the provided username and password.
     /// </summary>
-    /// <param name="username">The username of the user to create.</param>
-    /// <param name="password">The password of the user to create.</param>
-    /// <param name="rPassword"></param>
-    /// <param name="zipCode"></param>
-    /// <param name="cvrNumber"></param>
-    /// <exception cref="ArgumentNullException">Thrown when either username or password is null or empty.</exception>
-    /// <remarks>
-    /// This method sends a request to the server to create a new user with the given credentials.
-    /// If the user is created successfully, it will print a success message.
-    /// If any exception occurs during the process, it will be caught and re-thrown.
-    /// </remarks>
     private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber)
     {
-        if (!password.Equals(rPassword))
-            throw new Exception("Password does not match");
-
-        if (string.IsNullOrEmpty(cvrNumber.ToString()) || string.IsNullOrEmpty(zipCode.ToString()))
-            throw new Exception("ZipCode, CvrNumber is empty");
-
-        User user = new(0, username, password, zipCode);
-        CorporateUser newUser = new(0, $"{CvrNumber}", 0, user);
-
-        CreateUserServerRequest(newUser);
-    }
-
-
-    /// <summary>
-    /// Sends a request to the server to create a new user.
-    /// </summary>
-    /// <param name="user">The User object containing user data.</param>
-    public void CreateUserServerRequest(User user)
-    {
-        //#TODO: Send request to the server
+        CorporateUser corporateUser = new(0, $"{CvrNumber}", 0, new(0, username, password, zipCode));
+        try
+        {
+            DatabaseManager.SignUp(corporateUser);
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Error : {e.Message}");
+        }
     }
 
 
