@@ -79,29 +79,25 @@
                 <WrapPanel
                     HorizontalAlignment="Center"
                     IsVisible="{Binding Path=IsChecked, ElementName=IsCorporateButton, Mode=TwoWay}"
+                    VerticalAlignment="Top"
                     x:Name="CorporateInfo">
 
                     <TextBox
                         FontSize="22"
                         Foreground="Black"
                         Text="{Binding CvrNumber, Mode=TwoWay}"
+                        VerticalAlignment="Top"
                         Watermark="CVR"
                         Width="160" />
-                    <TextBox
-                        FontSize="22"
-                        Foreground="Black"
-                        Margin="12,0,0,0"
-                        Text="{Binding ZipCode, Mode=TwoWay}"
-                        Watermark="ZipCode"
-                        Width="120" />
 
                     <TextBox
                         FontSize="22"
                         Foreground="Black"
-                        Margin="12,0,0,0"
-                        Text="{Binding Credit}"
-                        Watermark="Credit"
-                        Width="120" />
+                        Margin="22,0,0,0"
+                        Text="{Binding ZipCode, Mode=TwoWay}"
+                        VerticalAlignment="Top"
+                        Watermark="Zip code"
+                        Width="150" />
                 </WrapPanel>
 
                 <!--  PrivateUserInfo  -->
@@ -113,17 +109,20 @@
                     <TextBox
                         FontSize="22"
                         Foreground="Black"
+                        MaxLength="10"
                         Text="{Binding CprNumber, Mode=TwoWay}"
-                        Watermark="CPR-Nummer"
-                        Width="200" />
+                        VerticalAlignment="Top"
+                        Watermark="Cpr number"
+                        Width="160" />
 
                     <TextBox
                         FontSize="22"
                         Foreground="Black"
                         Margin="22,0,0,0"
                         Text="{Binding ZipCode, Mode=TwoWay}"
-                        Watermark="ZipCode"
-                        Width="120" />
+                        VerticalAlignment="Top"
+                        Watermark="Zip code"
+                        Width="150" />
                 </WrapPanel>
             </WrapPanel>
 
