@@ -181,9 +181,9 @@ public static class AuctionHouse
     public static void PlaceBid(Auction auction, decimal newBid)
     {
         auction = DatabaseManager.GetAuctionById(auction.AuctionId);
-        if (newBid > auction.MinimumPrice)
-        {
-            auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
-        }
+        if (newBid < auction.MinimumPrice)
+            return;
+        
+        auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
     }
 }
