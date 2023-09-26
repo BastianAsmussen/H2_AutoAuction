@@ -20,7 +20,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseType";
+        command.CommandText = "SELECT * FROM LicenseTypes";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -58,10 +58,10 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO LicenseType (Name)" +
+        command.CommandText = "INSERT INTO LicenseTypes (Type)" +
                               "    OUTPUT inserted.Id" +
-                              "    VALUES (@Name)";
-        command.Parameters.AddWithValue("@Name", licenseType.ToString());
+                              "    VALUES (@Type)";
+        command.Parameters.AddWithValue("@Type", licenseType.ToString());
 
         var reader = command.ExecuteReader();
 
@@ -95,7 +95,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseType" +
+        command.CommandText = "SELECT * FROM LicenseTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
@@ -130,9 +130,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseType" +
-                              "    WHERE Name = @Name";
-        command.Parameters.AddWithValue("@Name", name);
+        command.CommandText = "SELECT * FROM LicenseTypes" +
+                              "    WHERE Type = @Type";
+        command.Parameters.AddWithValue("@Type", name);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -165,11 +165,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE LicenseType" +
-                              "    SET Name = @Name" +
+        command.CommandText = "UPDATE LicenseTypes" +
+                              "    SET Type = @Type" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", licenseType);
-        command.Parameters.AddWithValue("@Name", licenseType.ToString());
+        command.Parameters.AddWithValue("@Type", licenseType.ToString());
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -193,7 +193,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM LicenseType" +
+        command.CommandText = "DELETE FROM LicenseTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", licenseType);
 
@@ -218,7 +218,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelType";
+        command.CommandText = "SELECT * FROM FuelTypes";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -256,10 +256,10 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO FuelType (Name)" +
+        command.CommandText = "INSERT INTO FuelTypes (Type)" +
                               "    OUTPUT inserted.Id" +
-                              "    VALUES (@Name)";
-        command.Parameters.AddWithValue("@Name", fuelType.ToString());
+                              "    VALUES (@Type)";
+        command.Parameters.AddWithValue("@Type", fuelType.ToString());
 
         var reader = command.ExecuteReader();
 
@@ -293,7 +293,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelType" +
+        command.CommandText = "SELECT * FROM FuelTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
@@ -328,9 +328,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelType" +
-                              "    WHERE Name = @Name";
-        command.Parameters.AddWithValue("@Name", name);
+        command.CommandText = "SELECT * FROM FuelTypes" +
+                              "    WHERE Type = @Type";
+        command.Parameters.AddWithValue("@Type", name);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -363,11 +363,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE FuelType" +
-                              "    SET Name = @Name" +
+        command.CommandText = "UPDATE FuelTypes" +
+                              "    SET Type = @Type" +
                               "    WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Type", fuelType.ToString());
         command.Parameters.AddWithValue("@Id", fuelType);
-        command.Parameters.AddWithValue("@Name", fuelType.ToString());
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -391,7 +391,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM FuelType" +
+        command.CommandText = "DELETE FROM FuelTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", fuelType);
 
@@ -416,7 +416,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyType";
+        command.CommandText = "SELECT * FROM EnergyTypes";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -454,10 +454,10 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO EnergyType (Name)" +
+        command.CommandText = "INSERT INTO EnergyTypes (Type)" +
                               "    OUTPUT inserted.Id" +
-                              "    VALUES (@Name)";
-        command.Parameters.AddWithValue("@Name", energyType.ToString());
+                              "    VALUES (@Type)";
+        command.Parameters.AddWithValue("@Type", energyType.ToString());
 
         var reader = command.ExecuteReader();
 
@@ -491,7 +491,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyType" +
+        command.CommandText = "SELECT * FROM EnergyTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
@@ -526,9 +526,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyType" +
-                              "    WHERE Name = @Name";
-        command.Parameters.AddWithValue("@Name", name);
+        command.CommandText = "SELECT * FROM EnergyTypes" +
+                              "    WHERE Type = @Type";
+        command.Parameters.AddWithValue("@Type", name);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -561,11 +561,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE EnergyType" +
-                              "    SET Name = @Name" +
+        command.CommandText = "UPDATE EnergyTypes" +
+                              "    SET Type = @Type" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", energyType);
-        command.Parameters.AddWithValue("@Name", energyType.ToString());
+        command.Parameters.AddWithValue("@Type", energyType.ToString());
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -589,7 +589,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM EnergyType" +
+        command.CommandText = "DELETE FROM EnergyTypes" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", energyType);
 
@@ -614,7 +614,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Vehicle";
+        command.CommandText = "SELECT * FROM Vehicles";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -664,19 +664,41 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText =
-            "INSERT INTO Vehicle (Name, Km, RegistrationNumber, Year, HasTowbar, LicenseType, EngineSize, KmPerLiter, FuelType, EnergyClass)" +
-            "    OUTPUT inserted.Id" +
-            "    VALUES (@Name, @Km, @RegistrationNumber, @Year, @HasTowbar, @LicenseType, @EngineSize, @KmPerLiter, @FuelType, @EnergyClass)";
+            "INSERT INTO Vehicles (" +
+            "    Name," +
+            "    Km," +
+            "    RegistrationNumber," +
+            "    Year," +
+            "    HasTowbar," +
+            "    LicenseTypeId," +
+            "    EngineSize," +
+            "    KmPerLiter," +
+            "    FuelTypeId," +
+            "    EnergyTypeId" +
+            ")" +
+            " OUTPUT inserted.Id" +
+            " VALUES (" +
+            "    @Name," +
+            "    @Km," +
+            "    @RegistrationNumber," +
+            "    @Year," +
+            "    @HasTowbar," +
+            "    @LicenseTypeId," +
+            "    @EngineSize," +
+            "    @KmPerLiter," +
+            "    @FuelTypeId," +
+            "    @EnergyTypeId" +
+            ")";
         command.Parameters.AddWithValue("@Name", vehicle.Name);
         command.Parameters.AddWithValue("@Km", vehicle.Km);
         command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
         command.Parameters.AddWithValue("@Year", vehicle.Year);
         command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
-        command.Parameters.AddWithValue("@LicenseType", vehicle.LicenseType);
+        command.Parameters.AddWithValue("@LicenseTypeId", vehicle.LicenseType);
         command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
         command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
-        command.Parameters.AddWithValue("@FuelType", vehicle.FuelType);
-        command.Parameters.AddWithValue("@EnergyClass", vehicle.EnergyClass);
+        command.Parameters.AddWithValue("@FuelTypeId", vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyTypeId", vehicle.EnergyClass);
 
         var reader = command.ExecuteReader();
 
@@ -711,7 +733,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Vehicle" +
+        command.CommandText = "SELECT * FROM Vehicles" +
                               "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
@@ -756,7 +778,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Vehicle" +
+        command.CommandText = "SELECT * FROM Vehicles" +
                               "    WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
@@ -939,20 +961,29 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText =
-            "UPDATE Vehicle " +
-            "SET Name = @Name, Km = @Km, RegistrationNumber = @RegistrationNumber, Year = @Year, HasTowbar = @HasTowbar, LicenseType = @LicenseType, EngineSize = @EngineSize, KmPerLiter = @KmPerLiter, FuelType = @FuelType, EnergyClass = @EnergyClass " +
-            "WHERE Id = @Id";
+            "UPDATE Vehicles" +
+            " SET Name = @Name," +
+            "     Km = @Km," +
+            "     RegistrationNumber = @RegistrationNumber," +
+            "     Year = @Year," +
+            "     HasTowbar = @HasTowbar," +
+            "     LicenseTypeId = @LicenseTypeId," +
+            "     EngineSize = @EngineSize," +
+            "     KmPerLiter = @KmPerLiter," +
+            "     FuelTypeId = @FuelTypeId," +
+            "     EnergyTypeId = @EnergyTypeId" +
+            " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
         command.Parameters.AddWithValue("@Name", vehicle.Name);
         command.Parameters.AddWithValue("@Km", vehicle.Km);
         command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
         command.Parameters.AddWithValue("@Year", vehicle.Year);
         command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
-        command.Parameters.AddWithValue("@LicenseType", vehicle.LicenseType);
+        command.Parameters.AddWithValue("@LicenseTypeId", vehicle.LicenseType);
         command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
         command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
-        command.Parameters.AddWithValue("@FuelType", vehicle.FuelType);
-        command.Parameters.AddWithValue("@EnergyClass", vehicle.EnergyClass);
+        command.Parameters.AddWithValue("@FuelTypeId", vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyTypeId", vehicle.EnergyClass);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -976,7 +1007,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Vehicle WHERE Id = @Id";
+        command.CommandText = "DELETE FROM Vehicles WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
 
         // If it fails, throw an exception.
@@ -1287,7 +1318,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT VehicleDimensionsId, VehicleId, FROM HeavyVehicle";
+        command.CommandText = "SELECT VehicleDimensionsId, VehicleId FROM HeavyVehicles";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -1326,7 +1357,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO HeavyVehicle (VehicleDimensionsId, VehicleId)" +
+        command.CommandText = "INSERT INTO HeavyVehicles (VehicleDimensionsId, VehicleId)" +
                               "    OUTPUT inserted.Id" +
                               "    VALUES (@VehicleDimensionsId, @VehicleId)";
         command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
@@ -1364,7 +1395,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM HeavyVehicle WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM HeavyVehicles" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1400,10 +1432,13 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE HeavyVehicle SET VehicleDimensionsId = @VehicleDimensionsId, VehicleId = @VehicleId WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", heavyVehicle);
+        command.CommandText = "UPDATE HeavyVehicles" +
+                              "     SET VehicleDimensionsId = @VehicleDimensionsId," +
+                              "         VehicleId = @VehicleId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
         command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
+        command.Parameters.AddWithValue("@Id", heavyVehicle.HeavyVehicleId);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -1427,7 +1462,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM HeavyVehicle WHERE Id = @Id";
+        command.CommandText = "DELETE FROM HeavyVehicles" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", heavyVehicle);
 
         // If it fails, throw an exception.
@@ -1451,7 +1487,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT LoadCapacity, HeavyVehicleId, FROM Truck";
+        command.CommandText = "SELECT LoadCapacity, HeavyVehicleId FROM Trucks";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -1491,9 +1527,15 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Truck (LoadCapacity, HeavyVehicleId)" +
+        command.CommandText = "INSERT INTO Trucks (" +
+                              "    LoadCapacity," +
+                              "    HeavyVehicleId" +
+                              ")" +
                               "    OUTPUT inserted.Id" +
-                              "    VALUES (@LoadCapacity, @HeavyVehicleId)";
+                              "    VALUES (" +
+                              "        @LoadCapacity," +
+                              "        @HeavyVehicleId" +
+                              ")";
         command.Parameters.AddWithValue("@LoadCapacity", truck.LoadCapacity);
         command.Parameters.AddWithValue("@HeavyVehicleId", truck.HeavyVehicleId);
 
@@ -1529,7 +1571,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Truck WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM Trucks" +
+                              "    WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1565,10 +1608,13 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Truck SET LoadCapacity = @LoadCapacity, HeavyVehicleId = @HeavyVehicleId WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", truck);
+        command.CommandText = "UPDATE Trucks" +
+                              " SET LoadCapacity = @LoadCapacity," +
+                              "     HeavyVehicleId = @HeavyVehicleId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@LoadCapacity", truck.LoadCapacity);
         command.Parameters.AddWithValue("@HeavyVehicleId", truck.HeavyVehicleId);
+        command.Parameters.AddWithValue("@Id", truck.TruckId);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -1592,8 +1638,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Truck WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", truck);
+        command.CommandText = "DELETE FROM Trucks" +
+                              "    WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", truck.TruckId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
@@ -1616,7 +1663,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId, FROM Bus";
+        command.CommandText = "SELECT NumberOfSeats," +
+                              "       NumberOfSleepingSpaces," +
+                              "       HasToilet," +
+                              "       HeavyVehicleId" +
+                              " FROM Buses";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -1658,9 +1709,19 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Bus (NumberOfSeats, NumberOfSleepingSpaces, HasToilet, HeavyVehicleId)" +
+        command.CommandText = "INSERT INTO Buses (" +
+                              "    NumberOfSeats," +
+                              "    NumberOfSleepingSpaces," +
+                              "    HasToilet," +
+                              "    HeavyVehicleId" +
+                              ")" +
                               "    OUTPUT inserted.Id" +
-                              "    VALUES (@NumberOfSeats, @NumberOfSleepingSpaces, @HasToilet, @HeavyVehicleId)";
+                              "    VALUES (" +
+                              "        @NumberOfSeats," +
+                              "        @NumberOfSleepingSpaces," +
+                              "        @HasToilet," +
+                              "        @HeavyVehicleId" +
+                              ")";
         command.Parameters.AddWithValue("@NumberOfSeats", bus.NumberOfSeats);
         command.Parameters.AddWithValue("@NumberOfSleepingSpaces", bus.NumberOfSleepingSpaces);
         command.Parameters.AddWithValue("@HasToilet", bus.HasToilet);
@@ -1698,7 +1759,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Bus WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM Buses" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1736,12 +1798,17 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Bus SET NumberOfSeats = @NumberOfSeats, NumberOfSleepingSpaces = @NumberOfSleepingSpaces, HasToilet = @HasToilet, HeavyVehicleId = @HeavyVehicleId WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", bus);
+        command.CommandText = "UPDATE Buses" +
+                              " SET NumberOfSeats = @NumberOfSeats," +
+                              "     NumberOfSleepingSpaces = @NumberOfSleepingSpaces," +
+                              "     HasToilet = @HasToilet," +
+                              "     HeavyVehicleId = @HeavyVehicleId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@NumberOfSeats", bus.NumberOfSeats);
         command.Parameters.AddWithValue("@NumberOfSleepingSpaces", bus.NumberOfSleepingSpaces);
         command.Parameters.AddWithValue("@HasToilet", bus.HasToilet);
         command.Parameters.AddWithValue("@HeavyVehicleId", bus.HeavyVehicleId);
+        command.Parameters.AddWithValue("@Id", bus.BusId);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -1765,8 +1832,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Bus WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", bus);
+        command.CommandText = "DELETE FROM Buses" +
+                              " WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", bus.BusId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
@@ -1789,7 +1857,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT VehicleDimensionsId, VehicleId, FROM PersonalCar";
+        command.CommandText = "SELECT TrunkDimensionsId, VehicleId FROM PersonalCars";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -1829,9 +1897,18 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO PersonalCar (VehicleDimensionsId, VehicleId)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@VehicleDimensionsId, @VehicleId)";
+        command.CommandText = "INSERT INTO PersonalCars (" +
+                              "    NumberOfSeats," +
+                              "    TrunkDimensionsId," +
+                              "    VehicleId" +
+                              ")" +
+                              " OUTPUT inserted.Id" +
+                              " VALUES (" +
+                              "    @NumberOfSeats," +
+                              "    @VehicleDimensionsId," +
+                              "    @VehicleId" +
+                              ")";
+        command.Parameters.AddWithValue("@NumberOfSeats", personalCar.NumberOfSeats);
         command.Parameters.AddWithValue("@VehicleDimensionsId", personalCar.TrunkDimensions.DimensionsId);
         command.Parameters.AddWithValue("@VehicleId", personalCar.VehicleId);
 
@@ -1867,7 +1944,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM PersonalCar WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM PersonalCars" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1904,11 +1982,15 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE PersonalCar SET NumberOfSeats = @NumberOfSeats, TrunkDimensionsId = @TrunkDimensionsId, VehicleId = @VehicleId WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", personalCar);
+        command.CommandText = "UPDATE PersonalCars" +
+                              " SET NumberOfSeats = @NumberOfSeats," +
+                              "     TrunkDimensionsId = @TrunkDimensionsId," +
+                              "     VehicleId = @VehicleId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@NumberOfSeats", personalCar.NumberOfSeats);
         command.Parameters.AddWithValue("@TrunkDimensionsId", personalCar.TrunkDimensions);
         command.Parameters.AddWithValue("@VehicleId", personalCar.VehicleId);
+        command.Parameters.AddWithValue("@Id", personalCar.PersonalCarId);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -1932,7 +2014,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM PersonalCar WHERE Id = @Id";
+        command.CommandText = "DELETE FROM PersonalCars" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", personalCar);
 
         // If it fails, throw an exception.
@@ -1956,7 +2039,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT PersonalCarId, FROM PrivatePersonalCar";
+        command.CommandText = "SELECT PersonalCarId FROM PrivatePersonalCars";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -1995,9 +2078,16 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO PrivatePersonalCar (PersonalCarId)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@PersonalCarId)";
+        command.CommandText = "INSERT INTO PrivatePersonalCars (" +
+                              "    HasIsofixFittings," +
+                              "    PersonalCarId" +
+                              ")" +
+                              " OUTPUT inserted.Id" +
+                              " VALUES (" +
+                              "    @HasIsofixFittings," +
+                              "    @PersonalCarId" +
+                              ")";
+        command.Parameters.AddWithValue("@HasIsofixFittings", privatePersonalCar.HasIsofixFittings);
         command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
 
         var reader = command.ExecuteReader();
@@ -2032,7 +2122,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM PrivatePersonalCar WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM PrivatePersonalCars" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -2067,9 +2158,12 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE PrivatePersonalCar SET HasIsoFittings = @HasIsoFittings, PersonalCarId = @PersonalCarId WHERE Id = @Id";
+        command.CommandText = "UPDATE PrivatePersonalCars" +
+                              " SET HasIsofixFittings = @HasIsofixFittings," +
+                              "     PersonalCarId = @PersonalCarId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", privatePersonalCar);
-        command.Parameters.AddWithValue("@HasIsoFittings", privatePersonalCar.HasIsoFittings);
+        command.Parameters.AddWithValue("@HasIsofixFittings", privatePersonalCar.HasIsofixFittings);
         command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -2094,7 +2188,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM PrivatePersonalCar WHERE Id = @Id";
+        command.CommandText = "DELETE FROM PrivatePersonalCars" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", privatePersonalCar);
 
         // If it fails, throw an exception.
@@ -2118,7 +2213,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT PersonalCarId, FROM ProfessionalPersonalCar";
+        command.CommandText = "SELECT PersonalCarId FROM ProfessionalPersonalCars";
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -2158,9 +2253,19 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO ProfessionalPersonalCar (PersonalCarId)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@PersonalCarId)";
+        command.CommandText = "INSERT INTO ProfessionalPersonalCars (" +
+                              "    HasSafetyBar," +
+                              "    LoadCapacity," +
+                              "    PersonalCarId" +
+                              ")" +
+                              " OUTPUT inserted.Id" +
+                              " VALUES (" +
+                              "    @HasSafetyBar," +
+                              "    @LoadCapacity," +
+                              "    @PersonalCarId" +
+                              ")";
+        command.Parameters.AddWithValue("@HasSafetyBar", professionalPersonalCar.HasSafetyBar);
+        command.Parameters.AddWithValue("@LoadCapacity", professionalPersonalCar.LoadCapacity);
         command.Parameters.AddWithValue("@PersonalCarId", professionalPersonalCar.PersonalCarId);
 
         var reader = command.ExecuteReader();
@@ -2195,7 +2300,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM ProfessionalPersonalCar WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM ProfessionalPersonalCars" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -2231,11 +2337,15 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE ProfessionalPersonalCar SET HasSafetyBar = @HasSafetyBar, LoadCapacity = @LoadCapacity, PersonalCarId = @PersonalCarId WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", professionalPersonalCar);
+        command.CommandText = "UPDATE ProfessionalPersonalCars" +
+                              " SET HasSafetyBar = @HasSafetyBar," +
+                              "     LoadCapacity = @LoadCapacity," +
+                              "     PersonalCarId = @PersonalCarId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@HasSafetyBar", professionalPersonalCar.HasSafetyBar);
         command.Parameters.AddWithValue("@LoadCapacity", professionalPersonalCar.LoadCapacity);
         command.Parameters.AddWithValue("@PersonalCarId", professionalPersonalCar.PersonalCarId);
+        command.Parameters.AddWithValue("@Id", professionalPersonalCar.ProfessionalPersonalCarId);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -2259,8 +2369,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM ProfessionalPersonalCar WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", professionalPersonalCar);
+        command.CommandText = "DELETE FROM ProfessionalPersonalCars" +
+                              " WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", professionalPersonalCar.ProfessionalPersonalCarId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)

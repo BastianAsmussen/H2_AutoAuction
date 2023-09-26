@@ -9,8 +9,8 @@ namespace Data.DatabaseManager;
 /// </summary>
 public partial class DatabaseManager
 {
-    private static Data.DatabaseManager.DatabaseManager? _instance;
-    public static Data.DatabaseManager.DatabaseManager Instance => _instance ??= new Data.DatabaseManager.DatabaseManager();
+    private static DatabaseManager? _instance;
+    public static DatabaseManager Instance => _instance ??= new DatabaseManager();
 
     private SqlConnection? _connection;
 
