@@ -128,9 +128,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Auctions (MinimumPrice, StandingBid, VehicleId, SellerId, BuyerId) VALUES (@MinimumPrice, @StandingBid, @VehicleId, @SellerId, @BuyerId)";
+        command.CommandText = "INSERT INTO Auctions (MinimumPrice, StartingBid, VehicleId, SellerId, BuyerId) VALUES (@MinimumPrice, @StartingBid, @VehicleId, @SellerId, @BuyerId)";
         command.Parameters.AddWithValue("@MinimumPrice", auction.MinimumPrice);
-        command.Parameters.AddWithValue("@StandingBid", auction.StandingBid);
+        command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
         command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
         command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
         command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
@@ -156,7 +156,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Auctions WHERE AuctionId = @Id";
+        command.CommandText = "SELECT * FROM Auctions WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -255,9 +255,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Auctions SET MinimumPrice = @MinimumPrice, StandingBid = @StandingBid, VehicleId = @VehicleId, SellerId = @SellerId, BuyerId = @BuyerId WHERE AuctionId = @Id";
+        command.CommandText = "UPDATE Auctions SET MinimumPrice = @MinimumPrice, StartingBid = @StartingBid, VehicleId = @VehicleId, SellerId = @SellerId, BuyerId = @BuyerId WHERE Id = @Id";
         command.Parameters.AddWithValue("@MinimumPrice", auction.MinimumPrice);
-        command.Parameters.AddWithValue("@StandingBid", auction.StandingBid);
+        command.Parameters.AddWithValue("@StandingBid", auction.StartingBid);
         command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
         command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
         command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
@@ -284,7 +284,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Auctions WHERE AuctionId = @Id";
+        command.CommandText = "DELETE FROM Auctions WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", auction.AuctionId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -441,8 +441,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Bids (Time, Amount, BidderId, AuctionId) VALUES (@Time, @Amount, @BidderId, @AuctionId)";
-        command.Parameters.AddWithValue("@Time", bid.Time);
+        command.CommandText = "INSERT INTO Bids (Date, Amount, BidderId, AuctionId) VALUES (@Date, @Amount, @BidderId, @AuctionId)";
+        command.Parameters.AddWithValue("@Date", bid.Time);
         command.Parameters.AddWithValue("@Amount", bid.Amount);
         command.Parameters.AddWithValue("@BidderId", bid.Bidder.UserId);
         command.Parameters.AddWithValue("@AuctionId", bid.Auction.AuctionId);
@@ -468,7 +468,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Bids WHERE BidId = @Id";
+        command.CommandText = "SELECT * FROM Bids WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -508,8 +508,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Bids SET Time = @Time, Amount = @Amount, BidderId = @BidderId, AuctionId = @AuctionId WHERE BidId = @Id";
-        command.Parameters.AddWithValue("@Time", bid.Time);
+        command.CommandText = "UPDATE Bids SET Date = @Date, Amount = @Amount, BidderId = @BidderId, AuctionId = @AuctionId WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Date", bid.Time);
         command.Parameters.AddWithValue("@Amount", bid.Amount);
         command.Parameters.AddWithValue("@BidderId", bid.Bidder.UserId);
         command.Parameters.AddWithValue("@AuctionId", bid.Auction.AuctionId);
@@ -536,7 +536,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Bids WHERE BidId = @Id";
+        command.CommandText = "DELETE FROM Bids WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", bid.BidId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -567,7 +567,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT DISTINCT Id FROM Users U" +
+        command.CommandText = "SELECT DISTINCT U.Id FROM Users U" +
                               "    INNER JOIN Auctions A ON U.Id = A.SellerId" +
                               "    WHERE Zipcode BETWEEN @From AND @To";
         command.Parameters.AddWithValue("@From", from);

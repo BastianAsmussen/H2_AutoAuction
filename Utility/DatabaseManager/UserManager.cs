@@ -84,7 +84,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Users WHERE UserId = @Id";
+        command.CommandText = "SELECT * FROM Users WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -158,7 +158,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE Users SET Username = @Username, Password = @Password, Zipcode = @Zipcode, Balance = @Balance WHERE UserId = @Id";
+        command.CommandText = "UPDATE Users SET Username = @Username, Password = @Password, Zipcode = @Zipcode, Balance = @Balance WHERE Id = @Id";
         command.Parameters.AddWithValue("@Username", user.Username);
         command.Parameters.AddWithValue("@Password", user.PasswordHash);
         command.Parameters.AddWithValue("@Zipcode", user.Zipcode);
@@ -187,7 +187,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Users WHERE UserId = @Id";
+        command.CommandText = "DELETE FROM Users WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", user.UserId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -276,7 +276,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM PrivateUsers WHERE PrivateUserId = @Id";
+        command.CommandText = "SELECT * FROM PrivateUsers WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -350,7 +350,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE PrivateUsers SET Cpr = @Cpr, UserId = @UserId WHERE PrivateUserId = @Id";
+        command.CommandText = "UPDATE PrivateUsers SET Cpr = @Cpr, UserId = @UserId WHERE Id = @Id";
         command.Parameters.AddWithValue("@Cpr", privateUser.Cpr);
         command.Parameters.AddWithValue("@UserId", privateUser.UserId);
         command.Parameters.AddWithValue("@Id", privateUser.PrivateUserId);
@@ -377,7 +377,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM PrivateUsers WHERE PrivateUserId = @Id";
+        command.CommandText = "DELETE FROM PrivateUsers WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", privateUser.PrivateUserId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -468,7 +468,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM CorporateUsers WHERE CorporateUserId = @Id";
+        command.CommandText = "SELECT * FROM CorporateUsers WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -549,7 +549,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "UPDATE CorporateUsers SET Cvr = @Cvr, Credit = @Credit, UserId = @UserId WHERE CorporateUserId = @Id";
+        command.CommandText = "UPDATE CorporateUsers SET Cvr = @Cvr, Credit = @Credit, UserId = @UserId WHERE Id = @Id";
         command.Parameters.AddWithValue("@Cvr", corporateUser.CvrNumber);
         command.Parameters.AddWithValue("@Credit", corporateUser.Credit);
         command.Parameters.AddWithValue("@UserId", corporateUser.UserId);
@@ -577,7 +577,7 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM CorporateUsers WHERE CorporateUserId = @Id";
+        command.CommandText = "DELETE FROM CorporateUsers WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", corporateUser.CorporateUserId);
 
         if (command.ExecuteNonQuery() == 0)

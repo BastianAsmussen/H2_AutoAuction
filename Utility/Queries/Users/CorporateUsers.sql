@@ -1,10 +1,10 @@
 USE AutoAuction
 GO
 
--- Create the CorporateUser table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUser')
+-- Create the CorporateUsers table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
     BEGIN
-        CREATE TABLE CorporateUser(
+        CREATE TABLE CorporateUsers(
             Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 
             CVR INT NOT NULL,

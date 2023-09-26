@@ -17,10 +17,10 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
     END
 GO
 
--- Create the PrivateUser table if it does not exist
-IF NOT EXISTS (SELECT * FROM sys.database WHERE name = 'PrivateUser')
+-- Create the PrivateUsers table if it does not exist
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivateUsers')
     BEGIN
-        CREATE TABLE PrivateUser(
+        CREATE TABLE PrivateUsers(
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
             CPR CHAR(11) NOT NULL UNIQUE,
@@ -30,10 +30,10 @@ IF NOT EXISTS (SELECT * FROM sys.database WHERE name = 'PrivateUser')
     END
 GO
 
--- Create the CorporateUser table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUser')
+-- Create the CorporateUsers table if it doesn't exist.
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
     BEGIN
-        CREATE TABLE CorporateUser(
+        CREATE TABLE CorporateUsers(
             Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 
             CVR INT NOT NULL,
