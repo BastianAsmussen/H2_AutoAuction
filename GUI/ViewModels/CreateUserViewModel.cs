@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows.Input;
@@ -114,7 +113,7 @@ public class CreateUserViewModel : ViewModelBase
     public ICommand IsCorporateCommand { get; }
     public ICommand IsPrivateCommand { get; }
 
-
+#pragma warning disable
     public CreateUserViewModel()
     {
         CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView()); });
@@ -124,6 +123,7 @@ public class CreateUserViewModel : ViewModelBase
 
         InitializeCreateButtonState();
     }
+#pragma warning restore
 
     #region Methods
 
@@ -132,8 +132,7 @@ public class CreateUserViewModel : ViewModelBase
         if (_isPrivate)
             try
             {
-                CreatePrivateUser(UserName, PassWord, RepeatPassword, Convert.ToUInt32(ZipCode),
-                    CprNumber);
+                CreatePrivateUser(UserName, PassWord, ZipCode, CprNumber);
             }
             catch (Exception e)
             {
@@ -145,8 +144,7 @@ public class CreateUserViewModel : ViewModelBase
         if (_isCorporate)
             try
             {
-                CreateCorporateUser(UserName, PassWord, RepeatPassword, Convert.ToUInt32(ZipCode),
-                    Convert.ToUInt32(CvrNumber));
+                CreateCorporateUser(UserName, PassWord, ZipCode, Convert.ToUInt32(CvrNumber));
             }
             catch (Exception e)
             {
@@ -166,9 +164,9 @@ public class CreateUserViewModel : ViewModelBase
     /// If any exception occurs during the process, it will be caught and re-thrown.
     /// </remarks>
     /// </summary>
-    private void CreatePrivateUser(string username, string password, string rPassword, uint zipCode, string cprNumber)
+    private void CreatePrivateUser(string username, string password, string zipCode, string cprNumber)
     {
-        PrivateUser privateUser = new(0, cprNumber, new(0, username, password, zipCode, 0));
+        PrivateUser privateUser = new(0, cprNumber, new(0, username, password, zipCode));
         try
         {
             DatabaseManager.SignUp(privateUser);
@@ -180,14 +178,18 @@ public class CreateUserViewModel : ViewModelBase
             Console.WriteLine($"Error : {e.Message}");
             Console.ResetColor();
         }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Success : Private user created with username {username}");
+        Console.ResetColor();
     }
 
     /// <summary>
     /// Creates a new user with the provided username and password.
     /// </summary>
-    private void CreateCorporateUser(string username, string password, string rPassword, uint zipCode, uint cvrNumber)
+    private void CreateCorporateUser(string username, string password, string zipCode, uint cvrNumber)
     {
-        CorporateUser corporateUser = new(0, $"{CvrNumber}", 0, new(0, username, password, zipCode, 0));
+        CorporateUser corporateUser = new(0, $"{cvrNumber}", 0, new(0, username, password, zipCode));
         try
         {
             DatabaseManager.SignUp(corporateUser);
@@ -198,6 +200,10 @@ public class CreateUserViewModel : ViewModelBase
             Console.WriteLine($"Error : {e.Message}");
             Console.ResetColor();
         }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Success : Corporate user created with username {username}");
+        Console.ResetColor();
     }
 
 
@@ -237,11 +243,11 @@ public class CreateUserViewModel : ViewModelBase
                 x => x.PassWord,
                 x => x.RepeatPassword,
                 x => x.ZipCode,
-                (userName, passWord, rpassWord, zipCode) =>
+                (userName, passWord, repeatPass, zipCode) =>
                     !string.IsNullOrWhiteSpace(userName) &&
                     !string.IsNullOrWhiteSpace(passWord) &&
                     !string.IsNullOrWhiteSpace(zipCode) &&
-                    !string.IsNullOrWhiteSpace(rpassWord))
+                    !string.IsNullOrWhiteSpace(repeatPass))
             .Subscribe(x => BtnCreateEnabled = x);
     }
 
