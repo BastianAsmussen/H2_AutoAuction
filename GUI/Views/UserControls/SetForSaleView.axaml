@@ -1,4 +1,5 @@
 ﻿<UserControl
+    Background="#1b1827"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -7,11 +8,67 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock
-        FontSize="44"
-        Foreground="White"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center">
-        Set For Sale
-    </TextBlock>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="240" />
+            <RowDefinition Height="150" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="500" />
+            <ColumnDefinition MinWidth="300" />
+        </Grid.ColumnDefinitions>
+
+
+        <WrapPanel
+            Background="red"
+            Grid.Column="0"
+            Grid.Row="0">
+            <Label
+                Content="Set for sale"
+                FontSize="44"
+                Foreground="#ffffff" />
+            <StackPanel />
+
+        </WrapPanel>
+
+        <WrapPanel
+            Background="Yellow"
+            Grid.Column="0"
+            Grid.Row="1">
+            <Label
+                Content="Standing Bid"
+                FontSize="44"
+                Foreground="#ffffff" />
+            <StackPanel />
+
+        </WrapPanel>
+        <WrapPanel
+            Background="Green"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.Row="2">
+            <Label
+                Content="Set for sale"
+                FontSize="44"
+                Foreground="#ffffff" />
+            <StackPanel />
+
+        </WrapPanel>
+
+        <WrapPanel
+            Background="Beige"
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="2">
+            <Label
+                Content="Set for sale"
+                FontSize="44"
+                Foreground="#ffffff" />
+            <StackPanel />
+
+        </WrapPanel>
+
+    </Grid>
 </UserControl>
