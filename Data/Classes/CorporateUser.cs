@@ -1,4 +1,5 @@
-﻿using Data.Classes.Auctions;
+﻿using System.Data;
+using Data.Classes.Auctions;
 namespace Data.Classes;
 public class CorporateUser : User
 {
