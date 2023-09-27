@@ -10,9 +10,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="240" />
-            <RowDefinition Height="150" />
-            <RowDefinition Height="50" />
+            <RowDefinition MinHeight="240" />
+            <RowDefinition MinHeight="150" />
+            <RowDefinition MinHeight="50" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -44,19 +44,8 @@
             <StackPanel />
 
         </WrapPanel>
-        <WrapPanel
-            Background="Green"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Grid.Row="2">
-            <Label
-                Content="Set for sale"
-                FontSize="44"
-                Foreground="#ffffff" />
-            <StackPanel />
 
-        </WrapPanel>
-
+        <!--  Vehicle type User Control  -->
         <WrapPanel
             Background="Beige"
             Grid.Column="1"
@@ -67,6 +56,34 @@
                 FontSize="44"
                 Foreground="#ffffff" />
             <StackPanel />
+        </WrapPanel>
+
+        <!--  Footer  -->
+        <WrapPanel
+            Background="Transparent"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.Row="2">
+
+            <Panel
+                Background="Transparent"
+                Height="50"
+                VerticalAlignment="Bottom"
+                Width="800">
+
+                <Button HorizontalAlignment="Left">
+                    <Label
+                        Content="Cancel"
+                        FontSize="23"
+                        Foreground="Red" />
+                </Button>
+                <Button HorizontalAlignment="Right">
+                    <Label
+                        Content="Create auction"
+                        FontSize="23"
+                        Foreground="Green" />
+                </Button>
+            </Panel>
 
         </WrapPanel>
 
