@@ -16,17 +16,19 @@
     </UserControl.DataContext>
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Label
+            Content="Create user"
+            FontSize="40"
+            Foreground="White"
+            HorizontalAlignment="Center" />
         <StackPanel>
-            <Label
-                Content="Create user"
-                FontSize="40"
-                Foreground="White" />
 
             <!--  UserName Input  -->
             <TextBox
                 FontSize="22"
                 Foreground="Black"
                 Margin="0,20,0,0"
+                MaxWidth="400"
                 Text="{Binding UserName}"
                 Watermark="Username" />
 
@@ -36,6 +38,7 @@
                     FontSize="22"
                     Foreground="Black"
                     Margin="0,20,0,0"
+                    MaxWidth="400"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
                     Watermark="Password" />
@@ -45,26 +48,84 @@
                 FontSize="22"
                 Foreground="Black"
                 Margin="0,20,0,0"
+                MaxWidth="400"
                 PasswordChar="*"
-                Text="{Binding RPassWord}"
-                Watermark="Password again"
-                Width="350" />
+                Text="{Binding RepeatPassword}"
+                Watermark="Password again" />
 
             <!--  Corporate or Private Buttons  -->
-            <WrapPanel HorizontalAlignment="Center" Margin="10">
+            <WrapPanel
+                HorizontalAlignment="Center"
+                Margin="10"
+                VerticalAlignment="Center">
                 <RadioButton
+                    Command="{Binding Path=IsCorporateCommand}"
                     Content="Corporate"
                     FontSize="23"
                     Foreground="White"
-                    IsChecked="{Binding Path=IsCorporate}"
-                    Width="150" />
+                    Width="150"
+                    x:Name="IsCorporateButton" />
 
                 <RadioButton
+                    Command="{Binding IsPrivateCommand}"
                     Content="Private"
                     FontSize="23"
                     Foreground="White"
-                    IsChecked="{Binding Path=IsPrivate}"
-                    Width="150" />
+                    HorizontalAlignment="Center"
+                    Width="150"
+                    x:Name="IsPrivateteButton" />
+
+                <!--  CorporateInfo  -->
+                <WrapPanel
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding Path=IsChecked, ElementName=IsCorporateButton, Mode=TwoWay}"
+                    VerticalAlignment="Top"
+                    x:Name="CorporateInfo">
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Text="{Binding CvrNumber, Mode=TwoWay}"
+                        VerticalAlignment="Top"
+                        Watermark="CVR"
+                        Width="160" />
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Margin="22,0,0,0"
+                        MaxLength="5"
+                        Text="{Binding ZipCode, Mode=TwoWay}"
+                        VerticalAlignment="Top"
+                        Watermark="Zip code"
+                        Width="150" />
+                </WrapPanel>
+
+                <!--  PrivateUserInfo  -->
+                <WrapPanel
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding Path=IsChecked, ElementName=IsPrivateteButton, Mode=TwoWay}"
+                    x:Name="PrivateUserInfo">
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        MaxLength="10"
+                        Text="{Binding CprNumber, Mode=TwoWay}"
+                        VerticalAlignment="Top"
+                        Watermark="Cpr number"
+                        Width="160" />
+
+                    <TextBox
+                        FontSize="22"
+                        Foreground="Black"
+                        Margin="22,0,0,0"
+                        MaxLength="5"
+                        Text="{Binding ZipCode, Mode=TwoWay}"
+                        VerticalAlignment="Top"
+                        Watermark="Zip code"
+                        Width="150" />
+                </WrapPanel>
             </WrapPanel>
 
             <!--  Create And Cancel Buttons  -->
