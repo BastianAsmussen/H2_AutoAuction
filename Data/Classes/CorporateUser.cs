@@ -1,8 +1,8 @@
-﻿using Data.Classes.Auctions;
+﻿using System.Data;
+using Data.Classes.Auctions;
 namespace Data.Classes;
 public class CorporateUser : User
 {
-    
     /// <summary>
     /// Checks if the balance + credit is sufficient for the amount
     /// </summary>
@@ -15,8 +15,6 @@ public class CorporateUser : User
         return (balance + credit) - amount >= 0;
     }
 
-    
-    
     public int CorporateUserId { get; set; }
     public string Cvr { get; set; }
     public decimal Credit { get; set; }
@@ -37,9 +35,8 @@ public class CorporateUser : User
     public override void SubBalance(decimal amount)
     {
         if (!HasSufficientFunds(Balance, Credit, amount))
-            throw new DataException("Balance + Credit is not sufficent.");
+            throw new DataException("Balance and Credit is not sufficient!");
 
-  
         var startingValues = (Credit, Balance);
         
         // Start by subtracting the amount from the credit.
