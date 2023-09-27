@@ -10,7 +10,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
 
            Username NVARCHAR(64) NOT NULL UNIQUE,
            Password NCHAR(60) NOT NULL,
-           ZipCode INT NOT NULL,
+           ZipCode NVARCHAR(5) NOT NULL,
            Balance DECIMAL NOT NULL,
        )
     END

@@ -35,7 +35,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            // var licenseTypeId = (uint)reader.GetInt32(0);
+            // var licenseTypeId = reader.GetInt32(0);
             var name = reader.GetString(1);
 
             licenseTypes.Add((LicenseType) Enum.Parse(typeof(LicenseType), name));
@@ -53,7 +53,7 @@ public partial class DatabaseManager
     /// <param name="licenseType">The license type to create.</param>
     /// <returns>The ID of the created license type.</returns>
     /// <exception cref="ArgumentException">Thrown if the license type could not be created.</exception>
-    public static uint CreateLicenseType(LicenseType licenseType)
+    public static int CreateLicenseType(LicenseType licenseType)
     {
         var connection = Instance.GetConnection();
 
@@ -76,7 +76,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var licenseTypeId = (uint)reader.GetInt32(0);
+        var licenseTypeId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -90,7 +90,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the license type to get.</param>
     /// <returns>The license type with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
-    public static LicenseType GetLicenseTypeById(uint id)
+    public static LicenseType GetLicenseTypeById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -110,7 +110,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var licenseTypeId = (uint)reader.GetInt32(0);
+        // var licenseTypeId = reader.GetInt32(0);
         var name = reader.GetString(1);
 
         reader.Close();
@@ -145,7 +145,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var licenseTypeId = (uint)reader.GetInt32(0);
+        // var licenseTypeId = reader.GetInt32(0);
         var licenseTypeName = reader.GetString(1);
 
         reader.Close();
@@ -233,7 +233,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            // var fuelTypeId = (uint)reader.GetInt32(0);
+            // var fuelTypeId = reader.GetInt32(0);
             var name = reader.GetString(1);
 
             fuelTypes.Add((FuelType) Enum.Parse(typeof(FuelType), name));
@@ -251,7 +251,7 @@ public partial class DatabaseManager
     /// <param name="fuelType">The fuel type to create.</param>
     /// <returns>The ID of the created fuel type.</returns>
     /// <exception cref="ArgumentException">Thrown if the fuel type could not be created.</exception>
-    public static uint CreateFuelType(FuelType fuelType)
+    public static int CreateFuelType(FuelType fuelType)
     {
         var connection = Instance.GetConnection();
 
@@ -274,7 +274,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var fuelTypeId = (uint)reader.GetInt32(0);
+        var fuelTypeId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -288,7 +288,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the fuel type to get.</param>
     /// <returns>The fuel type with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
-    public static FuelType GetFuelTypeById(uint id)
+    public static FuelType GetFuelTypeById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -308,7 +308,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var fuelTypeId = (uint)reader.GetInt32(0);
+        // var fuelTypeId = reader.GetInt32(0);
         var name = reader.GetString(1);
 
         reader.Close();
@@ -343,7 +343,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var fuelTypeId = (uint)reader.GetInt32(0);
+        // var fuelTypeId = reader.GetInt32(0);
         var fuelTypeName = reader.GetString(1);
 
         reader.Close();
@@ -431,7 +431,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            // var energyTypeId = (uint)reader.GetInt32(0);
+            // var energyTypeId = reader.GetInt32(0);
             var name = reader.GetString(1);
 
             energyTypes.Add((EnergyType) Enum.Parse(typeof(EnergyType), name));
@@ -449,7 +449,7 @@ public partial class DatabaseManager
     /// <param name="energyType">The energy type to create.</param>
     /// <returns>The ID of the created energy type.</returns>
     /// <exception cref="ArgumentException">Thrown if the energy type could not be created.</exception>
-    public static uint CreateEnergyType(EnergyType energyType)
+    public static int CreateEnergyType(EnergyType energyType)
     {
         var connection = Instance.GetConnection();
 
@@ -472,7 +472,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var energyTypeId = (uint)reader.GetInt32(0);
+        var energyTypeId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -486,7 +486,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the energy type to get.</param>
     /// <returns>The energy type with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
-    public static EnergyType GetEnergyTypeById(uint id)
+    public static EnergyType GetEnergyTypeById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -506,7 +506,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var energyTypeId = (uint)reader.GetInt32(0);
+        // var energyTypeId = reader.GetInt32(0);
         var name = reader.GetString(1);
 
         reader.Close();
@@ -541,7 +541,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        // var energyTypeId = (uint)reader.GetInt32(0);
+        // var energyTypeId = reader.GetInt32(0);
         var energyTypeName = reader.GetString(1);
 
         reader.Close();
@@ -629,7 +629,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicleId = reader.GetInt32(0);
             var name = reader.GetString(1);
             var km = reader.GetFloat(2);
             var registrationNumber = reader.GetString(3);
@@ -713,7 +713,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var vehicleId = (uint)reader.GetInt32(0);
+        var vehicleId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -727,7 +727,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the vehicle to get.</param>
     /// <returns>The vehicle with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no vehicle with the given ID exists.</exception>
-    public static Vehicle GetVehicleById(uint id)
+    public static Vehicle GetVehicleById(int id)
     {
         // Retrieve the vehicle from the database.
         var connection = Instance.GetConnection();
@@ -748,7 +748,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var vehicleId = (uint)reader.GetInt32(0);
+        var vehicleId = reader.GetInt32(0);
         var name = reader.GetString(1);
         var km = reader.GetFloat(2);
         var registrationNumber = reader.GetString(3);
@@ -795,7 +795,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicleId = reader.GetInt32(0);
             var km = reader.GetFloat(2);
             var registrationNumber = reader.GetString(3);
             var year = (ushort)reader.GetInt32(4);
@@ -857,7 +857,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicleId = reader.GetInt32(0);
             var vehicle = GetVehicleById(vehicleId);
 
             vehicles.Add(vehicle);
@@ -881,7 +881,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT Id FROM Vehicles WHERE LicenseTypeId = @LicenseType";
-        command.Parameters.AddWithValue("@LicenseType", (uint) licenseType);
+        command.Parameters.AddWithValue("@LicenseType",  licenseType);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -896,7 +896,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicleId = reader.GetInt32(0);
             var vehicle = GetVehicleById(vehicleId);
 
             vehicles.Add(vehicle);
@@ -937,7 +937,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var vehicleId = (uint)reader.GetInt32(0);
+            var vehicleId = reader.GetInt32(0);
             var vehicle = GetVehicleById(vehicleId);
 
             vehicles.Add(vehicle);
@@ -1046,7 +1046,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId = (uint) reader.GetInt32(0);
+            var dimensionId =  reader.GetInt32(0);
             var length = reader.GetFloat(1);
             var width = reader.GetFloat(2);
             var height = reader.GetFloat(3);
@@ -1091,7 +1091,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var dimensionId = (uint)reader.GetInt32(0);
+        var dimensionId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -1105,7 +1105,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the dimension to get.</param>
     /// <returns>The dimension with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no dimension with the given ID exists.</exception>
-    public static Dimensions GetDimensionsById(uint id)
+    public static Dimensions GetDimensionsById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -1124,7 +1124,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var dimensionId = (uint) reader.GetInt32(0);
+        var dimensionId =  reader.GetInt32(0);
         var length = reader.GetFloat(1);
         var width = reader.GetFloat(2);
         var height = reader.GetFloat(3);
@@ -1162,7 +1162,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId = (uint) reader.GetInt32(0);
+            var dimensionId =  reader.GetInt32(0);
             var width = reader.GetFloat(2);
             var height = reader.GetFloat(3);
 
@@ -1202,7 +1202,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId = (uint) reader.GetInt32(0);
+            var dimensionId =  reader.GetInt32(0);
             var length = reader.GetFloat(1);
             var height = reader.GetFloat(3);
 
@@ -1242,7 +1242,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId = (uint) reader.GetInt32(0);
+            var dimensionId =  reader.GetInt32(0);
             var length = reader.GetFloat(1);
             var width = reader.GetFloat(2);
 
@@ -1333,10 +1333,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var heavyVehicleId = (uint) reader.GetInt32(0);
+            var heavyVehicleId =  reader.GetInt32(0);
 
-            var dimensions = GetDimensionsById((uint) reader.GetInt32(1));
-            var vehicle = GetVehicleById((uint) reader.GetInt32(2));
+            var dimensions = GetDimensionsById( reader.GetInt32(1));
+            var vehicle = GetVehicleById( reader.GetInt32(2));
 
             heavyVehicles.Add(new HeavyVehicle(heavyVehicleId, dimensions, vehicle));
         }
@@ -1376,7 +1376,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var heavyVehicleId = (uint)reader.GetInt32(0);
+        var heavyVehicleId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -1390,7 +1390,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the heavy vehicle to get.</param>
     /// <returns>The heavy vehicle with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no heavy vehicle with the given ID exists.</exception>
-    public static HeavyVehicle GetHeavyVehicleById(uint id)
+    public static HeavyVehicle GetHeavyVehicleById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -1410,10 +1410,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var heavyVehicleId = (uint) reader.GetInt32(0);
+        var heavyVehicleId =  reader.GetInt32(0);
 
-        var dimensions = GetDimensionsById((uint) reader.GetInt32(1));
-        var vehicle = GetVehicleById((uint) reader.GetInt32(2));
+        var dimensions = GetDimensionsById( reader.GetInt32(1));
+        var vehicle = GetVehicleById( reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -1502,10 +1502,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var truckId = (uint) reader.GetInt32(0);
+            var truckId =  reader.GetInt32(0);
 
             var loadCapacity = reader.GetFloat(1);
-            var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(2));
+            var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
 
             trucks.Add(new Truck(truckId, loadCapacity, heavyVehicle));
         }
@@ -1552,7 +1552,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var truckId = (uint)reader.GetInt32(0);
+        var truckId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -1566,7 +1566,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the truck to get.</param>
     /// <returns>The truck with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no truck with the given ID exists.</exception>
-    public static Truck GetTruckById(uint id)
+    public static Truck GetTruckById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -1586,10 +1586,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var truckId = (uint) reader.GetInt32(0);
+        var truckId =  reader.GetInt32(0);
 
         var loadCapacity = reader.GetFloat(1);
-        var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(2));
+        var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -1682,12 +1682,12 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var busId = (uint) reader.GetInt32(0);
+            var busId =  reader.GetInt32(0);
 
             var numberOfSeats = reader.GetByte(1);
             var numberOfSleepingSpaces = reader.GetByte(2);
             var hasToilet = reader.GetBoolean(3);
-            var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(4));
+            var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(4));
 
             buses.Add(new Bus(busId, numberOfSeats, numberOfSleepingSpaces, hasToilet, heavyVehicle));
         }
@@ -1740,7 +1740,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var busId = (uint)reader.GetInt32(0);
+        var busId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -1754,7 +1754,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the bus to get.</param>
     /// <returns>The bus with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no bus with the given ID exists.</exception>
-    public static Bus GetBusById(uint id)
+    public static Bus GetBusById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -1774,12 +1774,12 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var busId = (uint) reader.GetInt32(0);
+        var busId =  reader.GetInt32(0);
 
         var numberOfSeats = reader.GetByte(1);
         var numberOfSleepingSpaces = reader.GetByte(2);
         var hasToilet = reader.GetBoolean(3);
-        var heavyVehicle = GetHeavyVehicleById((uint) reader.GetInt32(4));
+        var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(4));
 
         reader.Close();
         connection.Close();
@@ -1872,10 +1872,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var personalCarId = (uint) reader.GetInt32(0);
+            var personalCarId =  reader.GetInt32(0);
             var numberOfSeats = reader.GetByte(1);
-            var dimensions = GetDimensionsById((uint) reader.GetInt32(2));
-            var vehicle = GetVehicleById((uint) reader.GetInt32(3));
+            var dimensions = GetDimensionsById( reader.GetInt32(2));
+            var vehicle = GetVehicleById( reader.GetInt32(3));
 
             personalCars.Add(new PersonalCar(personalCarId, numberOfSeats, dimensions, vehicle));
         }
@@ -1925,7 +1925,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var personalCarId = (uint)reader.GetInt32(0);
+        var personalCarId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -1939,7 +1939,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the personal car to get.</param>
     /// <returns>The personal car with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no personal car with the given ID exists.</exception>
-    public static PersonalCar GetPersonalCarById(uint id)
+    public static PersonalCar GetPersonalCarById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -1959,11 +1959,11 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var personalCarId = (uint) reader.GetInt32(0);
+        var personalCarId =  reader.GetInt32(0);
 
         var numberOfSeats = reader.GetByte(1);
-        var trunkDimensions = GetDimensionsById((uint) reader.GetInt32(2));
-        var vehicle = GetVehicleById((uint) reader.GetInt32(3));
+        var trunkDimensions = GetDimensionsById( reader.GetInt32(2));
+        var vehicle = GetVehicleById( reader.GetInt32(3));
 
         reader.Close();
         connection.Close();
@@ -2054,9 +2054,9 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var privatePersonalCarId = (uint) reader.GetInt32(0);
+            var privatePersonalCarId =  reader.GetInt32(0);
             var hasIsoFittings = reader.GetBoolean(1);
-            var personalCar = GetPersonalCarById((uint) reader.GetInt32(2));
+            var personalCar = GetPersonalCarById( reader.GetInt32(2));
 
             privatePersonalCars.Add(new PrivatePersonalCar(privatePersonalCarId, hasIsoFittings, personalCar));
         }
@@ -2103,7 +2103,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privatePersonalCarId = (uint)reader.GetInt32(0);
+        var privatePersonalCarId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -2117,7 +2117,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the private personal car to get.</param>
     /// <returns>The private personal car with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no private personal car with the given ID exists.</exception>
-    public static PrivatePersonalCar GetPrivatePersonalCarById(uint id)
+    public static PrivatePersonalCar GetPrivatePersonalCarById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -2137,9 +2137,9 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privatePersonalCarId = (uint) reader.GetInt32(0);
+        var privatePersonalCarId =  reader.GetInt32(0);
         var hasIsoFittings = reader.GetBoolean(1);
-        var personalCar = GetPersonalCarById((uint) reader.GetInt32(2));
+        var personalCar = GetPersonalCarById( reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -2228,10 +2228,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var professionalPersonalCarId = (uint) reader.GetInt32(0);
+            var professionalPersonalCarId =  reader.GetInt32(0);
             var hasSafetyBar = reader.GetBoolean(1);
             var loadCapacity = reader.GetFloat(2);
-            var personalCar = GetPersonalCarById((uint) reader.GetInt32(3));
+            var personalCar = GetPersonalCarById( reader.GetInt32(3));
 
             professionalPersonalCars.Add(new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar, loadCapacity, personalCar));
         }
@@ -2281,7 +2281,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var professionalPersonalCarId = (uint)reader.GetInt32(0);
+        var professionalPersonalCarId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -2295,7 +2295,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the professional personal car to get.</param>
     /// <returns>The professional personal car with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown if no professional personal car with the given ID exists.</exception>
-    public static ProfessionalPersonalCar GetProfessionalPersonalCarById(uint id)
+    public static ProfessionalPersonalCar GetProfessionalPersonalCarById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -2315,10 +2315,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var professionalPersonalCarId = (uint) reader.GetInt32(0);
+        var professionalPersonalCarId =  reader.GetInt32(0);
         var hasSafetyBar = reader.GetBoolean(1);
         var loadCapacity = reader.GetFloat(2);
-        var personalCar = GetPersonalCarById((uint) reader.GetInt32(3));
+        var personalCar = GetPersonalCarById( reader.GetInt32(3));
 
         reader.Close();
         connection.Close();

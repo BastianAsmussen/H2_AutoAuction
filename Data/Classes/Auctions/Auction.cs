@@ -8,7 +8,7 @@ public class Auction
     /// <summary>
     ///     ID of the auction
     /// </summary>
-    public uint AuctionId { get; }
+    public int AuctionId { get; }
 
     /// <summary>
     ///     The minimum price of the auction
@@ -35,7 +35,7 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(uint id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
+    public Auction(int id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
     {
         AuctionId = id;
         Vehicle = vehicle;

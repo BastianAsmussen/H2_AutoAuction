@@ -2,11 +2,11 @@
 
 public class CorporateUser : User
 {
-    public uint CorporateUserId { get; set; }
+    public int CorporateUserId { get; set; }
     public string Cvr { get; set; }
     public decimal Credit { get; set; }
 
-    public CorporateUser(uint id, string cvr, decimal credit, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
+    public CorporateUser(int id, string cvr, decimal credit, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
     {
         CorporateUserId = id;
         Cvr = cvr;

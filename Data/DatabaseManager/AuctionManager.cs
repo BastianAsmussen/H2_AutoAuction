@@ -35,14 +35,14 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var auctionId = (uint)reader.GetInt32(0);
+            var auctionId = reader.GetInt32(0);
             var minimumPrice = reader.GetDecimal(1);
             var standingBid = reader.GetDecimal(2);
 
-            var vehicleId = (uint)reader.GetInt32(3);
+            var vehicleId = reader.GetInt32(3);
             var vehicle = GetVehicleById(vehicleId);
 
-            var sellerId = (uint)reader.GetInt32(4);
+            var sellerId = reader.GetInt32(4);
             var seller = GetUserById(sellerId);
 
             if (reader.IsDBNull(5))
@@ -52,7 +52,7 @@ public partial class DatabaseManager
                 continue;
             }
 
-            var buyerId = (uint)reader.GetInt32(5);
+            var buyerId = reader.GetInt32(5);
             var buyer = GetUserById(buyerId);
 
             auctions.Add(new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid));
@@ -91,14 +91,14 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var auctionId = (uint)reader.GetInt32(0);
+            var auctionId = reader.GetInt32(0);
             var minimumPrice = reader.GetDecimal(1);
             var standingBid = reader.GetDecimal(2);
 
-            var vehicleId = (uint)reader.GetInt32(3);
+            var vehicleId = reader.GetInt32(3);
             var vehicle = GetVehicleById(vehicleId);
 
-            var sellerId = (uint)reader.GetInt32(4);
+            var sellerId = reader.GetInt32(4);
             var seller = GetUserById(sellerId);
 
             if (reader.IsDBNull(5))
@@ -108,7 +108,7 @@ public partial class DatabaseManager
                 continue;
             }
 
-            var buyerId = (uint)reader.GetInt32(5);
+            var buyerId = reader.GetInt32(5);
             var buyer = GetUserById(buyerId);
 
             auctions.Add(new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid));
@@ -151,7 +151,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var auctionId = (uint)reader.GetInt32(0);
+        var auctionId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -165,7 +165,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the auction.</param>
     /// <returns>The auction.</returns>
     /// <exception cref="ArgumentException">Thrown when the auction does not exist.</exception>
-    public static Auction GetAuctionById(uint id)
+    public static Auction GetAuctionById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -185,14 +185,14 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var auctionId = (uint)reader.GetInt32(0);
+        var auctionId = reader.GetInt32(0);
         var minimumPrice = reader.GetDecimal(1);
         var standingBid = reader.GetDecimal(2);
 
-        var vehicleId = (uint)reader.GetInt32(3);
+        var vehicleId = reader.GetInt32(3);
         var vehicle = GetVehicleById(vehicleId);
 
-        var sellerId = (uint)reader.GetInt32(4);
+        var sellerId = reader.GetInt32(4);
         var seller = GetUserById(sellerId);
 
         if (reader.IsDBNull(5))
@@ -203,7 +203,7 @@ public partial class DatabaseManager
             return new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid);
         }
 
-        var buyerId = (uint)reader.GetInt32(5);
+        var buyerId = reader.GetInt32(5);
         var buyer = GetUserById(buyerId);
 
         reader.Close();
@@ -237,11 +237,11 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var auctionId = (uint)reader.GetInt32(0);
+        var auctionId = reader.GetInt32(0);
         var minimumPrice = reader.GetDecimal(1);
         var standingBid = reader.GetDecimal(2);
 
-        var sellerId = (uint)reader.GetInt32(4);
+        var sellerId = reader.GetInt32(4);
         var seller = GetUserById(sellerId);
 
         if (reader.IsDBNull(5))
@@ -252,7 +252,7 @@ public partial class DatabaseManager
             return new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid);
         }
 
-        var buyerId = (uint)reader.GetInt32(5);
+        var buyerId = reader.GetInt32(5);
         var buyer = GetUserById(buyerId);
 
         reader.Close();
@@ -346,14 +346,14 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var bidId = (uint)reader.GetInt32(0);
+            var bidId = reader.GetInt32(0);
             var time = reader.GetDateTime(1);
             var amount = reader.GetDecimal(2);
 
-            var bidderId = (uint)reader.GetInt32(3);
+            var bidderId = reader.GetInt32(3);
             var bidder = GetUserById(bidderId);
 
-            var auctionId = (uint)reader.GetInt32(4);
+            var auctionId = reader.GetInt32(4);
             var auction = GetAuctionById(auctionId);
 
             bids.Add(new Bid(bidId, time, amount, bidder, auction));
@@ -392,14 +392,14 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var bidId = (uint)reader.GetInt32(0);
+            var bidId = reader.GetInt32(0);
             var time = reader.GetDateTime(1);
             var amount = reader.GetDecimal(2);
 
-            var bidderId = (uint)reader.GetInt32(3);
+            var bidderId = reader.GetInt32(3);
             var bidder = GetUserById(bidderId);
 
-            var auctionId = (uint)reader.GetInt32(4);
+            var auctionId = reader.GetInt32(4);
             var auction = GetAuctionById(auctionId);
 
             bids.Add(new Bid(bidId, time, amount, bidder, auction));
@@ -438,14 +438,14 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var bidId = (uint)reader.GetInt32(0);
+            var bidId = reader.GetInt32(0);
             var time = reader.GetDateTime(1);
             var amount = reader.GetDecimal(2);
 
-            var bidderId = (uint)reader.GetInt32(3);
+            var bidderId = reader.GetInt32(3);
             var bidder = GetUserById(bidderId);
 
-            var auctionId = (uint)reader.GetInt32(4);
+            var auctionId = reader.GetInt32(4);
             auction = GetAuctionById(auctionId);
 
             bids.Add(new Bid(bidId, time, amount, bidder, auction));
@@ -487,7 +487,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var bidId = (uint)reader.GetInt32(0);
+        var bidId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -501,7 +501,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the bid.</param>
     /// <returns>The bid.</returns>
     /// <exception cref="ArgumentException">Thrown when the bid does not exist.</exception>
-    public static Bid GetBidById(uint id)
+    public static Bid GetBidById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -521,14 +521,14 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var bidId = (uint)reader.GetInt32(0);
+        var bidId = reader.GetInt32(0);
         var time = reader.GetDateTime(1);
         var amount = reader.GetDecimal(2);
 
-        var bidderId = (uint)reader.GetInt32(3);
+        var bidderId = reader.GetInt32(3);
         var bidder = GetUserById(bidderId);
 
-        var auctionId = (uint)reader.GetInt32(4);
+        var auctionId = reader.GetInt32(4);
         var auction = GetAuctionById(auctionId);
 
         reader.Close();
@@ -602,7 +602,7 @@ public partial class DatabaseManager
     /// <param name="to">The upper bound of the zipcode range.</param>
     /// <returns>A list of sellers within the given zipcode range.</returns>
     /// <exception cref="ArgumentException">Thrown when no sellers exist or when the lower bound is greater than the upper bound.</exception>
-    public static List<User> GetSellersByZipcodeRange(uint from, uint to)
+    public static List<User> GetSellersByZipcodeRange(int from, int to)
     {
         if (from > to)
         {
@@ -632,7 +632,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var userId = (uint)reader.GetInt32(0);
+            var userId = reader.GetInt32(0);
             var user = GetUserById(userId);
 
             sellers.Add(user);

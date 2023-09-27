@@ -7,7 +7,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivateUsers')
         CREATE TABLE PrivateUsers(
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            CPR CHAR(11) NOT NULL UNIQUE,
+            CPR NCHAR(11) NOT NULL UNIQUE,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
         )

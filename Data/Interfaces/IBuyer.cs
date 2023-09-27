@@ -4,8 +4,8 @@ namespace Data.Interfaces;
 
 public interface IBuyer
 {
-    public uint UserId { get; set; }
+    public int UserId { get; set; }
 
     public void SubBalance(decimal amount);
-    uint PlaceBid(Auction auction, decimal newBid);
+    int PlaceBid(Auction auction, decimal newBid);
 }

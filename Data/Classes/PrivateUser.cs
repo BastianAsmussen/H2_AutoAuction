@@ -2,10 +2,10 @@
 
 public class PrivateUser : User
 {
-    public uint PrivateUserId { get; set; }
+    public int PrivateUserId { get; set; }
     public string Cpr { get; set; }
 
-    public PrivateUser(uint id, string cpr, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
+    public PrivateUser(int id, string cpr, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
     {
         PrivateUserId = id;
         Cpr = cpr;

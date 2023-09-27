@@ -7,7 +7,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
         CREATE TABLE CorporateUsers(
             Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 
-            CVR INT NOT NULL,
+            CVR NCHAR(11) NOT NULL,
             Credit DECIMAL NOT NULL,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),

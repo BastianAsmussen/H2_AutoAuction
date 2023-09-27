@@ -6,13 +6,13 @@ namespace Data.Classes;
 
 public class User : IBuyer, ISeller
 {
-    public uint UserId { get; set; }
+    public int UserId { get; set; }
     public string Username { get; set; }
     public string Password { get; set; }
-    public uint Zipcode { get; set; }
+    public string Zipcode { get; set; }
     public decimal Balance { get; set; }
 
-    public User(uint id, string username, string password, uint zipcode, decimal balance = 0)
+    public User(int id, string username, string password, string zipcode, decimal balance = 0)
     {
         UserId = id;
         Username = username;
@@ -26,7 +26,7 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
-    public uint PlaceBid(Auction auction, decimal newBid)
+    public int PlaceBid(Auction auction, decimal newBid)
     {
         throw new NotImplementedException();
     }
@@ -55,13 +55,14 @@ public class User : IBuyer, ISeller
     /// Set's a vehicle for sale
     /// </summary>
     /// <param name="vehicle">property form Vehicle class</param>
-    /// <param name="Seller">property form User class</param>
+    /// <param name="seller">property form User class</param>
     /// <param name="minBid"></param>
     /// <exception cref="ArgumentException">If it fails to create an auction</exception>
     /// <returns>The id of the auction</returns>
-    public uint SetForSale(Vehicle vehicle, User Seller, decimal minBid)
+    public int SetForSale(Vehicle vehicle, User seller, decimal minBid)
     {
-        Auction auction = new Auction(0, vehicle, Seller, null, minBid);
+        var auction = new Auction(0, vehicle, seller, null, minBid);
+
         try
         {
             auction = DatabaseManager.DatabaseManager.CreateAuction(auction);
