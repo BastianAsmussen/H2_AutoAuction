@@ -8,7 +8,7 @@ public class Vehicle
     /// <summary>
     ///     The ID of the vehicle in the database.
     /// </summary>
-    public uint VehicleId { get; set; }
+    public int VehicleId { get; set; }
 
     /// <summary>
     ///     The name of the vehicle.
@@ -74,7 +74,7 @@ public class Vehicle
     /// <param name="kmPerLiter">How many kilometers the vehicle drives per liter.</param>
     /// <param name="fuelType">What type of fuel the vehicle uses.</param>
     /// <param name="energyClass">The energy class of a vehicle.</param>
-    public Vehicle(uint id, string name, float km, string registrationNumber, ushort year, bool hasTowbar, LicenseType licenseType, float engineSize, float kmPerLiter, FuelType fuelType, EnergyType energyClass)
+    public Vehicle(int id, string name, float km, string registrationNumber, ushort year, bool hasTowbar, LicenseType licenseType, float engineSize, float kmPerLiter, FuelType fuelType, EnergyType energyClass)
     {
         VehicleId = id;
         Name = name;

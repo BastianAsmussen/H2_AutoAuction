@@ -8,7 +8,7 @@ public class HeavyVehicle : Vehicle
     /// <summary>
     ///     The ID of the heavy vehicle in the database.
     /// </summary>
-    public uint HeavyVehicleId { get; set; }
+    public int HeavyVehicleId { get; set; }
 
     /// <summary>
     ///     The dimensions of the vehicle.
@@ -21,7 +21,7 @@ public class HeavyVehicle : Vehicle
     /// <param name="id">The ID of the heavy vehicle in the database.</param>
     /// <param name="dimensions">The dimensions of the vehicle.</param>
     /// <param name="vehicle">The vehicle the heavy vehicle is based on.</param>
-    public HeavyVehicle(uint id, Dimensions dimensions, Vehicle vehicle)
+    public HeavyVehicle(int id, Dimensions dimensions, Vehicle vehicle)
         : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.HasTowbar,
             vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType, vehicle.EnergyClass)
     {

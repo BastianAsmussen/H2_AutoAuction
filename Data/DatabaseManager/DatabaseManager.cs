@@ -63,7 +63,7 @@ public partial class DatabaseManager
         }
 
         var port = env["SQL_PORT"];
-        if (!uint.TryParse(port, out var _))
+        if (!int.TryParse(port, out var _))
         {
             throw new InvalidCredentialException("SQL Port is invalid!");
         }

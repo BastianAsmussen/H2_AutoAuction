@@ -8,7 +8,7 @@ public class Truck : HeavyVehicle
     /// <summary>
     ///     The ID of the truck in the database.
     /// </summary>
-    public uint TruckId { get; set; }
+    public int TruckId { get; set; }
 
     /// <summary>
     ///     The load capacity of the truck in kilograms.
@@ -21,7 +21,7 @@ public class Truck : HeavyVehicle
     /// <param name="id">The ID of the truck in the database.</param>
     /// <param name="loadCapacity">The load capacity of the truck in kilograms.</param>
     /// <param name="heavyVehicle">The heavy vehicle the truck is based on.</param>
-    public Truck(uint id, float loadCapacity, HeavyVehicle heavyVehicle) : base(heavyVehicle.HeavyVehicleId, heavyVehicle.Dimensions, heavyVehicle)
+    public Truck(int id, float loadCapacity, HeavyVehicle heavyVehicle) : base(heavyVehicle.HeavyVehicleId, heavyVehicle.Dimensions, heavyVehicle)
     {
         TruckId = id;
         LoadCapacity = loadCapacity;

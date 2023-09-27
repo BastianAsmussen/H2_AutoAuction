@@ -5,7 +5,7 @@ namespace Data.Interfaces;
 
 public interface ISeller
 {
-    public uint UserId { get; set; }
+    public int UserId { get; set; }
 
     /// <summary>
     ///     Receives a message for the user.
@@ -14,5 +14,5 @@ public interface ISeller
     /// <returns>The message </returns>
     string ReceiveBidNotification(string message);
 
-    uint SetForSale(Vehicle vehicle, User Seller, decimal minBid);
+    int SetForSale(Vehicle vehicle, User seller, decimal minBid);
 }

@@ -181,19 +181,18 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Buses')
     END
 GO
 
-
 -- Create the Users table if it doesn't exist.
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
     BEGIN
-        CREATE TABLE Users
-        (
-            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+       CREATE TABLE Users
+       (
+           Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            Username NVARCHAR(64) NOT NULL UNIQUE,
-            Password NCHAR(60) NOT NULL,
-            ZipCode INT NOT NULL,
-            Balance DECIMAL NOT NULL,
-        )
+           Username NVARCHAR(64) NOT NULL UNIQUE,
+           Password NCHAR(60) NOT NULL,
+           ZipCode NVARCHAR(5) NOT NULL,
+           Balance DECIMAL NOT NULL,
+       )
     END
 GO
 
@@ -201,9 +200,9 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivateUsers')
     BEGIN
         CREATE TABLE PrivateUsers(
-            Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+            Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            CPR CHAR(11) UNIQUE NOT NULL,
+            CPR NCHAR(11) NOT NULL UNIQUE,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
         )
@@ -214,9 +213,9 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
     BEGIN
         CREATE TABLE CorporateUsers(
-            Id INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+            Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 
-            CVR INT NOT NULL,
+            CVR NCHAR(11) NOT NULL,
             Credit DECIMAL NOT NULL,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),

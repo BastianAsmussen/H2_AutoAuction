@@ -8,7 +8,7 @@ public class Dimensions
     /// <summary>
     ///     The ID of the dimensions in the database.
     /// </summary>
-    public uint DimensionsId { get; set; }
+    public int DimensionsId { get; set; }
 
     /// <summary>
     ///     The length of the vehicle in meters.
@@ -32,7 +32,7 @@ public class Dimensions
     /// <param name="length">The length of the vehicle in meters.</param>
     /// <param name="width">The width of the vehicle in meters.</param>
     /// <param name="height">The height of the vehicle in meters.</param>
-    public Dimensions(uint id, float length, float width, float height)
+    public Dimensions(int id, float length, float width, float height)
     {
         DimensionsId = id;
         Length = length;

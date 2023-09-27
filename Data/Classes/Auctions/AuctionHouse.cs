@@ -150,13 +150,14 @@ public static class AuctionHouse
     /// Set's a vehicle for sale
     /// </summary>
     /// <param name="vehicle">property form Vehicle class</param>
-    /// <param name="Seller">property form User class</param>
+    /// <param name="seller">property form User class</param>
     /// <param name="minBid"></param>
     /// <exception cref="ArgumentException">If it fails to create an auction</exception>
     /// <returns>The id of the auction</returns>
-    public static uint SetForSale(Vehicle vehicle, User Seller, decimal minBid)
+    public static int SetForSale(Vehicle vehicle, User seller, decimal minBid)
     {
-        Auction auction = new Auction(0, vehicle, Seller, null, minBid);
+        var auction = new Auction(0, vehicle, seller, null, minBid);
+
         try
         {
             auction = DatabaseManager.DatabaseManager.CreateAuction(auction);
