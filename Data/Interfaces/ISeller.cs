@@ -14,5 +14,5 @@ public interface ISeller
     /// <returns>The message </returns>
     string ReceiveBidNotification(string message);
 
-    int SetForSale(Vehicle vehicle, User seller, decimal minBid);
+    int SetForSale(Vehicle vehicle, DateTime startDate, DateTime endDate, User seller, decimal minBid);
 }
