@@ -128,6 +128,129 @@ public partial class DatabaseManager
     }
 
     /// <summary>
+    ///     Defines the specific type of a vehicle in an auction.
+    /// </summary>
+    /// <param name="auction">The auction.</param>
+    /// <returns>The vehicle.</returns>
+    /// <exception cref="ArgumentException">Thrown when the vehicle does not exist.</exception>
+    public static Vehicle GetVehicleType(Auction auction)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Buses.Id," +
+                              "       Trucks.Id," +
+                              "       HeavyVehicles.Id," +
+                              "       ProfessionalPersonalCars.Id," +
+                              "       PrivatePersonalCars.Id," +
+                              "       PersonalCars.Id," +
+                              "       Vehicles.Id" +
+                              " FROM Vehicles" +
+                              "    LEFT JOIN Buses ON HeavyVehicles.Id = Buses.HeavyVehicleId" +
+                              "    LEFT JOIN Trucks ON HeavyVehicles.Id = Trucks.HeavyVehicleId" +
+                              "    LEFT JOIN HeavyVehicles ON Vehicles.Id = HeavyVehicles.VehicleId" +
+                              "    LEFT JOIN ProfessionalPersonalCars ON PersonalCars.Id = ProfessionalPersonalCars.PersonalCarId" +
+                              "    LEFT JOIN PrivatePersonalCars ON PersonalCars.Id = PrivatePersonalCars.PersonalCarId" +
+                              "    LEFT JOIN PersonalCars ON Vehicles.Id = PersonalCars.VehicleId" +
+                              " WHERE Vehicles.Id = @Id";
+        command.Parameters.AddWithValue("@Id", auction.Vehicle.VehicleId);
+
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("Vehicle does not exist!");
+        }
+
+        reader.Read();
+
+        if (!reader.IsDBNull(0))
+        {
+            var busId = reader.GetInt32(0);
+            var bus = GetBusById(busId);
+
+            reader.Close();
+            connection.Close();
+
+            return bus;
+        }
+
+        if (!reader.IsDBNull(1))
+        {
+            var truckId = reader.GetInt32(1);
+            var truck = GetTruckById(truckId);
+
+            reader.Close();
+            connection.Close();
+
+            return truck;
+        }
+
+        if (!reader.IsDBNull(2))
+        {
+            var heavyVehicleId = reader.GetInt32(2);
+            var heavyVehicle = GetHeavyVehicleById(heavyVehicleId);
+
+            reader.Close();
+            connection.Close();
+
+            return heavyVehicle;
+        }
+
+        if (!reader.IsDBNull(3))
+        {
+            var professionalPersonalCarId = reader.GetInt32(3);
+            var professionalPersonalCar = GetProfessionalPersonalCarById(professionalPersonalCarId);
+
+            reader.Close();
+            connection.Close();
+
+            return professionalPersonalCar;
+        }
+
+        if (!reader.IsDBNull(4))
+        {
+            var privatePersonalCarId = reader.GetInt32(4);
+            var privatePersonalCar = GetPrivatePersonalCarById(privatePersonalCarId);
+
+            reader.Close();
+            connection.Close();
+
+            return privatePersonalCar;
+        }
+
+        if (!reader.IsDBNull(5))
+        {
+            var personalCarId = reader.GetInt32(5);
+            var personalCar = GetPersonalCarById(personalCarId);
+
+            reader.Close();
+            connection.Close();
+
+            return personalCar;
+        }
+
+        if (!reader.IsDBNull(6))
+        {
+            var vehicleId = reader.GetInt32(6);
+            var vehicle = GetVehicleById(vehicleId);
+
+            reader.Close();
+            connection.Close();
+
+            return vehicle;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        throw new ArgumentException("Vehicle does not exist!");
+    }
+
+    /// <summary>
     ///     Creates an auction.
     /// </summary>
     /// <param name="auction">The auction.</param>
@@ -237,6 +360,7 @@ public partial class DatabaseManager
         var buyer = GetUserById(buyerId);
 
         reader.Close();
+        connection.Close();
 
         return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid);
     }
@@ -290,6 +414,7 @@ public partial class DatabaseManager
         var buyer = GetUserById(buyerId);
 
         reader.Close();
+        connection.Close();
 
         return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid);
     }
@@ -326,6 +451,7 @@ public partial class DatabaseManager
         if (command.ExecuteNonQuery() == 0)
         {
             connection.Close();
+
             throw new ArgumentException("Failed to update auction!");
         }
 
@@ -345,7 +471,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM Auctions" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", auction.AuctionId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -398,6 +524,7 @@ public partial class DatabaseManager
         }
 
         reader.Close();
+        connection.Close();
 
         return bids;
     }
@@ -444,6 +571,7 @@ public partial class DatabaseManager
         }
 
         reader.Close();
+        connection.Close();
 
         return bids;
     }
@@ -490,6 +618,7 @@ public partial class DatabaseManager
         }
 
         reader.Close();
+        connection.Close();
 
         return bids;
     }
@@ -570,6 +699,7 @@ public partial class DatabaseManager
         var auction = GetAuctionById(auctionId);
 
         reader.Close();
+        connection.Close();
 
         return new Bid(bidId, time, amount, bidder, auction);
     }
@@ -626,6 +756,7 @@ public partial class DatabaseManager
         if (command.ExecuteNonQuery() == 0)
         {
             connection.Close();
+
             throw new ArgumentException("Failed to delete bid!");
         }
 
