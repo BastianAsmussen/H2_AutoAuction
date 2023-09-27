@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reactive;
 using System.Windows.Input;
-using Avalonia.Controls;
-using Data.Classes;
-using Data.Interfaces;
+using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
@@ -19,19 +12,19 @@ public class LoginViewModel : ViewModelBase
 {
     #region Properties
 
-    private string _userName;
-    private string _passWord;
+    private string _userName = null!;
+    private string _passWord = null!;
 
-    private bool _btnLoginEnabled = false;
+    private bool _btnLoginEnabled;
 
-    [Required]
+    [MinLength(1, ErrorMessage = "Username is required")]
     public string UserName
     {
         get => _userName;
         set => this.RaiseAndSetIfChanged(ref _userName, value);
     }
 
-    [Required]
+    [MinLength(1, ErrorMessage = "Password is required")]
     public string PassWord
     {
         get => _passWord;
@@ -57,23 +50,30 @@ public class LoginViewModel : ViewModelBase
         ValidateInput();
     }
 
-    private void GoToCreateScreen()
+    #region Methods
+
+    private void SignIn()
     {
-        ContentArea.Navigate(new CreateUserView());
+        // CorporateUser corporateUser = new(0, $"{cvrNumber}", 0, new(0, username, password, zipCode));
+        try
+        {
+            // DatabaseManager.Login();
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
+        }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Success : User signed in successfully.");
+        Console.ResetColor();
     }
 
-    void GoToHomeScreen()
-    {
-        if (PassWord != "password")
-        {
-            UserInstance.SetUser(new DemoUser($"{UserName}", 213, 9000));
-            ContentArea.Navigate(new HomeScreenView());
-        }
-        else
-        {
-            Console.WriteLine("No Can Do");
-        }
-    }
+    private void GoToHomeScreen() => ContentArea.Navigate(new HomeScreenView());
+    private void GoToCreateScreen() => ContentArea.Navigate(new CreateUserView());
+
 
     /// <summary>
     /// If the user has entered a username and password, the login button will be enabled.
@@ -86,23 +86,6 @@ public class LoginViewModel : ViewModelBase
                 (userName, passWord) => !string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(passWord))
             .Subscribe(x => BtnLoginEnabled = x);
     }
-}
 
-public class DemoUser : ISeller
-{
-    public string UserName { get; set; }
-    public decimal Balance { get; set; }
-    public uint Zipcode { get; set; }
-
-    public DemoUser(string UserName, decimal Balance, uint Zipcode)
-    {
-        this.UserName = UserName;
-        this.Balance = Balance;
-        this.Zipcode = Zipcode;
-    }
-
-    public string ReceiveBidNotification(string message)
-    {
-        return "ReceiveBidNotification !!";
-    }
+    #endregion
 }

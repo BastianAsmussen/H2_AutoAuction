@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Data.DatabaseManager;
 using GUI.ViewModels;
 using GUI.Views;
 
@@ -10,6 +11,8 @@ public partial class App : Application
 {
     public override void Initialize()
     {
+        var databaseManager = DatabaseManager.Instance;
+
         AvaloniaXamlLoader.Load(this);
     }
 
