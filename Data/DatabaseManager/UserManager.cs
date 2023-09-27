@@ -234,15 +234,17 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+    #endregion
 
+    #region Login
     /// <summary>
     ///     Logs a user in.
     /// </summary>
     /// <param name="user">The user to log in.</param>
-    /// <returns>The logged in user.</returns>
+    /// <returns>The logged in user, either a private user or a corporate user.</returns>
     /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
     /// <exception cref="DataException">Thrown when the user does not exist.</exception>
-    /// <exception cref="InvalidCredentialException">Thrown when the password is incorrect.</exception>
+    /// <exception cref="InvalidCredentialException"></exception>
     public static User Login(User user)
     {
         if (string.IsNullOrWhiteSpace(user.Username))
@@ -301,48 +303,85 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return GetUserById(userId);
+        if (IsCorporateUser(userId))
+            return GetAllCorporateUsers().Find(corporateUser => corporateUser.UserId == userId)!;
+
+        return GetAllPrivateUsers().Find(privateUser => privateUser.UserId == userId)!;
     }
 
     /// <summary>
-    ///     Logs a private user in.
+    ///     Checks if a given password matches a given hash.
     /// </summary>
-    /// <param name="privateUser">The private user to log in.</param>
-    /// <returns>The logged in private user.</returns>
-    /// <exception cref="InvalidCredentialException">Thrown when the CPR number is incorrect.</exception>
-    public static PrivateUser Login(PrivateUser privateUser)
+    /// <param name="password">The plaintext password.</param>
+    /// <param name="hash">The hashed password.</param>
+    /// <returns>True if the password matches the hash, false otherwise.</returns>
+    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
+    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
+    private static bool IsValidPassword(string password, string hash)
     {
-        var user = Login(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode, privateUser.Balance));
-
-        var privateUserFromDatabase = GetPrivateUserByCpr(privateUser.Cpr);
-
-        if (privateUserFromDatabase.UserId != user.UserId)
-        {
-            throw new InvalidCredentialException("CPR number is incorrect!");
-        }
-
-        return privateUserFromDatabase;
+        return BC.Verify(password, hash);
     }
 
     /// <summary>
-    ///     Logs a corporate user in.
+    ///     Checks if a username is already taken.
     /// </summary>
-    /// <param name="corporateUser">The corporate user to log in.</param>
-    /// <returns>The logged in corporate user.</returns>
-    /// <exception cref="InvalidCredentialException">Thrown when the CVR number is incorrect.</exception>
-    public static CorporateUser Login(CorporateUser corporateUser)
+    /// <param name="username">The username to check.</param>
+    /// <returns>True if the username is taken, false otherwise.</returns>
+    private static bool IsUsernameTaken(string username)
     {
-        var user = Login(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode, corporateUser.Balance));
+        var connection = Instance.GetConnection();
 
-        var corporateUsersFromDatabase = GetCorporateUsersByCvr(corporateUser.Cvr);
-        foreach (var corporateUserFromDatabase in corporateUsersFromDatabase.Where(corporateUserFromDatabase => corporateUserFromDatabase.UserId == user.UserId))
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM Users" +
+                              " WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
         {
-            return corporateUserFromDatabase;
+            reader.Close();
+            connection.Close();
+
+            return true;
         }
 
-        throw new InvalidCredentialException("CVR number is incorrect!");
+        reader.Close();
+        connection.Close();
+
+        return false;
     }
 
+    /// <summary>
+    ///     Checks if a user is a corporate user or not.
+    /// </summary>
+    /// <param name="userId">The ID of the user to check.</param>
+    /// <returns>True if the user is a corporate user, false otherwise.</returns>
+    private static bool IsCorporateUser(int userId)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM CorporateUsers" +
+                              " WHERE UserId = @UserId";
+        command.Parameters.AddWithValue("@UserId", userId);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
+    }
+    #endregion
+
+    #region Signup
     /// <summary>
     ///     Signs up a user.
     /// </summary>
@@ -458,48 +497,6 @@ public partial class DatabaseManager
         var hash = BC.HashPassword(password, BC.GenerateSalt());
 
         return hash;
-    }
-
-    /// <summary>
-    ///     Checks if a given password matches a given hash.
-    /// </summary>
-    /// <param name="password">The plaintext password.</param>
-    /// <param name="hash">The hashed password.</param>
-    /// <returns>True if the password matches the hash, false otherwise.</returns>
-    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
-    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
-    private static bool IsValidPassword(string password, string hash)
-    {
-        return BC.Verify(password, hash);
-    }
-
-    /// <summary>
-    ///     Checks if a username is already taken.
-    /// </summary>
-    /// <param name="username">The username to check.</param>
-    /// <returns>True if the username is taken, false otherwise.</returns>
-    private static bool IsUsernameTaken(string username)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", username);
-
-        var reader = command.ExecuteReader();
-        if (reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            return true;
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return false;
     }
     #endregion
 
