@@ -11,9 +11,9 @@ public class Auction
     public int AuctionId { get; }
 
     /// <summary>
-    ///     The minimum price of the auction
+    ///     The current price of the auction
     /// </summary>
-    public decimal MinimumPrice { get; set; }
+    public decimal CurrentPrice { get; set; }
 
     /// <summary>
     ///     The standing bid of the auction
@@ -45,7 +45,7 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(int id, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
+    public Auction(int id, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal currentPrice, decimal startingBid = 0)
     {
         AuctionId = id;
         StartDate = startDate;
@@ -53,7 +53,7 @@ public class Auction
         Vehicle = vehicle;
         Seller = seller;
         Buyer = buyer;
-        MinimumPrice = minimumPrice;
+        CurrentPrice = currentPrice;
         StartingBid = startingBid;
     }
 
@@ -65,7 +65,7 @@ public class Auction
                $"Vehicle: {Vehicle}\n" +
                $"Seller: {Seller}\n" +
                $"Buyer: {Buyer}\n" +
-               $"Minimum Price: {MinimumPrice}\n" +
+               $"Current price: {CurrentPrice}\n" +
                $"Starting Bid: {StartingBid}";
     }
 }

@@ -8,7 +8,7 @@ BEGIN
    (
        Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-       MinimumPrice DECIMAL NOT NULL,
+       CurrentPrice DECIMAL NOT NULL,
        StartingBid DECIMAL NOT NULL,
 
        StartDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

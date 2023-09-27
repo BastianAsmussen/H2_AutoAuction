@@ -85,17 +85,17 @@ public class CorporateUser : User
     /// <returns></returns>
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
-        if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.MinimumPrice))
+        auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+
+        if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.CurrentPrice))
             return false;
 
-        if (newBid < auction.MinimumPrice)
+        if (newBid < auction.CurrentPrice)
             return false;
         
         //checks if the newBid is higher than the current highest bid
         try
         {
-            auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
-            
             var ourbid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
 
             var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);

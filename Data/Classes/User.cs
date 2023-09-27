@@ -58,9 +58,9 @@ public class User : IBuyer, ISeller
     /// <param name="startDate">The starting date of the auction.</param>
     /// <param name="endDate">The ending date of the auction.</param>
     /// <param name="seller">The seller of the auction.</param>
-    /// <param name="minBid">The minimum bid of the auction.</param>
+    /// <param name="minBid">The current bid of the auction.</param>
     /// <returns>The ID of the auction.</returns>
-    /// <exception cref="ArgumentException">Thrown when the start date is after the end date, the minimum bid is less than 0 or the auction fails to be created.</exception>
+    /// <exception cref="ArgumentException">Thrown when the start date is after the end date, the current bid is less than 0 or the auction fails to be created.</exception>
     public int SetForSale(Vehicle vehicle, DateTime startDate, DateTime endDate, User seller, decimal minBid)
     {
         // If the start date is after the end date, throw an exception.
@@ -69,7 +69,7 @@ public class User : IBuyer, ISeller
 
         // If the minimum bid is less than 0, throw an exception.
         if (minBid < 0)
-            throw new ArgumentException("Minimum bid cannot be less than 0!");
+            throw new ArgumentException("current bid cannot be less than 0!");
 
         var auction = new Auction(0, startDate, endDate, vehicle, seller, null, minBid);
 
