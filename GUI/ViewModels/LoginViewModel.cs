@@ -88,7 +88,7 @@ public class LoginViewModel : ViewModelBase
     }
 }
 
-public class DemoUser : ISeller
+public class DemoUser 
 {
     public string UserName { get; set; }
     public decimal Balance { get; set; }
