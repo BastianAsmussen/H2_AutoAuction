@@ -24,11 +24,11 @@ public class PrivateUser : User
     /// If the subtraction results in a negative value, an ArgumentOutOfRangeException is thrown.
     /// </summary>
     /// <param name="amount">The amount to subtract from the balance.</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when the Balance is not sufficient.</exception>
+    /// <exception cref="DataException">Thrown when the Balance is not sufficient.</exception>
     public override void SubBalance(decimal amount)
     {
         if (!HasSufficientFunds(Balance, amount))
-            throw new ArgumentOutOfRangeException($"Balance is not sufficient. Current balance: {Balance}");
+            throw new DataException($"Balance is not sufficient. Current balance: {Balance}");
 
         Balance -= amount;
     }
