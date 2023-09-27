@@ -21,6 +21,16 @@ public class Auction
     public decimal StartingBid { get; set; }
 
     /// <summary>
+    ///     The starting date of the auction.
+    /// </summary>
+    public DateTime StartDate { get; set; }
+
+    /// <summary>
+    ///     The ending date of the auction.
+    /// </summary>
+    public DateTime EndDate { get; set; }
+
+    /// <summary>
     ///     The vehicle of the auction
     /// </summary>
     public Vehicle Vehicle { get; set; }
@@ -35,9 +45,11 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(int id, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
+    public Auction(int id, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal minimumPrice, decimal startingBid = 0)
     {
         AuctionId = id;
+        StartDate = startDate;
+        EndDate = endDate;
         Vehicle = vehicle;
         Seller = seller;
         Buyer = buyer;
@@ -48,6 +60,8 @@ public class Auction
     public override string ToString()
     {
         return $"Auction ID: {AuctionId}\n" +
+               $"Start Date: {StartDate}\n" +
+               $"End Date: {EndDate}\n" +
                $"Vehicle: {Vehicle}\n" +
                $"Seller: {Seller}\n" +
                $"Buyer: {Buyer}\n" +
