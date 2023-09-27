@@ -30,14 +30,14 @@ public class CorporateUser : User
 
     /// <summary>
     ///     Overrides the SubBalance method to subtract a specified amount from the sum of balance and credit.
-    ///     If the subtraction results in a negative value, an ArgumentOutOfRangeException is thrown.
+    ///     If the subtraction results in a negative value, an DataException is thrown.
     /// </summary>
     /// <param name="amount">The amount to subtract from the balance.</param>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown when the Balance + Credit is not sufficent.</exception>
+    /// <exception cref="DataException">Thrown when the Balance + Credit is not sufficent.</exception>
     public override void SubBalance(decimal amount)
     {
         if (!HasSufficientFunds(Balance, Credit, amount))
-            throw new ArgumentOutOfRangeException("Balance + Credit is not sufficent.");
+            throw new DataException("Balance + Credit is not sufficent.");
 
   
         var startingValues = (Credit, Balance);
@@ -70,7 +70,7 @@ public class CorporateUser : User
         Credit = startingValues.Credit;
         Balance = startingValues.Balance;
         
-        throw new ArgumentOutOfRangeException("Balance + Credit is not sufficent.");
+        throw new DataException("Balance + Credit is not sufficent.");
     }
 
     
