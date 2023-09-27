@@ -8,7 +8,7 @@ public class PersonalCar : Vehicle
     /// <summary>
     ///     The ID of the personal car in the database.
     /// </summary>
-    public uint PersonalCarId { get; set; }
+    public int PersonalCarId { get; set; }
 
     /// <summary>
     ///     The number of seats in the personal car.
@@ -27,7 +27,7 @@ public class PersonalCar : Vehicle
     /// <param name="numberOfSeats">The number of seats in the personal car.</param>
     /// <param name="trunkDimensions">The dimensions of the trunk.</param>
     /// <param name="vehicle">The vehicle the personal car is based on.</param>
-    public PersonalCar(uint id, byte numberOfSeats, Dimensions trunkDimensions, Vehicle vehicle) : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.HasTowbar, vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType, vehicle.EnergyClass)
+    public PersonalCar(int id, byte numberOfSeats, Dimensions trunkDimensions, Vehicle vehicle) : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.HasTowbar, vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType, vehicle.EnergyClass)
     {
         PersonalCarId = id;
         NumberOfSeats = numberOfSeats;

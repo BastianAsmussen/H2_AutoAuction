@@ -36,16 +36,17 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var userId = (uint)reader.GetInt32(0);
+            var userId = reader.GetInt32(0);
             var username = reader.GetString(1);
             var password = reader.GetString(2);
-            var zipcode = (uint)reader.GetInt32(3);
+            var zipcode = reader.GetString(3);
             var balance = reader.GetDecimal(4);
 
             users.Add(new User(userId, username, password, zipcode, balance));
         }
 
         reader.Close();
+        connection.Close();
 
         return users;
     }
@@ -91,7 +92,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var userId = (uint)reader.GetInt32(0);
+        var userId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -105,7 +106,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the user to get.</param>
     /// <returns>The user with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown when the user does not exist.</exception>
-    public static User GetUserById(uint id)
+    public static User GetUserById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -125,10 +126,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var userId = (uint)reader.GetInt32(0);
+        var userId = reader.GetInt32(0);
         var username = reader.GetString(1);
         var password = reader.GetString(2);
-        var zipcode = (uint)reader.GetInt32(3);
+        var zipcode = reader.GetString(3);
         var balance = reader.GetDecimal(4);
 
         reader.Close();
@@ -163,10 +164,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var userId = (uint)reader.GetInt32(0);
+        var userId = reader.GetInt32(0);
         var username = reader.GetString(1);
         var password = reader.GetString(2);
-        var zipcode = (uint)reader.GetInt32(3);
+        var zipcode = reader.GetString(3);
         var balance = reader.GetDecimal(4);
 
         reader.Close();
@@ -295,7 +296,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var userId = (uint)reader.GetInt32(0);
+        var userId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -429,7 +430,7 @@ public partial class DatabaseManager
             throw new ArgumentException("Password cannot be empty!");
         }
 
-        if (user.Zipcode == 0)
+        if (string.IsNullOrWhiteSpace(user.Zipcode))
         {
             throw new ArgumentException("Zipcode cannot be empty!");
         }
@@ -528,9 +529,9 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var privateUserId = (uint)reader.GetInt32(0);
+            var privateUserId = reader.GetInt32(0);
             var cpr = reader.GetString(1);
-            var userId = (uint)reader.GetInt32(2);
+            var userId = reader.GetInt32(2);
 
             var user = GetUserById(userId);
 
@@ -571,7 +572,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privateUserId = (uint)reader.GetInt32(0);
+        var privateUserId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -585,7 +586,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the private user to get.</param>
     /// <returns>The private user with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
-    public static PrivateUser GetPrivateUserById(uint id)
+    public static PrivateUser GetPrivateUserById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -605,9 +606,9 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privateUserId = (uint)reader.GetInt32(0);
+        var privateUserId = reader.GetInt32(0);
         var cpr = reader.GetString(1);
-        var userId = (uint)reader.GetInt32(2);
+        var userId = reader.GetInt32(2);
 
         reader.Close();
         connection.Close();
@@ -643,9 +644,9 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privateUserId = (uint)reader.GetInt32(0);
+        var privateUserId = reader.GetInt32(0);
         var cprNumber = reader.GetString(1);
-        var userId = (uint)reader.GetInt32(2);
+        var userId = reader.GetInt32(2);
 
         reader.Close();
         connection.Close();
@@ -737,10 +738,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var corporateUserId = (uint)reader.GetInt32(0);
+            var corporateUserId = reader.GetInt32(0);
             var cvrNumber = reader.GetString(1);
             var credit = reader.GetDecimal(2);
-            var userId = (uint)reader.GetInt32(3);
+            var userId = reader.GetInt32(3);
 
             var user = GetUserById(userId);
 
@@ -782,7 +783,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var corporateUserId = (uint)reader.GetInt32(0);
+        var corporateUserId = reader.GetInt32(0);
 
         reader.Close();
         connection.Close();
@@ -796,7 +797,7 @@ public partial class DatabaseManager
     /// <param name="id">The ID of the corporate user to get.</param>
     /// <returns>The corporate user with the given ID.</returns>
     /// <exception cref="ArgumentException">Thrown when the corporate user does not exist.</exception>
-    public static CorporateUser GetCorporateUserById(uint id)
+    public static CorporateUser GetCorporateUserById(int id)
     {
         var connection = Instance.GetConnection();
 
@@ -816,10 +817,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var corporateUserId = (uint)reader.GetInt32(0);
+        var corporateUserId = reader.GetInt32(0);
         var cvrNumber = reader.GetString(1);
         var credit = reader.GetDecimal(2);
-        var userId = (uint)reader.GetInt32(3);
+        var userId = reader.GetInt32(3);
 
         reader.Close();
         connection.Close();
@@ -857,10 +858,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var corporateUserId = (uint)reader.GetInt32(0);
+            var corporateUserId = reader.GetInt32(0);
             var cvrNumber = reader.GetString(1);
             var credit = reader.GetDecimal(2);
-            var userId = (uint)reader.GetInt32(3);
+            var userId = reader.GetInt32(3);
 
             var user = GetUserById(userId);
 

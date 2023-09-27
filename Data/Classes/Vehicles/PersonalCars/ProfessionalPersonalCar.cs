@@ -8,7 +8,7 @@ public class ProfessionalPersonalCar : PersonalCar
     /// <summary>
     ///     The ID of the professional personal car in the database.
     /// </summary>
-    public uint ProfessionalPersonalCarId { get; set; }
+    public int ProfessionalPersonalCarId { get; set; }
 
     /// <summary>
     ///     Whether the professional personal car has a safety bar or not.
@@ -20,7 +20,7 @@ public class ProfessionalPersonalCar : PersonalCar
     /// </summary>
     public float LoadCapacity { get; set; }
 
-    public ProfessionalPersonalCar(uint id, bool hasSafetyBar, float loadCapacity, PersonalCar personalCar) : base(personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
+    public ProfessionalPersonalCar(int id, bool hasSafetyBar, float loadCapacity, PersonalCar personalCar) : base(personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
     {
         ProfessionalPersonalCarId = id;
         HasSafetyBar = hasSafetyBar;

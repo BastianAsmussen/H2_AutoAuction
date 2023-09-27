@@ -8,7 +8,7 @@ public class Bus : HeavyVehicle
     /// <summary>
     ///    The ID of the bus in the database.
     /// </summary>
-    public uint BusId { get; set; }
+    public int BusId { get; set; }
 
     /// <summary>
     ///     The number of seats in the bus.
@@ -33,7 +33,7 @@ public class Bus : HeavyVehicle
     /// <param name="numberOfSleepingSpaces">The number of sleeping places in the bus.</param>
     /// <param name="hasToilet">Whether the bus has a toilet or not.</param>
     /// <param name="heavyVehicle">The heavy vehicle the bus is based on.</param>
-    public Bus(uint id, byte numberOfSeats, byte numberOfSleepingSpaces, bool hasToilet, HeavyVehicle heavyVehicle) : base(heavyVehicle.HeavyVehicleId, heavyVehicle.Dimensions, heavyVehicle)
+    public Bus(int id, byte numberOfSeats, byte numberOfSleepingSpaces, bool hasToilet, HeavyVehicle heavyVehicle) : base(heavyVehicle.HeavyVehicleId, heavyVehicle.Dimensions, heavyVehicle)
     {
         BusId = id;
         NumberOfSeats = numberOfSeats;
