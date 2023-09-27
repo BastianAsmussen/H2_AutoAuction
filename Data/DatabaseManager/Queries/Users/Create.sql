@@ -11,7 +11,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
 
            Username NVARCHAR(64) NOT NULL UNIQUE,
            Password NCHAR(60) NOT NULL,
-           ZipCode INT NOT NULL,
+           ZipCode NVARCHAR(5) NOT NULL,
            Balance DECIMAL NOT NULL,
        )
     END
@@ -23,7 +23,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PrivateUsers')
         CREATE TABLE PrivateUsers(
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            CPR CHAR(11) NOT NULL UNIQUE,
+            CPR NCHAR(11) NOT NULL UNIQUE,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
         )
@@ -36,7 +36,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
         CREATE TABLE CorporateUsers(
             Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 
-            CVR INT NOT NULL,
+            CVR NCHAR(11) NOT NULL,
             Credit DECIMAL NOT NULL,
 
             UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
