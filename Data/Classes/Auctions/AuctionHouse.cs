@@ -173,17 +173,49 @@ public static class AuctionHouse
 
 
     /// <summary>
-    ///  Notifies the seller the when a bid is over minimum bid
+    ///  Receives a bid from a buyer.
+    ///  Then checks if new bid is higher than the current highest bid.
+    ///  Lastly notifies the seller the when a bid is over minimum bid.
     /// </summary>
+    /// <param name="buyer"></param>
     /// <param name="auction"></param>
     /// <param name="newBid"></param>
     /// <returns></returns>
-    public static void PlaceBid(Auction auction, decimal newBid)
+    public static bool PlaceBid(PrivateUser buyer, Auction auction, decimal newBid)
     {
-        auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+        if (buyer.Balance < auction.MinimumPrice)
+            return false;
+
         if (newBid < auction.MinimumPrice)
-            return;
+            return false;
         
+        
+        //checks if the newBid is higher than the current highest bid
+        try
+        {
+            auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+            
+            var ourbid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
+
+            var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
+
+            var highestBid = bids.Max(b => b.Amount);
+
+            if (ourbid.Amount > highestBid)
+            {
+                auction.Buyer = buyer;
+            }
+
+            DatabaseManager.DatabaseManager.UpdateAuction(auction);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error in PlaceBid: " + e.Message);
+            throw;
+        }
+
         auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
+
+        return true;
     }
 }
