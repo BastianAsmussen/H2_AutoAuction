@@ -26,7 +26,7 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
-    public int PlaceBid(Auction auction, decimal newBid)
+    public bool PlaceBid(Auction auction, decimal newBid)
     {
         throw new NotImplementedException();
     }
@@ -75,4 +75,5 @@ public class User : IBuyer, ISeller
         
         return auction.AuctionId;
     } 
+    
 }

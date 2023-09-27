@@ -7,5 +7,5 @@ public interface IBuyer
     public int UserId { get; set; }
 
     public void SubBalance(decimal amount);
-    int PlaceBid(Auction auction, decimal newBid);
+    bool PlaceBid(Auction auction, decimal newBid);
 }
