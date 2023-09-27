@@ -11,6 +11,9 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Auctions')
             MinimumPrice DECIMAL NOT NULL,
             StartingBid DECIMAL NOT NULL,
 
+            StartDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            EndDate DATETIME NOT NULL,
+
             VehicleId INT NOT NULL FOREIGN KEY REFERENCES Vehicles(Id),
             SellerId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
             BuyerId INT FOREIGN KEY REFERENCES Users(Id), -- Null if there's no buyer yet.
@@ -25,7 +28,7 @@ IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Bids')
         (
             Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 
-            Date DATETIME NOT NULL,
+            Date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             Amount DECIMAL NOT NULL,
 
             BidderId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),

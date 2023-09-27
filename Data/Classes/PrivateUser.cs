@@ -5,7 +5,6 @@ namespace Data.Classes;
 
 public class PrivateUser : User
 {
-    
     private static bool HasSufficientFunds(decimal balance, decimal amount)
     {
         return balance - amount >= 0;
@@ -21,11 +20,10 @@ public class PrivateUser : User
     }
 
     /// <summary>
-    /// Overrides the SubBalance method to subtract a specified amount from the sum of balance and credit.
-    /// If the subtraction results in a negative value, an ArgumentOutOfRangeException is thrown.
+    ///     Subtract a specified amount from the balance.
     /// </summary>
     /// <param name="amount">The amount to subtract from the balance.</param>
-    /// <exception cref="DataException">Thrown when the Balance is not sufficient.</exception>
+    /// <exception cref="DataException">Thrown when the balance is not sufficient.</exception>
     public override void SubBalance(decimal amount)
     {
         if (!HasSufficientFunds(Balance, amount))
@@ -34,16 +32,16 @@ public class PrivateUser : User
         Balance -= amount;
     }
 
-    
     /// <summary>
-    ///  Receives a bid from a buyer.
-    ///  Then checks if new bid is higher than the current highest bid.
-    ///  Lastly notifies the seller the when a bid is over minimum bid.
+    ///     Receives a bid from a buyer.
+    ///     Then checks if new bid is higher than the current highest bid.
+    ///     Lastly notifies the seller the when a bid is over minimum bid.
     /// </summary>
-    /// <param name="buyer"></param>
-    /// <param name="auction"></param>
-    /// <param name="newBid"></param>
-    /// <returns></returns>
+    /// <param name="buyer">The bidder.</param>
+    /// <param name="auction">The auction to bid on.</param>
+    /// <param name="newBid">The new bid.</param>
+    /// <returns>True if the bid was placed, false if not.</returns>
+    /// <exception cref="ArgumentException">Thrown when an error occurs in the database.</exception>
     public bool PlaceBid(PrivateUser buyer, Auction auction, decimal newBid)
     {
         if (!HasSufficientFunds(buyer.Balance, auction.MinimumPrice))
@@ -51,9 +49,8 @@ public class PrivateUser : User
 
         if (newBid < auction.MinimumPrice)
             return false;
-        
-        
-        //checks if the newBid is higher than the current highest bid
+
+        // Checks if the newBid is higher than the current highest bid.
         try
         {
             auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);

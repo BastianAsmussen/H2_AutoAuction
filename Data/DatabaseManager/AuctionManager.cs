@@ -39,26 +39,30 @@ public partial class DatabaseManager
             var minimumPrice = reader.GetDecimal(1);
             var standingBid = reader.GetDecimal(2);
 
-            var vehicleId = reader.GetInt32(3);
+            var startDate = reader.GetDateTime(3);
+            var endDate = reader.GetDateTime(4);
+
+            var vehicleId = reader.GetInt32(5);
             var vehicle = GetVehicleById(vehicleId);
 
-            var sellerId = reader.GetInt32(4);
+            var sellerId = reader.GetInt32(6);
             var seller = GetUserById(sellerId);
 
-            if (reader.IsDBNull(5))
+            if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid));
+                auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, null, minimumPrice, standingBid));
 
                 continue;
             }
 
-            var buyerId = reader.GetInt32(5);
+            var buyerId = reader.GetInt32(7);
             var buyer = GetUserById(buyerId);
 
-            auctions.Add(new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid));
+            auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid));
         }
 
         reader.Close();
+        connection.Close();
 
         return auctions;
     }
@@ -92,26 +96,30 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var auctionId = reader.GetInt32(0);
+
             var minimumPrice = reader.GetDecimal(1);
             var standingBid = reader.GetDecimal(2);
 
-            var vehicleId = reader.GetInt32(3);
+            var startDate = reader.GetDateTime(3);
+            var endDate = reader.GetDateTime(4);
+
+            var vehicleId = reader.GetInt32(5);
             var vehicle = GetVehicleById(vehicleId);
 
-            var sellerId = reader.GetInt32(4);
+            var sellerId = reader.GetInt32(6);
             var seller = GetUserById(sellerId);
 
-            if (reader.IsDBNull(5))
+            if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid));
+                auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, null, minimumPrice, standingBid));
 
                 continue;
             }
 
-            var buyerId = reader.GetInt32(5);
+            var buyerId = reader.GetInt32(7);
             var buyer = GetUserById(buyerId);
 
-            auctions.Add(new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid));
+            auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid));
         }
 
         reader.Close();
@@ -130,11 +138,29 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Auctions (MinimumPrice, StartingBid, VehicleId, SellerId, BuyerId)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@MinimumPrice, @StartingBid, @VehicleId, @SellerId, @BuyerId)";
+        command.CommandText = "INSERT INTO Auctions (" +
+                              "    MinimumPrice," +
+                              "    StartingBid," +
+                              "    StartDate," +
+                              "    EndDate," +
+                              "    VehicleId," +
+                              "    SellerId," +
+                              "    BuyerId" +
+                              ")" +
+                              " OUTPUT inserted.Id" +
+                              " VALUES (" +
+                              "    @MinimumPrice," +
+                              "    @StartingBid," +
+                              "    @StartDate," +
+                              "    @EndDate," +
+                              "    @VehicleId," +
+                              "    @SellerId," +
+                              "    @BuyerId" +
+                              ")";
         command.Parameters.AddWithValue("@MinimumPrice", auction.MinimumPrice);
         command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
+        command.Parameters.AddWithValue("@StartDate", auction.StartDate);
+        command.Parameters.AddWithValue("@EndDate", auction.EndDate);
         command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
         command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
         command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
@@ -156,7 +182,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new Auction(auctionId, auction.Vehicle, auction.Seller, auction.Buyer, auction.MinimumPrice, auction.StartingBid);
+        return new Auction(auctionId, auction.StartDate, auction.EndDate, auction.Vehicle, auction.Seller, auction.Buyer, auction.MinimumPrice, auction.StartingBid);
     }
 
     /// <summary>
@@ -186,29 +212,33 @@ public partial class DatabaseManager
         reader.Read();
 
         var auctionId = reader.GetInt32(0);
+
         var minimumPrice = reader.GetDecimal(1);
         var standingBid = reader.GetDecimal(2);
 
-        var vehicleId = reader.GetInt32(3);
+        var startDate = reader.GetDateTime(3);
+        var endDate = reader.GetDateTime(4);
+
+        var vehicleId = reader.GetInt32(5);
         var vehicle = GetVehicleById(vehicleId);
 
-        var sellerId = reader.GetInt32(4);
+        var sellerId = reader.GetInt32(6);
         var seller = GetUserById(sellerId);
 
-        if (reader.IsDBNull(5))
+        if (reader.IsDBNull(7))
         {
             reader.Close();
             connection.Close();
 
-            return new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid);
+            return new Auction(auctionId, startDate, endDate, vehicle, seller, null, minimumPrice, standingBid);
         }
 
-        var buyerId = reader.GetInt32(5);
+        var buyerId = reader.GetInt32(7);
         var buyer = GetUserById(buyerId);
 
         reader.Close();
 
-        return new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid);
+        return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid);
     }
 
     /// <summary>
@@ -238,26 +268,30 @@ public partial class DatabaseManager
         reader.Read();
 
         var auctionId = reader.GetInt32(0);
+
         var minimumPrice = reader.GetDecimal(1);
         var standingBid = reader.GetDecimal(2);
 
-        var sellerId = reader.GetInt32(4);
+        var startDate = reader.GetDateTime(3);
+        var endDate = reader.GetDateTime(4);
+
+        var sellerId = reader.GetInt32(5);
         var seller = GetUserById(sellerId);
 
-        if (reader.IsDBNull(5))
+        if (reader.IsDBNull(6))
         {
             reader.Close();
             connection.Close();
 
-            return new Auction(auctionId, vehicle, seller, null, minimumPrice, standingBid);
+            return new Auction(auctionId, startDate, endDate, vehicle, seller, null, minimumPrice, standingBid);
         }
 
-        var buyerId = reader.GetInt32(5);
+        var buyerId = reader.GetInt32(6);
         var buyer = GetUserById(buyerId);
 
         reader.Close();
 
-        return new Auction(auctionId, vehicle, seller, buyer, minimumPrice, standingBid);
+        return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, minimumPrice, standingBid);
     }
 
     /// <summary>
@@ -272,14 +306,18 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE Auctions" +
-                              "    SET MinimumPrice = @MinimumPrice," +
-                              "        StartingBid = @StartingBid," +
-                              "        VehicleId = @VehicleId," +
-                              "        SellerId = @SellerId," +
-                              "        BuyerId = @BuyerId" +
-                              "    WHERE Id = @Id";
+                              " SET MinimumPrice = @MinimumPrice," +
+                              "     StartingBid = @StartingBid," +
+                              "     StartDate = @StartDate," +
+                              "     EndDate = @EndDate," +
+                              "     VehicleId = @VehicleId," +
+                              "     SellerId = @SellerId," +
+                              "     BuyerId = @BuyerId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@MinimumPrice", auction.MinimumPrice);
         command.Parameters.AddWithValue("@StandingBid", auction.StartingBid);
+        command.Parameters.AddWithValue("@StartDate", auction.StartDate);
+        command.Parameters.AddWithValue("@EndDate", auction.EndDate);
         command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
         command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
         command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
@@ -548,11 +586,11 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE Bids" +
-                              "    SET Date = @Date," +
-                              "        Amount = @Amount," +
-                              "        BidderId = @BidderId," +
-                              "        AuctionId = @AuctionId" +
-                              "    WHERE Id = @Id";
+                              " SET Date = @Date," +
+                              "     Amount = @Amount," +
+                              "     BidderId = @BidderId," +
+                              "     AuctionId = @AuctionId" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Date", bid.Time);
         command.Parameters.AddWithValue("@Amount", bid.Amount);
         command.Parameters.AddWithValue("@BidderId", bid.Bidder.UserId);
@@ -562,6 +600,7 @@ public partial class DatabaseManager
         if (command.ExecuteNonQuery() == 0)
         {
             connection.Close();
+
             throw new ArgumentException("Failed to update bid!");
         }
 
