@@ -6,6 +6,7 @@ using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
+using static GUI.Utilities.UserInstance;
 
 namespace GUI.ViewModels;
 
@@ -55,22 +56,32 @@ public class LoginViewModel : ViewModelBase
 
     private void SignIn()
     {
-        // CorporateUser corporateUser = new(0, $"{cvrNumber}", 0, new(0, username, password, zipCode));
+        BtnLoginEnabled = false;
         try
         {
-            User user = new(0, UserName, PassWord, "0", 0);
-            var a = DatabaseManager.Login(user);
+            User receivedUserData = new(DatabaseManager.Login(UserName, PassWord));
+
+            SetCurrentUser(receivedUserData);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"Success : User signed in successfully.");
+            Console.ResetColor();
+            
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (GetCurrentUser() != null)
+            {
+                GoToHomeScreen();
+            }
         }
         catch (Exception e)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
+            Console.WriteLine($"Server Error : {e.Message}");
             Console.ResetColor();
         }
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine($"Success : User signed in successfully.");
-        Console.ResetColor();
+        finally
+        {
+            BtnLoginEnabled = true;
+        }
     }
 
     private void GoToHomeScreen() => ContentArea.Navigate(new HomeScreenView());
