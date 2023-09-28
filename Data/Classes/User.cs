@@ -31,16 +31,6 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
-    /// <summary>
-    /// Receives a bid notification and returns a formatted string.
-    /// </summary>
-    /// <param name="message">The bid message to format.</param>
-    /// <returns>A string with the formatted message.</returns>
-    public string ReceiveBidNotification(string message)
-    {
-        return $"New Bid Received: {message}";
-    }
-
     public override string ToString()
     {
         return $"{base.ToString()}" +

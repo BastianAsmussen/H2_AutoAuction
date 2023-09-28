@@ -103,12 +103,10 @@ public class CorporateUser : User
         }
         catch (ArgumentException e)
         {
-            Console.WriteLine("Error in PlaceBid: " + argument.Message);
+            Console.WriteLine("Error in PlaceBid: " + e.Message);
             throw;
         }
-
-        auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
-
+        
         return true;
     }
     

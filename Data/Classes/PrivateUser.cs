@@ -73,9 +73,7 @@ public class PrivateUser : User
             Console.WriteLine("Error in PlaceBid: " + e.Message);
             throw;
         }
-
-        auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
-
+        
         return true;
     }
     
