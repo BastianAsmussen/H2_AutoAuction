@@ -288,10 +288,11 @@ public partial class DatabaseManager
         if (!IsValidPassword(password, hashedPassword))
             throw new InvalidCredentialException("Password is incorrect!");
 
+        // If the user is a corporate user, return the corporate user.
         if (IsCorporateUser(userId))
-            return GetAllCorporateUsers().Find(corporateUser => corporateUser.UserId == userId)!;
+            return GetCorporateUserByUserId(userId)!;
 
-        return GetAllPrivateUsers().Find(privateUser => privateUser.UserId == userId)!;
+        return GetPrivateUserByUserId(userId)!;
     }
 
     /// <summary>
@@ -636,6 +637,44 @@ public partial class DatabaseManager
     }
 
     /// <summary>
+    ///     Gets a private user from the database by their user ID.
+    /// </summary>
+    /// <param name="id">The user ID of the private user to get.</param>
+    /// <returns>The private user with the given user ID.</returns>
+    /// <exception cref="ArgumentException">Thrown when the private user does not exist.</exception>
+    public static PrivateUser GetPrivateUserByUserId(int id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM PrivateUsers" +
+                              " WHERE UserId = @UserId";
+        command.Parameters.AddWithValue("@UserId", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("Private user does not exist!");
+        }
+
+        reader.Read();
+
+        var privateUserId = reader.GetInt32(0);
+        var cprNumber = reader.GetString(1);
+        var userId = reader.GetInt32(2);
+
+        reader.Close();
+        connection.Close();
+
+        var user = GetUserById(userId);
+
+        return new PrivateUser(privateUserId, cprNumber, user);
+    }
+
+    /// <summary>
     ///     Updates a private user in the database.
     /// </summary>
     /// <param name="privateUser">The private user to update.</param>
@@ -784,6 +823,39 @@ public partial class DatabaseManager
         command.CommandText = "SELECT * FROM CorporateUsers" +
                               " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("Corporate user does not exist!");
+        }
+
+        reader.Read();
+
+        var corporateUserId = reader.GetInt32(0);
+        var cvrNumber = reader.GetString(1);
+        var credit = reader.GetDecimal(2);
+        var userId = reader.GetInt32(3);
+
+        reader.Close();
+        connection.Close();
+
+        var user = GetUserById(userId);
+
+        return new CorporateUser(corporateUserId, cvrNumber, credit, user);
+    }
+
+    public static CorporateUser GetCorporateUserByUserId(int id)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM CorporateUsers" +
+                              " WHERE UserId = @UserId";
+        command.Parameters.AddWithValue("@UserId", id);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
