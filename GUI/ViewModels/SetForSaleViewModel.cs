@@ -127,13 +127,13 @@ public class SetForSaleViewModel : ViewModelBase
         try
         {
             // Sale creation
-
-            Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),
-                true, LicenseType.B, 22, 22, FuelType.Diesel,
-                EnergyType.A
-            ), UserInstance.GetCurrentUser(), null, 0, decimal.Parse(StartingBid));
-
-            DatabaseManager.CreateAuction(newAuction);
+            //
+            // Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),
+            //     true, LicenseType.B, 22, 22, FuelType.Diesel,
+            //     EnergyType.A
+            // ), UserInstance.GetCurrentUser(), null, 0, decimal.Parse(StartingBid));
+            //
+            // DatabaseManager.CreateAuction(newAuction);
         }
         catch (Exception e)
         {
