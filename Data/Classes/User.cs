@@ -20,6 +20,14 @@ public class User : IBuyer, ISeller
         Zipcode = zipcode;
         Balance = balance;
     }
+ public User(User user)
+    {
+        UserId = user.UserId;
+        Username = user.Username;
+        Password = user.Password;
+        Zipcode =  user.Zipcode;
+        Balance =  user.Balance;
+    }
 
     public virtual void SubBalance(decimal amount)
     {
