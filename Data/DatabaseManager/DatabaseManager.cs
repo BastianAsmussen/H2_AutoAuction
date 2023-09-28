@@ -35,7 +35,7 @@ public partial class DatabaseManager
             Password = credentials.Item5,
         };
 
-        var connectionString = sb.ToString();
+        var connectionString = sb.ConnectionString;
 
         _connection = new SqlConnection(connectionString);
         _connection.Open();
