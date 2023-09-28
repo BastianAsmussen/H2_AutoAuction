@@ -45,27 +45,30 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(int id, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer, decimal currentPrice, decimal startingBid = 0)
+    public Auction(int id, decimal currentPrice, decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer)
     {
         AuctionId = id;
+
+        CurrentPrice = currentPrice;
+        StartingBid = startingBid;
+        
         StartDate = startDate;
         EndDate = endDate;
+        
         Vehicle = vehicle;
         Seller = seller;
         Buyer = buyer;
-        CurrentPrice = currentPrice;
-        StartingBid = startingBid;
     }
 
     public override string ToString()
     {
         return $"Auction ID: {AuctionId}\n" +
+               $"Current price: {CurrentPrice}\n" +
+               $"Starting Bid: {StartingBid}\n" +
                $"Start Date: {StartDate}\n" +
-               $"End Date: {EndDate}\n" +
+               $"End Date: {EndDate}\n" + 
                $"Vehicle: {Vehicle}\n" +
                $"Seller: {Seller}\n" +
-               $"Buyer: {Buyer}\n" +
-               $"Current price: {CurrentPrice}\n" +
-               $"Starting Bid: {StartingBid}";
+               $"Buyer: {Buyer}";
     }
 }
