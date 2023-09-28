@@ -6,9 +6,9 @@ public class CorporateUser : User
     /// <summary>
     /// Checks if the balance + credit is sufficient for the amount
     /// </summary>
-    /// <param name="balance"></param>
-    /// <param name="credit"></param>
-    /// <param name="amount"></param>
+    /// <param name="balance">The balance.</param>
+    /// <param name="credit">The credit.</param>
+    /// <param name="amount">The amount that subtracts from your credit and balance.</param>
     /// <returns></returns>
     private static bool HasSufficientFunds(decimal balance, decimal credit, decimal amount)
     {
@@ -79,10 +79,10 @@ public class CorporateUser : User
     ///  Then checks if new bid is higher than the current highest bid.
     ///  Lastly notifies the seller the when a bid is over minimum bid.
     /// </summary>
-    /// <param name="buyer"></param>
-    /// <param name="auction"></param>
-    /// <param name="newBid"></param>
-    /// <returns>true if place bid was succesful</returns>
+    /// <param name="buyer">What the user is.</param>
+    /// <param name="auction">The auction that get bidded on.</param>
+    /// <param name="newBid">The bid that gets submitted.</param>
+    /// <returns>True if place bid was succesful</returns>
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
         auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
