@@ -18,9 +18,9 @@ public class ProfessionalPersonalCar : PersonalCar
     /// <summary>
     ///     The load capacity of the professional personal car in kilograms.
     /// </summary>
-    public float LoadCapacity { get; set; }
+    public double LoadCapacity { get; set; }
 
-    public ProfessionalPersonalCar(int id, bool hasSafetyBar, float loadCapacity, PersonalCar personalCar) : base(personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
+    public ProfessionalPersonalCar(int id, bool hasSafetyBar, double loadCapacity, PersonalCar personalCar) : base(personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
     {
         ProfessionalPersonalCarId = id;
         HasSafetyBar = hasSafetyBar;
