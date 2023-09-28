@@ -1,5 +1,5 @@
 <Application
-    RequestedThemeVariant="Light"
+    RequestedThemeVariant="Dark"
     x:Class="GUI.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:local="using:GUI"
