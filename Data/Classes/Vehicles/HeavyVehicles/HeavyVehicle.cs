@@ -22,7 +22,7 @@ public class HeavyVehicle : Vehicle
     /// <param name="dimensions">The dimensions of the vehicle.</param>
     /// <param name="vehicle">The vehicle the heavy vehicle is based on.</param>
     public HeavyVehicle(int id, Dimensions dimensions, Vehicle vehicle)
-        : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.HasTowbar,
+        : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.NewPrice, vehicle.HasTowbar,
             vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType, vehicle.EnergyClass)
     {
         HeavyVehicleId = id;
