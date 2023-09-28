@@ -1,10 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Windows.Input;
-using Avalonia.Data;
-using Data.Classes.Auctions;
-using Data.Classes.Vehicles;
-using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
@@ -23,10 +18,7 @@ public class SetForSaleViewModel : ViewModelBase
     private DateTime _startDate;
     private DateTime _endDate;
 
-    public DateTime ThisYear
-    {
-        get => DateTime.Now;
-    }
+    public int ThisYear => DateTime.Now.Year;
 
     public string Name
     {
@@ -61,25 +53,13 @@ public class SetForSaleViewModel : ViewModelBase
     public DateTime StartDate
     {
         get => _startDate;
-        set
-        {
-            if (StartDate < EndDate)
-                throw new DataValidationException("Start date cannot be before today");
-
-            this.RaiseAndSetIfChanged(ref _startDate, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _startDate, value);
     }
 
     public DateTime EndDate
     {
         get => _endDate;
-        set
-        {
-            if (EndDate < StartDate)
-                throw new DataValidationException("End date cannot be before start date");
-
-            this.RaiseAndSetIfChanged(ref _endDate, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _endDate, value);
     }
 
     #endregion
@@ -93,13 +73,11 @@ public class SetForSaleViewModel : ViewModelBase
         CreateSaleCommand = ReactiveCommand.Create(CreateSale);
         CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
 
-        DateTime localDate = DateTime.Now;
-
-        DateOnly d = new();
+        DateOnly currentDate = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
         try
         {
-            StartDate = (DateTime.Now);
+            StartDate = Convert.ToDateTime(currentDate);
         }
         catch (Exception e)
         {
@@ -110,7 +88,8 @@ public class SetForSaleViewModel : ViewModelBase
 
         try
         {
-            EndDate = DateTime.Now.AddDays(+1);
+            EndDate = Convert.ToDateTime(currentDate).AddDays(+1);
+            var a = EndDate;
         }
         catch (Exception e)
         {
