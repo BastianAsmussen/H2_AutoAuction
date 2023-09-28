@@ -82,7 +82,7 @@ public class CorporateUser : User
     /// <param name="buyer"></param>
     /// <param name="auction"></param>
     /// <param name="newBid"></param>
-    /// <returns></returns>
+    /// <returns>true if place bid was succesful</returns>
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
         auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
