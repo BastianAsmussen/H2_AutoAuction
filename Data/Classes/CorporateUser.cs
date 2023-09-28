@@ -67,7 +67,7 @@ public class CorporateUser : User
         Credit = startingValues.Credit;
         Balance = startingValues.Balance;
         
-        throw new DataException("Balance + Credit is not sufficent.");
+        throw new DataException("Balance + Credit is not sufficient.");
     }
 
     
@@ -86,27 +86,19 @@ public class CorporateUser : User
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
         auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+        
+        if (newBid < auction.CurrentPrice)
+            return false;
 
         if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.CurrentPrice))
             return false;
-
-        if (newBid < auction.CurrentPrice)
-            return false;
         
-        //checks if the newBid is higher than the current highest bid
         try
         {
-            var ourbid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
-
-            var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
-
-            var highestBid = bids.Max(b => b.Amount);
-
-            if (ourbid.Amount > highestBid)
-            {
-                auction.Buyer = buyer;
-            }
-
+            var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
+            
+            auction.CurrentPrice = ourBid.Amount;
+            
             DatabaseManager.DatabaseManager.UpdateAuction(auction);
         }
         catch (Exception e)
