@@ -6,17 +6,17 @@ namespace Data.Classes.Auctions;
 public class Auction
 {
     /// <summary>
-    ///     ID of the auction
+    ///     The ID of the auction.
     /// </summary>
     public int AuctionId { get; }
 
     /// <summary>
-    ///     The current price of the auction
+    ///     The current price of the auction.
     /// </summary>
     public decimal CurrentPrice { get; set; }
 
     /// <summary>
-    ///     The standing bid of the auction
+    ///     The standing bid of the auction.
     /// </summary>
     public decimal StartingBid { get; set; }
 
@@ -31,17 +31,17 @@ public class Auction
     public DateTime EndDate { get; set; }
 
     /// <summary>
-    ///     The vehicle of the auction
+    ///     The vehicle of the auction.
     /// </summary>
     public Vehicle Vehicle { get; set; }
 
     /// <summary>
-    ///     The seller of the auction
+    ///     The seller of the auction.
     /// </summary>
     public ISeller Seller { get; set; }
 
     /// <summary>
-    ///     The buyer or potential buyer of the auction
+    ///     The buyer or potential buyer of the auction.
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
