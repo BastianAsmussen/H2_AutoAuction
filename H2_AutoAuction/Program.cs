@@ -11,6 +11,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        /*
         var random = new Random();
 
         const int totalUsers = 1_000;
@@ -202,6 +203,7 @@ internal class Program
 
             Console.WriteLine(bus + "\n");
         }
+        */
     }
 
     /// <summary>
