@@ -391,18 +391,15 @@ public partial class DatabaseManager
     public static User SignUp(User user)
     {
         // Check if the username is already taken.
-        if (IsUsernameTaken(user.Username)) {
+        if (IsUsernameTaken(user.Username))
             throw new DataException("Username is already taken!");
-        }
 
         // Hash the password.
         var hashedPassword = HashPassword(user.Password);
 
         // Make sure the password was hashed successfully.
         if (string.IsNullOrWhiteSpace(hashedPassword))
-        {
             throw new DataException("Password could not be hashed!");
-        }
 
         // Create the user.
         var userToCreate = new User(0, user.Username, hashedPassword, user.Zipcode, user.Balance);
