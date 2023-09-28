@@ -263,7 +263,7 @@ public partial class DatabaseManager
         var command = connection.CreateCommand();
 
         // Get the hashed password from the database.
-        command.CommandText = "SELECT Password FROM Users" +
+        command.CommandText = "SELECT Id, Password FROM Users" +
                               " WHERE Username = @Username";
         command.Parameters.AddWithValue("@Username", username);
 
@@ -278,31 +278,15 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var hashedPassword = reader.GetString(0);
-
-        reader.Close();
-
-        // Check if the password is correct.
-        if (!IsValidPassword(password, hashedPassword))
-        {
-            connection.Close();
-
-            throw new InvalidCredentialException("Password is incorrect!");
-        }
-
-        // Get the user from the database.
-        command.CommandText = "SELECT Id FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", username);
-
-        reader = command.ExecuteReader();
-
-        reader.Read();
-
         var userId = reader.GetInt32(0);
+        var hashedPassword = reader.GetString(1);
 
         reader.Close();
         connection.Close();
+
+        // Check if the password is correct.
+        if (!IsValidPassword(password, hashedPassword))
+            throw new InvalidCredentialException("Password is incorrect!");
 
         if (IsCorporateUser(userId))
             return GetAllCorporateUsers().Find(corporateUser => corporateUser.UserId == userId)!;
