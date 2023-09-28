@@ -9,600 +9,6 @@ namespace Data.DatabaseManager;
 /// </summary>
 public partial class DatabaseManager
 {
-    #region LicenseType
-    /// <summary>
-    ///     Get a list of all license types.
-    /// </summary>
-    /// <returns>A list of all license types.</returns>
-    /// <exception cref="ArgumentException">Thrown if no license types exist.</exception>
-    public static List<LicenseType> GetAllLicenseTypes()
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseTypes";
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No license types exist!");
-        }
-
-        var licenseTypes = new List<LicenseType>();
-
-        while (reader.Read())
-        {
-            // var licenseTypeId = reader.GetInt32(0);
-            var name = reader.GetString(1);
-
-            licenseTypes.Add((LicenseType) Enum.Parse(typeof(LicenseType), name));
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return licenseTypes;
-    }
-
-    /// <summary>
-    ///     Create a license type in the database.
-    /// </summary>
-    /// <param name="licenseType">The license type to create.</param>
-    /// <returns>The ID of the created license type.</returns>
-    /// <exception cref="ArgumentException">Thrown if the license type could not be created.</exception>
-    public static int CreateLicenseType(LicenseType licenseType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO LicenseTypes (Type)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@Type)";
-        command.Parameters.AddWithValue("@Type", licenseType.ToString());
-
-        var reader = command.ExecuteReader();
-
-        // If it fails, throw an exception and close the connection.
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("License type could not be created!");
-        }
-
-        reader.Read();
-
-        var licenseTypeId = reader.GetInt32(0);
-
-        reader.Close();
-        connection.Close();
-
-        return licenseTypeId;
-    }
-
-    /// <summary>
-    ///     Get a license type by its ID.
-    /// </summary>
-    /// <param name="id">The ID of the license type to get.</param>
-    /// <returns>The license type with the given ID.</returns>
-    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
-    public static LicenseType GetLicenseTypeById(int id)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", id);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No license type with that ID exists!");
-        }
-
-        reader.Read();
-
-        // var licenseTypeId = reader.GetInt32(0);
-        var name = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (LicenseType) Enum.Parse(typeof(LicenseType), name);
-    }
-
-    /// <summary>
-    ///     Get a license type by its name.
-    /// </summary>
-    /// <param name="name">The name of the license type to get.</param>
-    /// <returns>The license type with the given name.</returns>
-    /// <exception cref="ArgumentException">Thrown if no license type with the given name exists.</exception>
-    public static LicenseType GetLicenseTypeByName(string name)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM LicenseTypes" +
-                              "    WHERE Type = @Type";
-        command.Parameters.AddWithValue("@Type", name);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No license type with that name exists!");
-        }
-
-        reader.Read();
-
-        // var licenseTypeId = reader.GetInt32(0);
-        var licenseTypeName = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (LicenseType) Enum.Parse(typeof(LicenseType), licenseTypeName);
-    }
-
-    /// <summary>
-    ///     Update a license type in the database.
-    /// </summary>
-    /// <param name="licenseType">The license type to update.</param>
-    /// <returns>The updated license type.</returns>
-    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
-    public static LicenseType UpdateLicenseType(LicenseType licenseType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE LicenseTypes" +
-                              "    SET Type = @Type" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", licenseType);
-        command.Parameters.AddWithValue("@Type", licenseType.ToString());
-
-        if (command.ExecuteNonQuery() == 0)
-        {
-            connection.Close();
-
-            throw new ArgumentException("No license type with that ID exists!");
-        }
-
-        connection.Close();
-
-        return licenseType;
-    }
-
-    /// <summary>
-    ///    Delete a license type from the database.
-    /// </summary>
-    /// <param name="licenseType">The license type to delete.</param>
-    /// <exception cref="ArgumentException">Thrown if no license type with the given ID exists.</exception>
-    public static void DeleteLicenseType(LicenseType licenseType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM LicenseTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", licenseType);
-
-        // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No license type with that ID exists!");
-        }
-
-        connection.Close();
-    }
-    #endregion
-
-    #region FuelType
-    /// <summary>
-    ///     Get a list of all fuel types.
-    /// </summary>
-    /// <returns>A list of all fuel types.</returns>
-    /// <exception cref="ArgumentException">Thrown if no fuel types exist.</exception>
-    public static List<FuelType> GetAllFuelTypes()
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelTypes";
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No fuel types exist!");
-        }
-
-        var fuelTypes = new List<FuelType>();
-
-        while (reader.Read())
-        {
-            // var fuelTypeId = reader.GetInt32(0);
-            var name = reader.GetString(1);
-
-            fuelTypes.Add((FuelType) Enum.Parse(typeof(FuelType), name));
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return fuelTypes;
-    }
-
-    /// <summary>
-    ///     Create a fuel type in the database.
-    /// </summary>
-    /// <param name="fuelType">The fuel type to create.</param>
-    /// <returns>The ID of the created fuel type.</returns>
-    /// <exception cref="ArgumentException">Thrown if the fuel type could not be created.</exception>
-    public static int CreateFuelType(FuelType fuelType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO FuelTypes (Type)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@Type)";
-        command.Parameters.AddWithValue("@Type", fuelType.ToString());
-
-        var reader = command.ExecuteReader();
-
-        // If it fails, throw an exception and close the connection.
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("Fuel type could not be created!");
-        }
-
-        reader.Read();
-
-        var fuelTypeId = reader.GetInt32(0);
-
-        reader.Close();
-        connection.Close();
-
-        return fuelTypeId;
-    }
-
-    /// <summary>
-    ///     Get a fuel type by its ID.
-    /// </summary>
-    /// <param name="id">The ID of the fuel type to get.</param>
-    /// <returns>The fuel type with the given ID.</returns>
-    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
-    public static FuelType GetFuelTypeById(int id)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", id);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No fuel type with that ID exists!");
-        }
-
-        reader.Read();
-
-        // var fuelTypeId = reader.GetInt32(0);
-        var name = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (FuelType) Enum.Parse(typeof(FuelType), name);
-    }
-
-    /// <summary>
-    ///     Get a fuel type by its name.
-    /// </summary>
-    /// <param name="name">The name of the fuel type to get.</param>
-    /// <returns>The fuel type with the given name.</returns>
-    /// <exception cref="ArgumentException">Thrown if no fuel type with the given name exists.</exception>
-    public static FuelType GetFuelTypeByName(string name)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM FuelTypes" +
-                              "    WHERE Type = @Type";
-        command.Parameters.AddWithValue("@Type", name);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No fuel type with that name exists!");
-        }
-
-        reader.Read();
-
-        // var fuelTypeId = reader.GetInt32(0);
-        var fuelTypeName = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (FuelType) Enum.Parse(typeof(FuelType), fuelTypeName);
-    }
-
-    /// <summary>
-    ///     Update a fuel type in the database.
-    /// </summary>
-    /// <param name="fuelType">The fuel type to update.</param>
-    /// <returns>The updated fuel type.</returns>
-    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
-    public static FuelType UpdateFuelType(FuelType fuelType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE FuelTypes" +
-                              "    SET Type = @Type" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Type", fuelType.ToString());
-        command.Parameters.AddWithValue("@Id", fuelType);
-
-        if (command.ExecuteNonQuery() == 0)
-        {
-            connection.Close();
-
-            throw new ArgumentException("No fuel type with that ID exists!");
-        }
-
-        connection.Close();
-
-        return fuelType;
-    }
-
-    /// <summary>
-    ///     Delete a fuel type from the database.
-    /// </summary>
-    /// <param name="fuelType">The fuel type to delete.</param>
-    /// <exception cref="ArgumentException">Thrown if no fuel type with the given ID exists.</exception>
-    public static void DeleteFuelType(FuelType fuelType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM FuelTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", fuelType);
-
-        // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No fuel type with that ID exists!");
-        }
-
-        connection.Close();
-    }
-    #endregion
-
-    #region EnergyType
-    /// <summary>
-    ///     Get a list of all energy types.
-    /// </summary>
-    /// <returns>A list of all energy types.</returns>
-    /// <exception cref="ArgumentException">Thrown if no energy types exist.</exception>
-    public static List<EnergyType> GetAllEnergyTypes()
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyTypes";
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No energy types exist!");
-        }
-
-        var energyTypes = new List<EnergyType>();
-
-        while (reader.Read())
-        {
-            // var energyTypeId = reader.GetInt32(0);
-            var name = reader.GetString(1);
-
-            energyTypes.Add((EnergyType) Enum.Parse(typeof(EnergyType), name));
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return energyTypes;
-    }
-
-    /// <summary>
-    ///     Create an energy type in the database.
-    /// </summary>
-    /// <param name="energyType">The energy type to create.</param>
-    /// <returns>The ID of the created energy type.</returns>
-    /// <exception cref="ArgumentException">Thrown if the energy type could not be created.</exception>
-    public static int CreateEnergyType(EnergyType energyType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO EnergyTypes (Type)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@Type)";
-        command.Parameters.AddWithValue("@Type", energyType.ToString());
-
-        var reader = command.ExecuteReader();
-
-        // If it fails, throw an exception and close the connection.
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("Energy type could not be created!");
-        }
-
-        reader.Read();
-
-        var energyTypeId = reader.GetInt32(0);
-
-        reader.Close();
-        connection.Close();
-
-        return energyTypeId;
-    }
-
-    /// <summary>
-    ///     Get an energy type by its ID.
-    /// </summary>
-    /// <param name="id">The ID of the energy type to get.</param>
-    /// <returns>The energy type with the given ID.</returns>
-    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
-    public static EnergyType GetEnergyTypeById(int id)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", id);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No energy type with that ID exists!");
-        }
-
-        reader.Read();
-
-        // var energyTypeId = reader.GetInt32(0);
-        var name = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (EnergyType) Enum.Parse(typeof(EnergyType), name);
-    }
-
-    /// <summary>
-    ///     Get an energy type by its name.
-    /// </summary>
-    /// <param name="name">The name of the energy type to get.</param>
-    /// <returns>The energy type with the given name.</returns>
-    /// <exception cref="ArgumentException">Thrown if no energy type with the given name exists.</exception>
-    public static EnergyType GetEnergyTypeByName(string name)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM EnergyTypes" +
-                              "    WHERE Type = @Type";
-        command.Parameters.AddWithValue("@Type", name);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No energy type with that name exists!");
-        }
-
-        reader.Read();
-
-        // var energyTypeId = reader.GetInt32(0);
-        var energyTypeName = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        return (EnergyType) Enum.Parse(typeof(EnergyType), energyTypeName);
-    }
-
-    /// <summary>
-    ///     Update an energy type in the database.
-    /// </summary>
-    /// <param name="energyType">The energy type to update.</param>
-    /// <returns>The updated energy type.</returns>
-    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
-    public static EnergyType UpdateEnergyType(EnergyType energyType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "UPDATE EnergyTypes" +
-                              "    SET Type = @Type" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", energyType);
-        command.Parameters.AddWithValue("@Type", energyType.ToString());
-
-        if (command.ExecuteNonQuery() == 0)
-        {
-            connection.Close();
-
-            throw new ArgumentException("No energy type with that ID exists!");
-        }
-
-        connection.Close();
-
-        return energyType;
-    }
-
-    /// <summary>
-    ///     Delete an energy type from the database.
-    /// </summary>
-    /// <param name="energyType">The energy type to delete.</param>
-    /// <exception cref="ArgumentException">Thrown if no energy type with the given ID exists.</exception>
-    public static void DeleteEnergyType(EnergyType energyType)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM EnergyTypes" +
-                              "    WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", energyType);
-
-        // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No energy type with that ID exists!");
-        }
-
-        connection.Close();
-    }
-    #endregion
-
     #region Vehicle
     /// <summary>
     ///     Gets all vehicles from the database.
@@ -631,17 +37,18 @@ public partial class DatabaseManager
         {
             var vehicleId = reader.GetInt32(0);
             var name = reader.GetString(1);
-            var km = reader.GetFloat(2);
+            var km = reader.GetDouble(2);
             var registrationNumber = reader.GetString(3);
-            var year = (ushort)reader.GetInt32(4);
-            var hasTowbar = reader.GetBoolean(5);
-            var licenseType = (LicenseType)reader.GetInt32(6);
-            var engineSize = reader.GetFloat(7);
-            var kmPerLiter = reader.GetFloat(8);
-            var fuelType = (FuelType)reader.GetInt32(9);
-            var energyClass = (EnergyType)reader.GetInt32(10);
+            var year = reader.GetInt16(4);
+            var newPrice = reader.GetDecimal(5);
+            var hasTowbar = reader.GetBoolean(6);
+            var engineSize = reader.GetDouble(7);
+            var kmPerLiter = reader.GetDouble(8);
+            var licenseType = (LicenseType)reader.GetByte(9);
+            var fuelType = (FuelType)reader.GetByte(10);
+            var energyClass = (EnergyType)reader.GetByte(11);
 
-            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType, engineSize,
+            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, newPrice, hasTowbar, licenseType, engineSize,
                 kmPerLiter, fuelType, energyClass));
         }
 
@@ -669,6 +76,7 @@ public partial class DatabaseManager
             "    Km," +
             "    RegistrationNumber," +
             "    Year," +
+            "    NewPrice," +
             "    HasTowbar," +
             "    LicenseTypeId," +
             "    EngineSize," +
@@ -682,6 +90,7 @@ public partial class DatabaseManager
             "    @Km," +
             "    @RegistrationNumber," +
             "    @Year," +
+            "    @NewPrice," +
             "    @HasTowbar," +
             "    @LicenseTypeId," +
             "    @EngineSize," +
@@ -693,12 +102,13 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Km", vehicle.Km);
         command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
         command.Parameters.AddWithValue("@Year", vehicle.Year);
+        command.Parameters.AddWithValue("@NewPrice", vehicle.NewPrice);
         command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
-        command.Parameters.AddWithValue("@LicenseTypeId", vehicle.LicenseType);
         command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
         command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
-        command.Parameters.AddWithValue("@FuelTypeId", vehicle.FuelType);
-        command.Parameters.AddWithValue("@EnergyTypeId", vehicle.EnergyClass);
+        command.Parameters.AddWithValue("@LicenseTypeId", (byte)vehicle.LicenseType);
+        command.Parameters.AddWithValue("@FuelTypeId", (byte)vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyTypeId", (byte)vehicle.EnergyClass);
 
         var reader = command.ExecuteReader();
 
@@ -734,7 +144,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Vehicles" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -750,20 +160,21 @@ public partial class DatabaseManager
 
         var vehicleId = reader.GetInt32(0);
         var name = reader.GetString(1);
-        var km = reader.GetFloat(2);
+        var km = reader.GetDouble(2);
         var registrationNumber = reader.GetString(3);
-        var year = (ushort)reader.GetInt32(4);
-        var hasTowbar = reader.GetBoolean(5);
-        var licenseType = (LicenseType)reader.GetInt32(6);
-        var engineSize = reader.GetFloat(7);
-        var kmPerLiter = reader.GetFloat(8);
-        var fuelType = (FuelType)reader.GetInt32(9);
-        var energyClass = (EnergyType)reader.GetInt32(10);
+        var year = reader.GetInt16(4);
+        var newPrice = reader.GetDecimal(5);
+        var hasTowbar = reader.GetBoolean(6);
+        var engineSize = reader.GetDouble(7);
+        var kmPerLiter = reader.GetDouble(8);
+        var licenseType = (LicenseType)reader.GetByte(9);
+        var fuelType = (FuelType)reader.GetByte(10);
+        var energyClass = (EnergyType)reader.GetByte(11);
 
         reader.Close();
         connection.Close();
 
-        return new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType, engineSize,
+        return new Vehicle(vehicleId, name, km, registrationNumber, year, newPrice, hasTowbar, licenseType, engineSize,
             kmPerLiter, fuelType, energyClass);
     }
 
@@ -779,7 +190,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Vehicles" +
-                              "    WHERE Name = @Name";
+                              " WHERE Name = @Name";
         command.Parameters.AddWithValue("@Name", name);
 
         var reader = command.ExecuteReader();
@@ -796,17 +207,18 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var vehicleId = reader.GetInt32(0);
-            var km = reader.GetFloat(2);
+            var km = reader.GetDouble(2);
             var registrationNumber = reader.GetString(3);
-            var year = (ushort)reader.GetInt32(4);
-            var hasTowbar = reader.GetBoolean(5);
-            var licenseType = (LicenseType)reader.GetInt32(6);
-            var engineSize = reader.GetFloat(7);
-            var kmPerLiter = reader.GetFloat(8);
-            var fuelType = (FuelType)reader.GetInt32(9);
-            var energyClass = (EnergyType)reader.GetInt32(10);
+            var year = reader.GetInt16(4);
+            var newPrice = reader.GetDecimal(5);
+            var hasTowbar = reader.GetBoolean(6);
+            var engineSize = reader.GetDouble(7);
+            var kmPerLiter = reader.GetDouble(8);
+            var licenseType = (LicenseType)reader.GetByte(9);
+            var fuelType = (FuelType)reader.GetByte(10);
+            var energyClass = (EnergyType)reader.GetByte(11);
 
-            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, hasTowbar, licenseType,
+            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, newPrice, hasTowbar, licenseType,
                 engineSize, kmPerLiter, fuelType, energyClass));
         }
 
@@ -828,13 +240,13 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT V.Id" +
-                              "    FROM Vehicles AS V" +
-                              "    WHERE EXISTS (" +
-                              "        SELECT 1" +
-                              "        FROM Buses AS B" +
-                              "        INNER JOIN HeavyVehicles AS H ON B.HeavyVehicleId = H.Id" +
-                              "        WHERE H.VehicleId = V.Id" +
-                              "            AND B.NumberOfSeats = @NumberOfSeats" +
+                              " FROM Vehicles AS V" +
+                              " WHERE EXISTS (" +
+                              "     SELECT 1" +
+                              "     FROM Buses AS B" +
+                              "     INNER JOIN HeavyVehicles AS H ON B.HeavyVehicleId = H.Id" +
+                              "     WHERE H.VehicleId = V.Id" +
+                              "         AND B.NumberOfSeats = @NumberOfSeats" +
                               ")" +
                               "OR EXISTS (" +
                               "    SELECT 1" +
@@ -880,8 +292,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Vehicles WHERE LicenseTypeId = @LicenseType";
-        command.Parameters.AddWithValue("@LicenseType",  licenseType);
+        command.CommandText = "SELECT Id FROM Vehicles" +
+                              " WHERE LicenseTypeId = @Id";
+        command.Parameters.AddWithValue("@Id",  (byte)licenseType);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -920,7 +333,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Vehicles WHERE Km = @Km AND NewPrice = @NewPrice";
+        command.CommandText = "SELECT Id FROM Vehicles" +
+                              " WHERE Km = @Km" +
+                              "   AND NewPrice = @NewPrice";
         command.Parameters.AddWithValue("@Km", km);
         command.Parameters.AddWithValue("@NewPrice", newPrice);
 
@@ -979,11 +394,11 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@RegistrationNumber", vehicle.RegistrationNumber);
         command.Parameters.AddWithValue("@Year", vehicle.Year);
         command.Parameters.AddWithValue("@HasTowbar", vehicle.HasTowbar);
-        command.Parameters.AddWithValue("@LicenseTypeId", vehicle.LicenseType);
+        command.Parameters.AddWithValue("@LicenseTypeId", (byte)vehicle.LicenseType);
         command.Parameters.AddWithValue("@EngineSize", vehicle.EngineSize);
         command.Parameters.AddWithValue("@KmPerLiter", vehicle.KmPerLiter);
-        command.Parameters.AddWithValue("@FuelTypeId", vehicle.FuelType);
-        command.Parameters.AddWithValue("@EnergyTypeId", vehicle.EnergyClass);
+        command.Parameters.AddWithValue("@FuelTypeId", (byte)vehicle.FuelType);
+        command.Parameters.AddWithValue("@EnergyTypeId", (byte)vehicle.EnergyClass);
 
         if (command.ExecuteNonQuery() == 0)
         {
@@ -1007,7 +422,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Vehicles WHERE Id = @Id";
+        command.CommandText = "DELETE FROM Vehicles" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
 
         // If it fails, throw an exception.
@@ -1047,9 +463,9 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var dimensionId =  reader.GetInt32(0);
-            var length = reader.GetFloat(1);
-            var width = reader.GetFloat(2);
-            var height = reader.GetFloat(3);
+            var length = reader.GetDouble(1);
+            var width = reader.GetDouble(2);
+            var height = reader.GetDouble(3);
 
             dimensions.Add(new Dimensions(dimensionId, length, width, height));
         }
@@ -1110,7 +526,8 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Dimensions WHERE Id = @Id";
+        command.CommandText = "SELECT * FROM Dimensions" +
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1125,9 +542,9 @@ public partial class DatabaseManager
         reader.Read();
 
         var dimensionId =  reader.GetInt32(0);
-        var length = reader.GetFloat(1);
-        var width = reader.GetFloat(2);
-        var height = reader.GetFloat(3);
+        var length = reader.GetDouble(1);
+        var width = reader.GetDouble(2);
+        var height = reader.GetDouble(3);
 
         reader.Close();
         connection.Close();
@@ -1163,8 +580,8 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var dimensionId =  reader.GetInt32(0);
-            var width = reader.GetFloat(2);
-            var height = reader.GetFloat(3);
+            var width = reader.GetDouble(2);
+            var height = reader.GetDouble(3);
 
             dimensions.Add(new Dimensions(dimensionId, length, width, height));
         }
@@ -1203,8 +620,8 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var dimensionId =  reader.GetInt32(0);
-            var length = reader.GetFloat(1);
-            var height = reader.GetFloat(3);
+            var length = reader.GetDouble(1);
+            var height = reader.GetDouble(3);
 
             dimensions.Add(new Dimensions(dimensionId, length, width, height));
         }
@@ -1243,8 +660,8 @@ public partial class DatabaseManager
         while (reader.Read())
         {
             var dimensionId =  reader.GetInt32(0);
-            var length = reader.GetFloat(1);
-            var width = reader.GetFloat(2);
+            var length = reader.GetDouble(1);
+            var width = reader.GetDouble(2);
 
             dimensions.Add(new Dimensions(dimensionId, length, width, height));
         }
@@ -1267,7 +684,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "UPDATE Dimensions SET Length = @Length, Width = @Width, Height = @Height WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", dimensions);
+        command.Parameters.AddWithValue("@Id", dimensions.DimensionsId);
         command.Parameters.AddWithValue("@Length", dimensions.Length);
         command.Parameters.AddWithValue("@Width", dimensions.Width);
         command.Parameters.AddWithValue("@Height", dimensions.Height);
@@ -1294,8 +711,9 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "DELETE FROM Dimensions WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", dimensions);
+        command.CommandText = "DELETE FROM Dimensions" +
+                              " WHERE Id = @Id";
+        command.Parameters.AddWithValue("@Id", dimensions.DimensionsId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
@@ -1360,7 +778,7 @@ public partial class DatabaseManager
         command.CommandText = "INSERT INTO HeavyVehicles (VehicleDimensionsId, VehicleId)" +
                               "    OUTPUT inserted.Id" +
                               "    VALUES (@VehicleDimensionsId, @VehicleId)";
-        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
+        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions.DimensionsId);
         command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
 
         var reader = command.ExecuteReader();
@@ -1396,7 +814,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM HeavyVehicles" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1436,7 +854,7 @@ public partial class DatabaseManager
                               "     SET VehicleDimensionsId = @VehicleDimensionsId," +
                               "         VehicleId = @VehicleId" +
                               " WHERE Id = @Id";
-        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions);
+        command.Parameters.AddWithValue("@VehicleDimensionsId", heavyVehicle.Dimensions.DimensionsId);
         command.Parameters.AddWithValue("@VehicleId", heavyVehicle.VehicleId);
         command.Parameters.AddWithValue("@Id", heavyVehicle.HeavyVehicleId);
 
@@ -1463,7 +881,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM HeavyVehicles" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", heavyVehicle);
 
         // If it fails, throw an exception.
@@ -1504,7 +922,7 @@ public partial class DatabaseManager
         {
             var truckId =  reader.GetInt32(0);
 
-            var loadCapacity = reader.GetFloat(1);
+            var loadCapacity = reader.GetDouble(1);
             var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
 
             trucks.Add(new Truck(truckId, loadCapacity, heavyVehicle));
@@ -1572,7 +990,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Trucks" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -1588,7 +1006,7 @@ public partial class DatabaseManager
 
         var truckId =  reader.GetInt32(0);
 
-        var loadCapacity = reader.GetFloat(1);
+        var loadCapacity = reader.GetDouble(1);
         var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
 
         reader.Close();
@@ -1639,7 +1057,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM Trucks" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", truck.TruckId);
 
         // If it fails, throw an exception.
@@ -2016,7 +1434,7 @@ public partial class DatabaseManager
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM PersonalCars" +
                               " WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", personalCar);
+        command.Parameters.AddWithValue("@Id", personalCar.PersonalCarId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
@@ -2162,7 +1580,7 @@ public partial class DatabaseManager
                               " SET HasIsofixFittings = @HasIsofixFittings," +
                               "     PersonalCarId = @PersonalCarId" +
                               " WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", privatePersonalCar);
+        command.Parameters.AddWithValue("@Id", privatePersonalCar.PrivatePersonalCarId);
         command.Parameters.AddWithValue("@HasIsofixFittings", privatePersonalCar.HasIsofixFittings);
         command.Parameters.AddWithValue("@PersonalCarId", privatePersonalCar.PersonalCarId);
 
@@ -2190,7 +1608,7 @@ public partial class DatabaseManager
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM PrivatePersonalCars" +
                               " WHERE Id = @Id";
-        command.Parameters.AddWithValue("@Id", privatePersonalCar);
+        command.Parameters.AddWithValue("@Id", privatePersonalCar.PrivatePersonalCarId);
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
@@ -2230,8 +1648,8 @@ public partial class DatabaseManager
         {
             var professionalPersonalCarId =  reader.GetInt32(0);
             var hasSafetyBar = reader.GetBoolean(1);
-            var loadCapacity = reader.GetFloat(2);
-            var personalCar = GetPersonalCarById( reader.GetInt32(3));
+            var loadCapacity = reader.GetDouble(2);
+            var personalCar = GetPersonalCarById(reader.GetInt32(3));
 
             professionalPersonalCars.Add(new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar, loadCapacity, personalCar));
         }
@@ -2317,8 +1735,8 @@ public partial class DatabaseManager
 
         var professionalPersonalCarId =  reader.GetInt32(0);
         var hasSafetyBar = reader.GetBoolean(1);
-        var loadCapacity = reader.GetFloat(2);
-        var personalCar = GetPersonalCarById( reader.GetInt32(3));
+        var loadCapacity = reader.GetDouble(2);
+        var personalCar = GetPersonalCarById(reader.GetInt32(3));
 
         reader.Close();
         connection.Close();
