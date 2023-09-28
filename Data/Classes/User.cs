@@ -69,7 +69,7 @@ public class User : IBuyer, ISeller
 
         // If the minimum bid is less than 0, throw an exception.
         if (startingBid < 0)
-            throw new ArgumentException("starting bid cannot be less than 0!");
+            throw new ArgumentException("Starting bid cannot be less than 0!");
 
         var auction = new Auction(0, startingBid, startingBid, startDate, endDate, vehicle, seller, null);
 
