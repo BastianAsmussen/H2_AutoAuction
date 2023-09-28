@@ -2,15 +2,18 @@ USE AutoAuction
 GO
 
 -- Create the CorporateUsers table if it doesn't exist.
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CorporateUsers')
+IF NOT EXISTS (SELECT *
+               FROM sys.tables
+               WHERE name = 'CorporateUsers')
     BEGIN
-        CREATE TABLE CorporateUsers(
-            Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+        CREATE TABLE CorporateUsers
+        (
+            Id     INT       NOT NULL PRIMARY KEY IDENTITY (1,1),
 
-            CVR NCHAR(11) NOT NULL,
-            Credit DECIMAL NOT NULL,
+            CVR    NCHAR(11) NOT NULL,
+            Credit DECIMAL   NOT NULL,
 
-            UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+            UserId INT       NOT NULL FOREIGN KEY REFERENCES Users (Id) ON DELETE CASCADE,
         )
     END
 GO
