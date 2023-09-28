@@ -18,7 +18,7 @@ public class Vehicle
     /// <summary>
     ///     The number of kilometers the vehicle has driven.
     /// </summary>
-    public float Km { get; set; }
+    public double Km { get; set; }
 
     /// <summary>
     ///     The registration number of the vehicle.
@@ -28,7 +28,12 @@ public class Vehicle
     /// <summary>
     ///     The year the vehicle was manufactured.
     /// </summary>
-    public ushort Year { get; set; }
+    public short Year { get; set; }
+
+    /// <summary>
+    ///     The new price of the vehicle.
+    /// </summary>
+    public decimal NewPrice { get; set; }
 
     /// <summary>
     ///     Whether the vehicle has a towbar or not.
@@ -43,12 +48,12 @@ public class Vehicle
     /// <summary>
     ///     The size of the engine.
     /// </summary>
-    public float EngineSize { get; set; }
+    public double EngineSize { get; set; }
 
     /// <summary>
     ///     How many kilometers the vehicle drives per liter.
     /// </summary>
-    public float KmPerLiter { get; set; }
+    public double KmPerLiter { get; set; }
 
     /// <summary>
     ///     What type of fuel the vehicle uses.
@@ -68,19 +73,21 @@ public class Vehicle
     /// <param name="km">The number of kilometers the vehicle has driven.</param>
     /// <param name="registrationNumber">The registration number of the vehicle.</param>
     /// <param name="year">The year the vehicle was manufactured.</param>
+    /// <param name="newPrice">The new price of the vehicle.</param>
     /// <param name="hasTowbar">Whether the vehicle has a towbar or not.</param>
     /// <param name="licenseType">The vehicles type of drivers license.</param>
     /// <param name="engineSize">The size of the engine.</param>
     /// <param name="kmPerLiter">How many kilometers the vehicle drives per liter.</param>
     /// <param name="fuelType">What type of fuel the vehicle uses.</param>
     /// <param name="energyClass">The energy class of a vehicle.</param>
-    public Vehicle(int id, string name, float km, string registrationNumber, ushort year, bool hasTowbar, LicenseType licenseType, float engineSize, float kmPerLiter, FuelType fuelType, EnergyType energyClass)
+    public Vehicle(int id, string name, double km, string registrationNumber, short year, decimal newPrice, bool hasTowbar, LicenseType licenseType, double engineSize, double kmPerLiter, FuelType fuelType, EnergyType energyClass)
     {
         VehicleId = id;
         Name = name;
         Km = km;
         RegistrationNumber = registrationNumber;
         Year = year;
+        NewPrice = newPrice;
         HasTowbar = hasTowbar;
         LicenseType = licenseType;
         EngineSize = engineSize;
@@ -141,9 +148,6 @@ public class Vehicle
                 };
             }
         }
-
-        // Return a default value if none of the conditions match.
-        return EnergyType.D;
     }
 
     public override string ToString() =>
