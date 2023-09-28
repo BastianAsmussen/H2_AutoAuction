@@ -13,17 +13,17 @@ public class Dimensions
     /// <summary>
     ///     The length of the vehicle in meters.
     /// </summary>
-    public float Length { get; set; }
+    public double Length { get; set; }
 
     /// <summary>
     ///     The width of the vehicle in meters.
     /// </summary>
-    public float Width { get; set; }
+    public double Width { get; set; }
 
     /// <summary>
     ///     The height of the vehicle in meters.
     /// </summary>
-    public float Height { get; set; }
+    public double Height { get; set; }
 
     /// <summary>
     ///     The dimensions of a vehicle.
@@ -32,7 +32,7 @@ public class Dimensions
     /// <param name="length">The length of the vehicle in meters.</param>
     /// <param name="width">The width of the vehicle in meters.</param>
     /// <param name="height">The height of the vehicle in meters.</param>
-    public Dimensions(int id, float length, float width, float height)
+    public Dimensions(int id, double length, double width, double height)
     {
         DimensionsId = id;
         Length = length;
