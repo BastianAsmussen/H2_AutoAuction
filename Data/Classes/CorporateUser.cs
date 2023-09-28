@@ -101,7 +101,7 @@ public class CorporateUser : User
             
             DatabaseManager.DatabaseManager.UpdateAuction(auction);
         }
-        catch (Exception argument)
+        catch (ArgumentException e)
         {
             Console.WriteLine("Error in PlaceBid: " + argument.Message);
             throw;
