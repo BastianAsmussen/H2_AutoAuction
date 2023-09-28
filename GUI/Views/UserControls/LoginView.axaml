@@ -69,6 +69,7 @@
             <Button
                 Command="{Binding Path=LoginCommand}"
                 HorizontalAlignment="Right"
+                IsDefault="True"
                 IsEnabled="{Binding Path=BtnLoginEnabled}"
                 VerticalAlignment="Bottom">
 

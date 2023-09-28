@@ -139,6 +139,7 @@
 
                 <Button
                     Command="{Binding Path=CreateCommand}"
+                    IsDefault="True"
                     IsEnabled="{Binding Path=BtnCreateEnabled}"
                     Margin="40,0,0,0">
                     <Label
