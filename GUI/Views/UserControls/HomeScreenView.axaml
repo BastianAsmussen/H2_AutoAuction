@@ -46,24 +46,24 @@
                 Width="390">
 
                 <DataGrid.Columns>
-
-                    <DataGridTextColumn
-                        Binding="{Binding Name}"
-                        Foreground="White"
-                        Header="Name"
-                        Width="130" />
-
-                    <DataGridTextColumn
-                        Binding="{Binding Year}"
-                        Foreground="White"
-                        Header="Årgang"
-                        Width="130" />
-
-                    <DataGridTextColumn
-                        Binding="{Binding Year}"
-                        Foreground="White"
-                        Header="Bud"
-                        Width="130" />
+                    <!--    -->
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Name}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Name"  -->
+                    <!--  Width="130" />  -->
+                    <!--    -->
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Year}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Årgang"  -->
+                    <!--  Width="130" />  -->
+                    <!--    -->
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Year}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Bud"  -->
+                    <!--  Width="130" />  -->
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
@@ -88,23 +88,23 @@
 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn
-                        Binding="{Binding Name}"
-                        Foreground="White"
-                        Header="Name"
-                        Width="130" />
-
-                    <DataGridTextColumn
-                        Binding="{Binding Year}"
-                        Foreground="White"
-                        Header="Årgang"
-                        Width="130" />
-
-                    <DataGridTextColumn
-                        Binding="{Binding Year}"
-                        Foreground="White"
-                        Header="Bud"
-                        Width="130" />
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Name}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Name"  -->
+                    <!--  Width="130" />  -->
+                    <!--    -->
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Year}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Årgang"  -->
+                    <!--  Width="130" />  -->
+                    <!--    -->
+                    <!--  <DataGridTextColumn  -->
+                    <!--  Binding="{Binding Year}"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  Header="Bud"  -->
+                    <!--  Width="130" />  -->
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
