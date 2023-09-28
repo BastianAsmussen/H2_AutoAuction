@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
+using Data.Classes;
 using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
@@ -44,7 +45,7 @@ public class LoginViewModel : ViewModelBase
 
     public LoginViewModel()
     {
-        LoginCommand = ReactiveCommand.Create(GoToHomeScreen);
+        LoginCommand = ReactiveCommand.Create(SignIn);
         SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
 
         ValidateInput();
@@ -57,7 +58,8 @@ public class LoginViewModel : ViewModelBase
         // CorporateUser corporateUser = new(0, $"{cvrNumber}", 0, new(0, username, password, zipCode));
         try
         {
-            // DatabaseManager.Login();
+            User user = new(0, UserName, PassWord, "0", 0);
+            var a = DatabaseManager.Login(user);
         }
         catch (Exception e)
         {
