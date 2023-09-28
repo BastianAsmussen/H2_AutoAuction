@@ -1,8 +1,12 @@
 ﻿using System.Data;
 using Data.Classes.Auctions;
+
 namespace Data.Classes;
+
 public class CorporateUser : User
 {
+    #region static methods
+
     /// <summary>
     /// Checks if the balance + credit is sufficient for the amount
     /// </summary>
@@ -15,16 +19,30 @@ public class CorporateUser : User
         return (balance + credit) - amount >= 0;
     }
 
+    #endregion
+
+    #region properties
+
     public int CorporateUserId { get; set; }
     public string Cvr { get; set; }
     public decimal Credit { get; set; }
 
-    public CorporateUser(int id, string cvr, decimal credit, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
+    #endregion
+    
+    public CorporateUser(int id, string cvr, decimal credit, User user) : base(user.UserId, user.Username,
+        user.Password, user.Zipcode, user.Balance)
     {
         CorporateUserId = id;
         Cvr = cvr;
         Credit = credit;
+    }  
+    public CorporateUser(CorporateUser c, User user) : base(user)
+    {
+        CorporateUserId = c.CorporateUserId;
+        Cvr = c.Cvr;
+        Credit = c.Credit;
     }
+    
 
     /// <summary>
     ///     Overrides the SubBalance method to subtract a specified amount from the sum of balance and credit.
@@ -38,7 +56,7 @@ public class CorporateUser : User
             throw new DataException("Balance and Credit is not sufficient!");
 
         var startingValues = (Credit, Balance);
-        
+
         // Start by subtracting the amount from the credit.
         if (Credit >= amount)
         {
@@ -49,10 +67,10 @@ public class CorporateUser : User
         else
         {
             amount -= Credit;
-            
+
             Credit = 0;
         }
-        
+
         // If the amount is still greater than 0, then we need to take it from the balance.
         if (Balance >= amount)
         {
@@ -62,16 +80,13 @@ public class CorporateUser : User
 
             return;
         }
-        
+
         // Reset the values.
         Credit = startingValues.Credit;
         Balance = startingValues.Balance;
-        
+
         throw new DataException("Balance + Credit is not sufficient.");
     }
-
-    
-    
 
 
     /// <summary>
@@ -86,30 +101,30 @@ public class CorporateUser : User
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
         auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
-        
+
         if (newBid < auction.CurrentPrice)
             return false;
 
         if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.CurrentPrice))
             return false;
-        
+
         try
         {
             var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
-            
+
             auction.CurrentPrice = ourBid.Amount;
-            
+            auction.Buyer = buyer;
+
             DatabaseManager.DatabaseManager.UpdateAuction(auction);
         }
         catch (ArgumentException e)
         {
-            Console.WriteLine("Error in PlaceBid: " + e.Message);
             throw;
         }
-        
+
         return true;
     }
-    
+
     public override string ToString()
     {
         return $"{base.ToString()}\n" +

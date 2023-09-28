@@ -7,5 +7,5 @@ public interface ISeller
 {
     public int UserId { get; set; }
     
-    int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, User seller);
+    int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller);
 }
