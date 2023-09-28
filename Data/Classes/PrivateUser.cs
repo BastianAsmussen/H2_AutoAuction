@@ -35,7 +35,7 @@ public class PrivateUser : User
     /// <summary>
     ///     Receives a bid from a buyer.
     ///     Then checks if new bid is higher than the current highest bid.
-    ///     Lastly notifies the seller the when a bid is over minimum bid.
+    ///     Lastly notifies the seller the when a bid is over current bid.
     /// </summary>
     /// <param name="buyer">The bidder.</param>
     /// <param name="auction">The auction to bid on.</param>
@@ -44,10 +44,10 @@ public class PrivateUser : User
     /// <exception cref="ArgumentException">Thrown when an error occurs in the database.</exception>
     public bool PlaceBid(PrivateUser buyer, Auction auction, decimal newBid)
     {
-        if (!HasSufficientFunds(buyer.Balance, auction.MinimumPrice))
+        if (!HasSufficientFunds(buyer.Balance, auction.CurrentPrice))
             return false;
 
-        if (newBid < auction.MinimumPrice)
+        if (newBid < auction.CurrentPrice)
             return false;
 
         // Checks if the newBid is higher than the current highest bid.
