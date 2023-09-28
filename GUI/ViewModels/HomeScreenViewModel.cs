@@ -39,7 +39,7 @@ public class HomeScreenViewModel : ViewModelBase
     public HomeScreenViewModel()
     {
         CommandsLoader();
-        
+
         try
         {
             LoadAuctions();
@@ -55,11 +55,11 @@ public class HomeScreenViewModel : ViewModelBase
 
     private void LoadAuctions()
     {
-        List<Auction> auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
-        UserAuctions = new(auctionsByThisUser);
-
         var allAuctions = DatabaseManager.GetAllAuctions();
         CurrentAuctions = new(allAuctions);
+       
+        var auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
+        UserAuctions = new(auctionsByThisUser);
     }
 
     private void CommandsLoader()
