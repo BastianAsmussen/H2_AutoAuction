@@ -2,6 +2,7 @@
 using Data.Classes;
 using Data.Interfaces;
 using GUI.ViewModels;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ReactiveUI;
 
 namespace GUI.Utilities;
@@ -39,6 +40,9 @@ public abstract class UserInstance : ViewModelBase
     /// <returns>The currently set user.</returns>
     public static User GetCurrentUser()
     {
+        if (_user == null)
+            throw new NullReferenceException("UserInstance is not set");
+        
         return _user;
     }
 }
