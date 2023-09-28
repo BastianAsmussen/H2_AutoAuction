@@ -43,27 +43,27 @@
                 IsReadOnly="True"
                 ItemsSource="{Binding UserAuctions}"
                 Margin="0,0,200,0"
-                Width="390">
+                MinWidth="390">
 
                 <DataGrid.Columns>
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Name}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Name"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Årgang"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Bud"  -->
-                    <!--  Width="130" />  -->
+
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name"
+                        MinWidth="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        MinWidth="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding CurrentPrice}"
+                        Foreground="White"
+                        Header="Bud"
+                        MinWidth="130" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
@@ -79,32 +79,31 @@
                 Foreground="White" />
 
             <DataGrid
-                Height="150"
                 HorizontalScrollBarVisibility="Visible"
                 IsReadOnly="True"
                 ItemsSource="{Binding CurrentAuctions}"
                 Margin="0,0,200,0"
-                Width="390">
+                MinHeight="150"
+                MinWidth="390">
 
                 <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name"
+                        Width="130" />
 
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Name}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Name"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Årgang"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Bud"  -->
-                    <!--  Width="130" />  -->
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        Width="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding CurrentPrice}"
+                        Foreground="White"
+                        Header="Bud"
+                        Width="130" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>

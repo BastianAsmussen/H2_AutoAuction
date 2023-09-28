@@ -39,7 +39,15 @@ public class HomeScreenViewModel : ViewModelBase
     public HomeScreenViewModel()
     {
         CommandsLoader();
-        LoadAuctions();
+        
+        try
+        {
+            LoadAuctions();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading auctions: {e.Message}");
+        }
     }
 
 
@@ -47,25 +55,11 @@ public class HomeScreenViewModel : ViewModelBase
 
     private void LoadAuctions()
     {
-        try
-        {
-            List<Auction> auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
-            UserAuctions = new(auctionsByThisUser);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        List<Auction> auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
+        UserAuctions = new(auctionsByThisUser);
 
-        try
-        {
-            var allAuctions = DatabaseManager.GetAllAuctions();
-            CurrentAuctions = new(allAuctions);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        var allAuctions = DatabaseManager.GetAllAuctions();
+        CurrentAuctions = new(allAuctions);
     }
 
     private void CommandsLoader()
@@ -79,11 +73,12 @@ public class HomeScreenViewModel : ViewModelBase
     private void ShowUserProfile() => Utilities.ContentArea.Navigate(new UserProfileView());
     private void ShowBidHistory() => Utilities.ContentArea.Navigate(new UserProfileView());
     private void ShowSetForSale() => Utilities.ContentArea.Navigate(new SetForSaleView());
+
     private void SignOut()
     {
         UserInstance.LogOut();
         Utilities.ContentArea.Navigate(new LoginView());
-    } 
+    }
 
     #endregion
 }
