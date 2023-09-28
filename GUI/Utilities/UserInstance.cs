@@ -1,21 +1,44 @@
-﻿using Data.Classes;
+﻿using System;
+using Data.Classes;
 using Data.Interfaces;
 using GUI.ViewModels;
 using ReactiveUI;
 
 namespace GUI.Utilities;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+/// <summary>
+/// This class is used to store the current user instance
+/// </summary>
 public abstract class UserInstance : ViewModelBase
 {
-    private static ISeller User;
+    private static bool _canEdit = true;
+    private static User _user;
 
-    public static void SetUser(ISeller user)
+
+    /// <summary>
+    /// Sets the current user. The current user can only be set once,
+    /// subsequent attempts will throw an AccessViolationException.
+    /// </summary>
+    /// <param name="user">The user to set as the current user.</param>
+    /// <exception cref="AccessViolationException">
+    /// Thrown when an attempt is made to change the current user after it has already been set.
+    /// </exception>
+    public static void SetCurrentUser(User user)
     {
-        User = user;
+        if (!_canEdit)
+            throw new AccessViolationException("UserInstance is already set");
+
+        _user = user;
+        _canEdit = false;
     }
 
-    public static ISeller GetUser()
+    /// <summary>
+    /// Gets the currently set user.
+    /// </summary>
+    /// <returns>The currently set user.</returns>
+    public static User GetCurrentUser()
     {
-        return User;
+        return _user;
     }
 }
