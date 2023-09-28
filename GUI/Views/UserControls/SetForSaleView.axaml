@@ -4,15 +4,22 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.SetForSaleView"
+    x:DataType="vm:SetForSaleViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.DataContext>
+        <vm:SetForSaleViewModel />
+    </UserControl.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="240" />
             <RowDefinition MinHeight="150" />
-            <RowDefinition MinHeight="50" />
+            <RowDefinition MaxHeight="50" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -20,37 +27,198 @@
             <ColumnDefinition MinWidth="300" />
         </Grid.ColumnDefinitions>
 
-
+        <!--  Set For Sale  -->
         <WrapPanel
-            Background="red"
             Grid.Column="0"
-            Grid.Row="0">
-            <Label
-                Content="Set for sale"
-                FontSize="44"
-                Foreground="#ffffff" />
-            <StackPanel />
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <StackPanel>
+                <Label
+                    Content="Set for sale"
+                    FontSize="30"
+                    FontWeight="Black"
+                    Foreground="#ffffff" />
 
+                <!--  Name  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="160"
+                        Text="Name"
+                        VerticalAlignment="Center" />
+                    <TextBox
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        FontSize="25"
+                        Foreground="White"
+                        MinWidth="240"
+                        Text="{Binding Path=Name}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!--  Mileage  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="160"
+                        Text="Mileage"
+                        VerticalAlignment="Center" />
+                    <TextBox
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        FontSize="25"
+                        Foreground="White"
+                        MinWidth="240"
+                        Text="{Binding Path=Mileage}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!--  Reg. num  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="160"
+                        Text="Reg. num"
+                        VerticalAlignment="Center" />
+                    <TextBox
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        FontSize="25"
+                        Foreground="White"
+                        MinWidth="240"
+                        Text="{Binding Path=RegNumber}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!--  Year  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="160"
+                        Text="Year"
+                        VerticalAlignment="Center" />
+
+                    <DatePicker
+                        Background="#322e40"
+                        BorderBrush="Black"
+                        BorderThickness="4"
+                        DayVisible="False"
+                        Foreground="Red"
+                        Height="35"
+                        MaxYear="{Binding Path=ThisYear}"
+                        MonthVisible="False"
+                        SelectedDate="{Binding Path=Year}"
+                        Width="240" />
+                </StackPanel>
+            </StackPanel>
         </WrapPanel>
 
+        <!--  Starting Bid  -->
         <WrapPanel
-            Background="Yellow"
             Grid.Column="0"
-            Grid.Row="1">
-            <Label
-                Content="Standing Bid"
-                FontSize="44"
-                Foreground="#ffffff" />
-            <StackPanel />
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+            <!--  Orientation="Vertical"  -->
+            <StackPanel HorizontalAlignment="Center">
+
+                <!--  Starting Bid  -->
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="180"
+                        Text="Starting Bid"
+                        VerticalAlignment="Center" />
+                    <TextBox
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        FontSize="25"
+                        Foreground="White"
+                        MinWidth="240"
+                        Text="{Binding Path=StartingBid}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!--  Start Date  -->
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="180"
+                        Text="Start Auction"
+                        VerticalAlignment="Center" />
+
+                    <CalendarDatePicker
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        CustomDateFormatString="dd-MM-yyyy"
+                        FontSize="25"
+                        Foreground="White"
+                        Height="40"
+                        MinWidth="240"
+                        SelectedDate="{Binding Path=StartDate, Mode=TwoWay}"
+                        SelectedDateFormat="Custom"
+                        Width="240" />
+                </StackPanel>
+
+                <!--  Close Date  -->
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="25"
+                        FontWeight="Medium"
+                        Foreground="#ffffff"
+                        MinWidth="180"
+                        Text="Close Auction"
+                        VerticalAlignment="Center" />
+
+                    <CalendarDatePicker
+                        BorderBrush="Black"
+                        BorderThickness="2"
+                        CustomDateFormatString="dd-MM-yyyy"
+                        FontSize="25"
+                        Foreground="White"
+                        Height="40"
+                        MinWidth="240"
+                        SelectedDate="{Binding Path=EndDate, Mode=TwoWay}"
+                        Watermark="01/01/1970"
+                        Width="240" />
+                </StackPanel>
+            </StackPanel>
 
         </WrapPanel>
 
         <!--  Vehicle type User Control  -->
         <WrapPanel
-            Background="Beige"
+            Background="Green"
             Grid.Column="1"
             Grid.Row="0"
-            Grid.RowSpan="2">
+            Grid.RowSpan="2"
+            Height="330"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="290">
             <Label
                 Content="Set for sale"
                 FontSize="44"
@@ -67,22 +235,38 @@
 
             <Panel
                 Background="Transparent"
-                Height="50"
-                VerticalAlignment="Bottom"
-                Width="800">
+                MaxHeight="50"
+                MinWidth="800"
+                VerticalAlignment="Bottom">
 
-                <Button HorizontalAlignment="Left">
+                <Button Command="{Binding Path=CancelCommand}" HorizontalAlignment="Left">
                     <Label
                         Content="Cancel"
                         FontSize="23"
                         Foreground="Red" />
                 </Button>
-                <Button HorizontalAlignment="Right">
-                    <Label
-                        Content="Create auction"
+
+                <!-- <Button Command="{Binding Path=CreateSaleCommand}" HorizontalAlignment="Right"> -->
+                <!--  <Label  -->
+                <!--  Content="Create auction"  -->
+                <!--  FontSize="23"  -->
+                <!--  Foreground="Green" />  -->
+
+                <Border Background="{DynamicResource ErrorBrush}" ToolTip.Placement="Right">
+                    <ToolTip.Tip>
+                        <StackPanel>
+                            <TextBlock Classes="h1">ToolTip</TextBlock>
+                            <TextBlock Classes="h2">A control which pops up a hint when a control is hovered</TextBlock>
+                        </StackPanel>
+                    </ToolTip.Tip>
+                    <Button
+                        Command="{Binding Path=CreateSaleCommand}"
+                        Content="Create Sale"
                         FontSize="23"
-                        Foreground="Green" />
-                </Button>
+                        Foreground="Green"
+                        HorizontalAlignment="Right" />
+                </Border>
+                <!-- </Button> -->
             </Panel>
 
         </WrapPanel>
