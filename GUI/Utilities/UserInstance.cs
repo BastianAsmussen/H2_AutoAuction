@@ -41,8 +41,14 @@ public abstract class UserInstance : ViewModelBase
     public static User GetCurrentUser()
     {
         if (_user == null)
-            throw new NullReferenceException("UserInstance is not set");
-        
+            Console.WriteLine("UserInstance is not set");
+
         return _user;
+    }
+
+    public static void LogOut()
+    {
+        _user = null;
+        _canEdit = true;
     }
 }

@@ -29,14 +29,14 @@ public class CreateUserViewModel : ViewModelBase
     public string UserName
     {
         get => _userName;
-        set => this.RaiseAndSetIfChanged(ref _userName, value);
+        set => this.RaiseAndSetIfChanged(ref _userName, value.Trim());
     }
 
     [MinLength(1, ErrorMessage = "Password is required")]
     public string PassWord
     {
         get => _passWord;
-        set => this.RaiseAndSetIfChanged(ref _passWord, value);
+        set => this.RaiseAndSetIfChanged(ref _passWord, value.Trim());
     }
 
     public string RepeatPassword
@@ -46,6 +46,7 @@ public class CreateUserViewModel : ViewModelBase
         {
             if (!PassWord.Equals(value))
             {
+                //Rider 
                 throw new DataValidationException("Password does not match");
             }
 
