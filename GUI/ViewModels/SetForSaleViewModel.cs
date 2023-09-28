@@ -80,7 +80,10 @@ public class SetForSaleViewModel : ViewModelBase
         CreateSaleCommand = ReactiveCommand.Create(CreateSale);
         CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
 
-        Year = DateTime.Now;
+        DateTime localDate = DateTime.Now;
+
+        
+        // Year = d.Now();
         StartDate = DateTime.Now;
         EndDate = DateTime.Now.AddDays(+1);
     }
@@ -94,8 +97,8 @@ public class SetForSaleViewModel : ViewModelBase
             // Sale creation
 
             Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),
-                true, Data.Classes.Vehicles.LicenseType.B, 22, 22, Data.Classes.Vehicles.FuelType.Diesel,
-                Data.Classes.Vehicles.EnergyType.A
+                true, LicenseType.B, 22, 22, FuelType.Diesel,
+                EnergyType.A
             ), UserInstance.GetCurrentUser(), null, 0, decimal.Parse(StartingBid));
 
             DatabaseManager.CreateAuction(newAuction);

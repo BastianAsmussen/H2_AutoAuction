@@ -107,6 +107,7 @@
                         Text="Year"
                         VerticalAlignment="Center" />
 
+                    <!--  TODO: Fix selected Year  -->
                     <DatePicker
                         Background="#322e40"
                         BorderBrush="Black"
@@ -116,7 +117,6 @@
                         Height="35"
                         MaxYear="{Binding Path=ThisYear}"
                         MonthVisible="False"
-                        SelectedDate="{Binding Path=Year}"
                         Width="240" />
                 </StackPanel>
             </StackPanel>
