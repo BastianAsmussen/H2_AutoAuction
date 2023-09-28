@@ -240,19 +240,20 @@ public partial class DatabaseManager
     /// <summary>
     ///     Logs a user in.
     /// </summary>
-    /// <param name="user">The user to log in.</param>
+    /// <param name="username">The username of the user to log in.</param>
+    /// <param name="password">The password of the user to log in.</param>
     /// <returns>The logged in user, either a private user or a corporate user.</returns>
     /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
     /// <exception cref="DataException">Thrown when the user does not exist.</exception>
     /// <exception cref="InvalidCredentialException"></exception>
-    public static User Login(User user)
+    public static User Login(string username, string password)
     {
-        if (string.IsNullOrWhiteSpace(user.Username))
+        if (string.IsNullOrWhiteSpace(username))
         {
             throw new ArgumentException("Username cannot be empty!");
         }
 
-        if (string.IsNullOrWhiteSpace(user.Password))
+        if (string.IsNullOrWhiteSpace(password))
         {
             throw new ArgumentException("Password cannot be empty!");
         }
@@ -264,7 +265,7 @@ public partial class DatabaseManager
         // Get the hashed password from the database.
         command.CommandText = "SELECT Password FROM Users" +
                               " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", user.Username);
+        command.Parameters.AddWithValue("@Username", username);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -282,7 +283,7 @@ public partial class DatabaseManager
         reader.Close();
 
         // Check if the password is correct.
-        if (!IsValidPassword(user.Password, hashedPassword))
+        if (!IsValidPassword(password, hashedPassword))
         {
             connection.Close();
 
@@ -292,7 +293,7 @@ public partial class DatabaseManager
         // Get the user from the database.
         command.CommandText = "SELECT Id FROM Users" +
                               " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", user.Username);
+        command.Parameters.AddWithValue("@Username", username);
 
         reader = command.ExecuteReader();
 
