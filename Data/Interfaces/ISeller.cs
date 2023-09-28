@@ -6,13 +6,6 @@ namespace Data.Interfaces;
 public interface ISeller
 {
     public int UserId { get; set; }
-
-    /// <summary>
-    ///     Receives a message for the user.
-    /// </summary>
-    /// <param name="message"></param>
-    /// <returns>The message </returns>
-    string ReceiveBidNotification(string message);
-
-    int SetForSale(Vehicle vehicle, DateTime startDate, DateTime endDate, User seller, decimal minBid);
+    
+    int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, User seller);
 }

@@ -3,8 +3,6 @@ using Data.Interfaces;
 
 namespace Data.Classes.Auctions;
 
-public delegate string NotificationDelegate(string message);
-
 public static class AuctionHouse
 {
     public static List<Auction> Auctions = new();
@@ -21,22 +19,7 @@ public static class AuctionHouse
         //TODO: A3 - SetForSale
         throw new NotImplementedException();
     }
-
-    /// <summary>
-    ///     An overload of SetForSale, that ...
-    /// </summary>
-    /// <param name="vehicle"></param>
-    /// <param name="seller"></param>
-    /// <param name="minimumBid"></param>
-    /// <param name="notificationMethod"> This is a delegate that is used to notify the user, with more information.</param>
-    /// <returns> The auction ID </returns>
-    public static uint SetForSale(Vehicle vehicle, ISeller seller, decimal minimumBid,
-        NotificationDelegate notificationMethod)
-    {
-        //TODO: A4 - SetForSale overload
-        throw new NotImplementedException();
-    }
-
+    
     /// <summary>
     ///     Receives a bid from a buyer.
     ///     Checks if the bid is eligible, by ...

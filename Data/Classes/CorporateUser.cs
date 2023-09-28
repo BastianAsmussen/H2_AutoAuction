@@ -6,9 +6,9 @@ public class CorporateUser : User
     /// <summary>
     /// Checks if the balance + credit is sufficient for the amount
     /// </summary>
-    /// <param name="balance"></param>
-    /// <param name="credit"></param>
-    /// <param name="amount"></param>
+    /// <param name="balance">The balance.</param>
+    /// <param name="credit">The credit.</param>
+    /// <param name="amount">The amount that subtracts from your credit and balance.</param>
     /// <returns></returns>
     private static bool HasSufficientFunds(decimal balance, decimal credit, decimal amount)
     {
@@ -67,7 +67,7 @@ public class CorporateUser : User
         Credit = startingValues.Credit;
         Balance = startingValues.Balance;
         
-        throw new DataException("Balance + Credit is not sufficent.");
+        throw new DataException("Balance + Credit is not sufficient.");
     }
 
     
@@ -79,44 +79,34 @@ public class CorporateUser : User
     ///  Then checks if new bid is higher than the current highest bid.
     ///  Lastly notifies the seller the when a bid is over minimum bid.
     /// </summary>
-    /// <param name="buyer"></param>
-    /// <param name="auction"></param>
-    /// <param name="newBid"></param>
-    /// <returns></returns>
+    /// <param name="buyer">What the user is.</param>
+    /// <param name="auction">The auction that get bidded on.</param>
+    /// <param name="newBid">The bid that gets submitted.</param>
+    /// <returns>True if place bid was succesful</returns>
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
-        if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.MinimumPrice))
+        auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+        
+        if (newBid < auction.CurrentPrice)
             return false;
 
-        if (newBid < auction.MinimumPrice)
+        if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.CurrentPrice))
             return false;
         
-        //checks if the newBid is higher than the current highest bid
         try
         {
-            auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+            var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
             
-            var ourbid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
-
-            var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
-
-            var highestBid = bids.Max(b => b.Amount);
-
-            if (ourbid.Amount > highestBid)
-            {
-                auction.Buyer = buyer;
-            }
-
+            auction.CurrentPrice = ourBid.Amount;
+            
             DatabaseManager.DatabaseManager.UpdateAuction(auction);
         }
-        catch (Exception e)
+        catch (ArgumentException e)
         {
             Console.WriteLine("Error in PlaceBid: " + e.Message);
             throw;
         }
-
-        auction.Seller.ReceiveBidNotification($"New bid of {newBid} on {auction.Vehicle}.");
-
+        
         return true;
     }
     

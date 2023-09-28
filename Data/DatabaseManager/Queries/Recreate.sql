@@ -222,10 +222,10 @@ IF NOT EXISTS (SELECT *
         CREATE TABLE Auctions
         (
             Id           INT      NOT NULL IDENTITY (1,1) PRIMARY KEY,
-
-            MinimumPrice DECIMAL  NOT NULL,
+            
+            CurrentPrice DECIMAL  NOT NULL,
             StartingBid  DECIMAL  NOT NULL,
-
+            
             StartDate    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             EndDate      DATETIME NOT NULL,
 
