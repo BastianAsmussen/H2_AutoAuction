@@ -26,7 +26,7 @@
             <!--  UserName Input  -->
             <TextBox
                 FontSize="22"
-                Foreground="Black"
+                Foreground="White"
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 Text="{Binding UserName}"
@@ -36,7 +36,7 @@
             <StackPanel>
                 <TextBox
                     FontSize="22"
-                    Foreground="Black"
+                    Foreground="White"
                     Margin="0,20,0,0"
                     MaxWidth="400"
                     PasswordChar="*"
@@ -46,7 +46,7 @@
 
             <TextBox
                 FontSize="22"
-                Foreground="Black"
+                Foreground="White"
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 PasswordChar="*"
@@ -84,7 +84,7 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         Text="{Binding CvrNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="CVR"
@@ -92,7 +92,7 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         Margin="22,0,0,0"
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
@@ -109,7 +109,7 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         MaxLength="10"
                         Text="{Binding CprNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
@@ -118,7 +118,7 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         Margin="22,0,0,0"
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"

@@ -28,7 +28,7 @@
             <WrapPanel HorizontalAlignment="Left">
                 <TextBox
                     FontSize="22"
-                    Foreground="Black"
+                    Foreground="White"
                     Margin="0,20,0,0"
                     Text="{Binding UserName}"
                     Watermark="Username"
@@ -39,7 +39,7 @@
             <WrapPanel HorizontalAlignment="Left">
                 <TextBox
                     FontSize="22"
-                    Foreground="Black"
+                    Foreground="White"
                     Margin="0,20,0,0"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
