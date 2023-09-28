@@ -50,7 +50,7 @@ public partial class DatabaseManager
 
             if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, null, currentPrice, standingBid));
+                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null));
 
                 continue;
             }
@@ -58,7 +58,7 @@ public partial class DatabaseManager
             var buyerId = reader.GetInt32(7);
             var buyer = GetUserById(buyerId);
 
-            auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, currentPrice, standingBid));
+            auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, buyer));
         }
 
         reader.Close();
@@ -111,7 +111,7 @@ public partial class DatabaseManager
 
             if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, null, currentPrice, standingBid));
+                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null));
 
                 continue;
             }
@@ -119,7 +119,7 @@ public partial class DatabaseManager
             var buyerId = reader.GetInt32(7);
             var buyer = GetUserById(buyerId);
 
-            auctions.Add(new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, currentPrice, standingBid));
+            auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, buyer));
         }
 
         reader.Close();
@@ -305,7 +305,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new Auction(auctionId, auction.StartDate, auction.EndDate, auction.Vehicle, auction.Seller, auction.Buyer, auction.CurrentPrice, auction.StartingBid);
+        return new Auction(auctionId, auction.CurrentPrice, auction.StartingBid, auction.StartDate, auction.EndDate, auction.Vehicle, auction.Seller, auction.Buyer);
     }
 
     /// <summary>
@@ -353,7 +353,7 @@ public partial class DatabaseManager
             reader.Close();
             connection.Close();
 
-            return new Auction(auctionId, startDate, endDate, vehicle, seller, null, currentPrice, standingBid);
+            return new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null);
         }
 
         var buyerId = reader.GetInt32(7);
@@ -362,7 +362,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, currentPrice, standingBid);
+        return new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, buyer);
     }
 
     /// <summary>
@@ -407,7 +407,7 @@ public partial class DatabaseManager
             reader.Close();
             connection.Close();
 
-            return new Auction(auctionId, startDate, endDate, vehicle, seller, null, currentPrice, standingBid);
+            return new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null);
         }
 
         var buyerId = reader.GetInt32(6);
@@ -416,7 +416,7 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new Auction(auctionId, startDate, endDate, vehicle, seller, buyer, currentPrice, standingBid);
+        return new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, buyer);
     }
 
     /// <summary>
