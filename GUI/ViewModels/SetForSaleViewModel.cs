@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Input;
+using Avalonia.Data;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.DatabaseManager;
@@ -60,13 +61,25 @@ public class SetForSaleViewModel : ViewModelBase
     public DateTime StartDate
     {
         get => _startDate;
-        set => this.RaiseAndSetIfChanged(ref _startDate, value);
+        set
+        {
+            if (StartDate < EndDate)
+                throw new DataValidationException("Start date cannot be before today");
+
+            this.RaiseAndSetIfChanged(ref _startDate, value);
+        }
     }
 
     public DateTime EndDate
     {
         get => _endDate;
-        set => this.RaiseAndSetIfChanged(ref _endDate, value);
+        set
+        {
+            if (EndDate < StartDate)
+                throw new DataValidationException("End date cannot be before start date");
+
+            this.RaiseAndSetIfChanged(ref _endDate, value);
+        }
     }
 
     #endregion
@@ -82,10 +95,29 @@ public class SetForSaleViewModel : ViewModelBase
 
         DateTime localDate = DateTime.Now;
 
-        
-        // Year = d.Now();
-        StartDate = DateTime.Now;
-        EndDate = DateTime.Now.AddDays(+1);
+        DateOnly d = new();
+
+        try
+        {
+            StartDate = (DateTime.Now);
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
+        }
+
+        try
+        {
+            EndDate = DateTime.Now.AddDays(+1);
+        }
+        catch (Exception e)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
+        }
     }
 
     #region Methods
