@@ -1,4 +1,5 @@
 ﻿using Data.Classes;
+using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.Classes.Vehicles.HeavyVehicles;
 using Data.Classes.Vehicles.PersonalCars;
@@ -11,9 +12,8 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        /*
         var random = new Random();
-
+        /*
         const int totalUsers = 1_000;
         const string defaultPassword = "1234";
 
@@ -202,6 +202,39 @@ internal class Program
             heavyVehicles.Remove(heavyVehicle);
 
             Console.WriteLine(bus + "\n");
+        }
+
+        const int totalAuctions = 1_000;
+
+        var auctions = new List<Auction>();
+        for (var i = 0; i < totalAuctions; i++)
+        {
+            var name = Faker.Name.First();
+            var startDate = DateTime.Now.AddDays(random.Next(1, 100));
+            var endDate = startDate.AddDays(random.Next(1, 100));
+            var vehicle = DatabaseManager.GetVehicleById(random.Next(1, 1_000));
+            var seller = DatabaseManager.GetUserById(random.Next(1, 1_000));
+            var startingBid = random.Next(0, 1_000_000);
+            var auction = DatabaseManager.CreateAuction(new Auction(0, startingBid, startingBid, startDate, endDate,
+                vehicle, seller, null));
+
+            auctions.Add(auction);
+
+            Console.WriteLine(auction + "\n");
+        }
+
+        var bids = new List<Bid>();
+        for (var i = 0; i < totalAuctions / 10; i++)
+        {
+            var auction = auctions[random.Next(auctions.Count)];
+            var time = auction.StartDate.AddSeconds(random.Next(1, 100));
+            var bidder = DatabaseManager.GetUserById(random.Next(1, 1_000));
+            var amount = auction.CurrentPrice + random.Next(1, 1_000);
+            var bid = DatabaseManager.CreateBid(new Bid(0, time, amount, bidder, auction));
+
+            bids.Add(bid);
+
+            Console.WriteLine(bid + "\n");
         }
         */
     }
