@@ -1,14 +1,18 @@
 ﻿<UserControl
-    Background="#1b1827"
-    MinHeight="330"
-    MinWidth="290"
+    Background="#302d3b"
+    Height="335"
+    Width="295"
     mc:Ignorable="d"
-    x:Class="GUI.Utilities.VehicleBlueprintView"
+    x:Class="GUI.Views.UserControls.VehicleBlueprintView"
+    x:DataType="vm:VehicleBlueprintViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <WrapPanel VerticalAlignment="Top">
+
+
+    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
         <StackPanel>
             <!--  Vehicle Type  -->
@@ -18,7 +22,7 @@
                     Text="Vehicle type"
                     VerticalAlignment="Center"
                     Width="120" />
-                <ComboBox />
+                <ComboBox ItemsSource="{Binding Path=EnumValues}" SelectedItem="{Binding SelectedVehicleType}" />
             </StackPanel>
 
             <!--  Height  -->
@@ -28,7 +32,7 @@
                     Text="Height"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Width="150" />
+                <TextBox Text="{Binding Height}" Width="150" />
             </StackPanel>
 
             <!--  Length  -->
@@ -38,7 +42,7 @@
                     Text="Length"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Width="150" />
+                <TextBox Text="{Binding Width}" Width="150" />
             </StackPanel>
 
             <!--  Weight  -->
@@ -48,7 +52,7 @@
                     Text="Weight"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Width="150" />
+                <TextBox Text="{Binding Weight}" Width="150" />
             </StackPanel>
 
             <!--  Engine Size  -->
@@ -58,7 +62,7 @@
                     Text="Engine Size"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Width="150" />
+                <TextBox Text="{Binding EngineSize}" Width="150" />
             </StackPanel>
 
             <!--  Has Tow bar  -->
@@ -69,12 +73,17 @@
                     VerticalAlignment="Center"
                     Width="120" />
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="Yes" Margin="0,0,10,0" />
-                    <RadioButton Content="No" Margin="10,0,0,0" />
+                    <RadioButton
+                        Command="{Binding YesCommand}"
+                        Content="Yes"
+                        Margin="0,0,10,0" />
+
+                    <RadioButton
+                        Command="{Binding NoCommand}"
+                        Content="No"
+                        Margin="10,0,0,0" />
                 </StackPanel>
             </StackPanel>
-
-
         </StackPanel>
     </WrapPanel>
 </UserControl>

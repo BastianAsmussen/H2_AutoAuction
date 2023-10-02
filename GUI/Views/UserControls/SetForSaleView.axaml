@@ -8,7 +8,6 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:utilities="clr-namespace:GUI.Utilities"
     xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -114,7 +113,7 @@
                         BorderBrush="Black"
                         BorderThickness="4"
                         DayVisible="False"
-                        Foreground="Red"
+                        Foreground="Green"
                         Height="35"
                         MaxYear="{Binding Path=ThisYear}"
                         MonthVisible="False"
@@ -218,11 +217,9 @@
             Grid.RowSpan="2"
             Height="335"
             Width="295">
-            <utilities:VehicleBlueprintView
-                HorizontalAlignment="Right"
-                MinHeight="330"
-                MinWidth="290" />
-            <StackPanel />
+
+            <UserControl Content="{Binding Path=VehicleBlueprintControl}" />
+
         </WrapPanel>
 
         <!--  Footer  -->
@@ -244,12 +241,6 @@
                         FontSize="23"
                         Foreground="Red" />
                 </Button>
-
-                <!-- <Button Command="{Binding Path=CreateSaleCommand}" HorizontalAlignment="Right"> -->
-                <!--  <Label  -->
-                <!--  Content="Create auction"  -->
-                <!--  FontSize="23"  -->
-                <!--  Foreground="Green" />  -->
 
                 <Border Background="{DynamicResource ErrorBrush}" ToolTip.Placement="Right">
                     <ToolTip.Tip>

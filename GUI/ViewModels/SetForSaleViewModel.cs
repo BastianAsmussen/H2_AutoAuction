@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using Avalonia.Controls;
 using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
@@ -8,8 +9,6 @@ namespace GUI.ViewModels;
 
 public class SetForSaleViewModel : ViewModelBase
 {
-    #region Properties
-
     private string _name = null!;
     private string _mileage = null!;
     private string _regNumber = null!;
@@ -17,6 +16,10 @@ public class SetForSaleViewModel : ViewModelBase
     private DateTime _year;
     private DateTime _startDate;
     private DateTime _endDate;
+    private UserControl _vehicleBlueprintControl;
+    private VehicleBlueprintViewModel _vehiclebpVm = new();
+
+    #region Properties
 
     public int ThisYear => DateTime.Now.Year;
 
@@ -62,6 +65,12 @@ public class SetForSaleViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _endDate, value);
     }
 
+    public UserControl VehicleBlueprintControl
+    {
+        get => _vehicleBlueprintControl;
+        set => this.RaiseAndSetIfChanged(ref _vehicleBlueprintControl, value);
+    }
+
     #endregion
 
 
@@ -73,30 +82,37 @@ public class SetForSaleViewModel : ViewModelBase
         CreateSaleCommand = ReactiveCommand.Create(CreateSale);
         CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
 
+        var a = new VehicleBlueprintView
+        {
+            DataContext = _vehiclebpVm
+        };
+        
+        VehicleBlueprintControl = a;
+
         DateOnly currentDate = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-        try
-        {
-            StartDate = Convert.ToDateTime(currentDate);
-        }
-        catch (Exception e)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
-        }
-
-        try
-        {
-            EndDate = Convert.ToDateTime(currentDate).AddDays(+1);
-            var a = EndDate;
-        }
-        catch (Exception e)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
-        }
+        // try
+        // {
+        //     StartDate = Convert.ToDateTime(currentDate);
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.ForegroundColor = ConsoleColor.Red;
+        //     Console.WriteLine($"Error : {e.Message}");
+        //     Console.ResetColor();
+        // }
+        //
+        // try
+        // {
+        //     EndDate = Convert.ToDateTime(currentDate).AddDays(+1);
+        //     var a = EndDate;
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.ForegroundColor = ConsoleColor.Red;
+        //     Console.WriteLine($"Error : {e.Message}");
+        //     Console.ResetColor();
+        // }
     }
 
     #region Methods
@@ -105,12 +121,6 @@ public class SetForSaleViewModel : ViewModelBase
     {
         try
         {
-            SetForSaleView sv = new();
-            sv.DataContext = new SetForSaleViewModel();
-            
-           
-            
-
             // Sale creation
             //
             // Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),
