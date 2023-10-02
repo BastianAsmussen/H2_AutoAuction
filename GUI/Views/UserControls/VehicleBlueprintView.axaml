@@ -22,7 +22,11 @@
                     Text="Vehicle type"
                     VerticalAlignment="Center"
                     Width="120" />
-                <ComboBox ItemsSource="{Binding Path=EnumValues}" SelectedItem="{Binding SelectedVehicleType}" />
+                <ComboBox
+                    ItemsSource="{Binding Path=VehicleType}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedVehicleType}"
+                    Width="150" />
             </StackPanel>
 
             <!--  Height  -->

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
+﻿using System.Collections.Generic;
 using System.Windows.Input;
-using Avalonia.Collections;
-using Data.Classes.Vehicles;
 using ReactiveUI;
 
 namespace GUI.ViewModels;
 
 public class VehicleBlueprintViewModel : ViewModelBase
 {
-    private VehicleTypes _vehicleType;
     private object? _selectedVehicleType = null;
     private string? _height;
     private string? _width;
@@ -19,16 +13,17 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private string? _engineSize;
     private bool _hasTowBar = false;
 
-    public List<VehicleTypes> EnumValues { get; } =
-        new List<VehicleTypes>(Enum.GetValues(typeof(VehicleTypes)).Cast<VehicleTypes>());
+    public List<string> _vehicleType { get; } = new()
+    {
+        "Private Personal Car",
+        "Professional Personal Car",
+        "Bus",
+        "Truck"
+    };
 
     #region Properties
 
-    public VehicleTypes VehicleType
-    {
-        get => _vehicleType;
-        set => this.RaiseAndSetIfChanged(ref _vehicleType, value);
-    }
+    public List<string> VehicleType => _vehicleType;
 
     public object? SelectedVehicleType
     {
