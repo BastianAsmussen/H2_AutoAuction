@@ -1,0 +1,80 @@
+﻿<UserControl
+    Background="#1b1827"
+    MinHeight="330"
+    MinWidth="290"
+    mc:Ignorable="d"
+    x:Class="GUI.Utilities.VehicleBlueprintView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <WrapPanel VerticalAlignment="Top">
+
+        <StackPanel>
+            <!--  Vehicle Type  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Vehicle type"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <ComboBox />
+            </StackPanel>
+
+            <!--  Height  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Height"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Width="150" />
+            </StackPanel>
+
+            <!--  Length  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Length"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Width="150" />
+            </StackPanel>
+
+            <!--  Weight  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Weight"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Width="150" />
+            </StackPanel>
+
+            <!--  Engine Size  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Engine Size"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Width="150" />
+            </StackPanel>
+
+            <!--  Has Tow bar  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Tow bar"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Yes" Margin="0,0,10,0" />
+                    <RadioButton Content="No" Margin="10,0,0,0" />
+                </StackPanel>
+            </StackPanel>
+
+
+        </StackPanel>
+    </WrapPanel>
+</UserControl>

@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace GUI.Utilities;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+#pragma warning disable
 /// <summary>
 /// This class is used to store the current user instance
 /// </summary>

@@ -105,6 +105,12 @@ public class SetForSaleViewModel : ViewModelBase
     {
         try
         {
+            SetForSaleView sv = new();
+            sv.DataContext = new SetForSaleViewModel();
+            
+           
+            
+
             // Sale creation
             //
             // Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),

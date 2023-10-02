@@ -8,6 +8,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utilities="clr-namespace:GUI.Utilities"
     xmlns:vm="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -211,18 +212,16 @@
 
         <!--  Vehicle type User Control  -->
         <WrapPanel
-            Background="Green"
+            Background="#302d3b"
             Grid.Column="1"
             Grid.Row="0"
             Grid.RowSpan="2"
-            Height="330"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Width="290">
-            <Label
-                Content="Set for sale"
-                FontSize="44"
-                Foreground="#ffffff" />
+            Height="335"
+            Width="295">
+            <utilities:VehicleBlueprintView
+                HorizontalAlignment="Right"
+                MinHeight="330"
+                MinWidth="290" />
             <StackPanel />
         </WrapPanel>
 

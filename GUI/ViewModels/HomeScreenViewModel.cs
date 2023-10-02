@@ -31,10 +31,10 @@ public class HomeScreenViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand SetForSaleCommand { get; set; }
-    public ICommand UserProfileCommand { get; set; }
-    public ICommand BidHistoryCommand { get; set; }
-    public ICommand SignOutCommand { get; set; }
+    public ICommand? SetForSaleCommand { get; set; }
+    public ICommand? UserProfileCommand { get; set; }
+    public ICommand? BidHistoryCommand { get; set; }
+    public ICommand? SignOutCommand { get; set; }
 
     public HomeScreenViewModel()
     {
