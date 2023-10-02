@@ -145,7 +145,7 @@ public class CreateUserViewModel : ViewModelBase
         if (_isCorporate)
             try
             {
-                CreateCorporateUser(UserName, PassWord, ZipCode, Convert.ToUInt32(CvrNumber));
+                CreateCorporateUser(UserName, PassWord, ZipCode, CvrNumber);
             }
             catch (Exception e)
             {
@@ -188,7 +188,7 @@ public class CreateUserViewModel : ViewModelBase
     /// <summary>
     /// Creates a new user with the provided username and password.
     /// </summary>
-    private void CreateCorporateUser(string username, string password, string zipCode, uint cvrNumber)
+    private void CreateCorporateUser(string username, string password, string zipCode, string cvrNumber)
     {
         CorporateUser corporateUser = new(0, $"{cvrNumber}", 0, new(0, username, password, zipCode));
         try

@@ -85,6 +85,7 @@
                     <TextBox
                         FontSize="22"
                         Foreground="White"
+                        MaxLength="11"
                         Text="{Binding CvrNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="CVR"
