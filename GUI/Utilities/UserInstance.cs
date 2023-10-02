@@ -1,9 +1,6 @@
 ﻿using System;
 using Data.Classes;
-using Data.Interfaces;
 using GUI.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ReactiveUI;
 
 namespace GUI.Utilities;
 
@@ -40,6 +37,7 @@ public abstract class UserInstance : ViewModelBase
     /// <returns>The currently set user.</returns>
     public static User GetCurrentUser()
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (_user == null)
             Console.WriteLine("UserInstance is not set");
 
