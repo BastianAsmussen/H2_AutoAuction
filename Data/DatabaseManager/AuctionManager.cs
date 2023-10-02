@@ -261,32 +261,63 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO Auctions (" +
-                              "    CurrentPrice," +
-                              "    StartingBid," +
-                              "    StartDate," +
-                              "    EndDate," +
-                              "    VehicleId," +
-                              "    SellerId," +
-                              "    BuyerId" +
-                              ")" +
-                              " OUTPUT inserted.Id" +
-                              " VALUES (" +
-                              "    @CurrentPrice," +
-                              "    @StartingBid," +
-                              "    @StartDate," +
-                              "    @EndDate," +
-                              "    @VehicleId," +
-                              "    @SellerId," +
-                              "    @BuyerId" +
-                              ")";
-        command.Parameters.AddWithValue("@CurrentPrice", auction.CurrentPrice);
-        command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
-        command.Parameters.AddWithValue("@StartDate", auction.StartDate);
-        command.Parameters.AddWithValue("@EndDate", auction.EndDate);
-        command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
-        command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
-        command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
+        if (auction.Buyer == null)
+        {
+            command.CommandText = "INSERT INTO Auctions (" +
+                                  "    CurrentPrice," +
+                                  "    StartingBid," +
+                                  "    StartDate," +
+                                  "    EndDate," +
+                                  "    VehicleId," +
+                                  "    SellerId" +
+                                  ")" +
+                                  " OUTPUT inserted.Id" +
+                                  " VALUES (" +
+                                  "    @CurrentPrice," +
+                                  "    @StartingBid," +
+                                  "    @StartDate," +
+                                  "    @EndDate," +
+                                  "    @VehicleId," +
+                                  "    @SellerId" +
+                                  ")";
+
+            command.Parameters.AddWithValue("@CurrentPrice", auction.CurrentPrice);
+            command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
+            command.Parameters.AddWithValue("@StartDate", auction.StartDate);
+            command.Parameters.AddWithValue("@EndDate", auction.EndDate);
+            command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
+            command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
+        }
+        else
+        {
+            command.CommandText = "INSERT INTO Auctions (" +
+                                  "    CurrentPrice," +
+                                  "    StartingBid," +
+                                  "    StartDate," +
+                                  "    EndDate," +
+                                  "    VehicleId," +
+                                  "    SellerId," +
+                                  "    BuyerId" +
+                                  ")" +
+                                  " OUTPUT inserted.Id" +
+                                  " VALUES (" +
+                                  "    @CurrentPrice," +
+                                  "    @StartingBid," +
+                                  "    @StartDate," +
+                                  "    @EndDate," +
+                                  "    @VehicleId," +
+                                  "    @SellerId," +
+                                  "    @BuyerId" +
+                                  ")";
+
+            command.Parameters.AddWithValue("@CurrentPrice", auction.CurrentPrice);
+            command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
+            command.Parameters.AddWithValue("@StartDate", auction.StartDate);
+            command.Parameters.AddWithValue("@EndDate", auction.EndDate);
+            command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
+            command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
+            command.Parameters.AddWithValue("@BuyerId", auction.Buyer.UserId);
+        }
 
         var reader = command.ExecuteReader();
 
