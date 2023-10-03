@@ -22,17 +22,12 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 case
                     "Private Personal Car":
                     return GetPrivatePersonalCar();
-                    break;
                 case "Professional Personal Car":
                     return GetProfessionalCar();
-                    break;
                 case "Bus":
                     return GetBus();
-                    break;
                 case "Truck":
-                    return GetBus()
-                        ;
-                    break;
+                    return GetBus();
                 default:
                     throw new("Vehicle Type is empty");
             }
@@ -47,7 +42,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private string? _height;
     private string? _width;
     private string? _weight;
-
 
     // Private Personal Car
     private bool _hasIsoFix;
@@ -66,6 +60,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private string? _numberOfSleepingSpaces;
     private bool _hasToilet;
 
+    #region Properties
+
     public List<string> VehicleType { get; } = new()
     {
         "Private Personal Car",
@@ -74,14 +70,47 @@ public class VehicleBlueprintViewModel : ViewModelBase
         "Truck"
     };
 
-
     public string? SelectedVehicleType
     {
         get => _selectedVehicleType;
-        set => this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
+        set
+        {
+            switch (SelectedVehicleType)
+            {
+                case
+                    "Private Personal Car":
+                    IsPrivatePersonalCar = true;
+                    IsProfessionalPersonalCar = false;
+                    IsBus = false;
+                    IsTruck = false;
+                    this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
+                    break;
+                case "Professional Personal Car":
+                    IsProfessionalPersonalCar = true;
+                    IsPrivatePersonalCar = false;
+                    IsBus = false;
+                    IsTruck = false;
+                    this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
+                    break;
+                case "Bus":
+                    IsBus = true;
+                    IsPrivatePersonalCar = false;
+                    IsProfessionalPersonalCar = false;
+                    IsTruck = false;
+                    this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
+                    break;
+                case "Truck":
+                    IsTruck = true;
+                    IsBus = false;
+                    IsPrivatePersonalCar = false;
+                    IsProfessionalPersonalCar = false;
+                    this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
+                    break;
+                default:
+                    throw new("Vehicle Type is empty");
+            }
+        }
     }
-
-    #region Properties
 
     public bool IsPrivatePersonalCar
     {
@@ -160,7 +189,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
     }
 
-
     // Professional Personal Car Properties
     public bool HasSafetyBar
     {
@@ -236,12 +264,30 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         YesCommand = ReactiveCommand.Create(DoesHaveTowBar);
         NoCommand = ReactiveCommand.Create(DoesNotHaveTowBar);
+
+        try
+        {
+            LoadDates();
+        }
+
+        catch (Exception e)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Error : {e.Message}");
+            Console.ResetColor();
+        }
     }
 
     #region Methods
 
     private void DoesHaveTowBar() => HasTowBar = true;
     private void DoesNotHaveTowBar() => HasTowBar = false;
+
+    [Description("It Loads the Dates and time")]
+    private void LoadDates()
+    {
+        
+    }
 
     private void NumberOnly(string? value)
     {
