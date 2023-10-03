@@ -13,8 +13,33 @@ namespace GUI.ViewModels;
 
 public class VehicleBlueprintViewModel : ViewModelBase
 {
-    private string? _selectedVehicleType;
+    public Vehicle VehicleData
+    {
+        get
+        {
+            switch (SelectedVehicleType)
+            {
+                case
+                    "Private Personal Car":
+                    return GetPrivatePersonalCar();
+                    break;
+                case "Professional Personal Car":
+                    return GetProfessionalCar();
+                    break;
+                case "Bus":
+                    return GetBus();
+                    break;
+                case "Truck":
+                    return GetBus()
+                        ;
+                    break;
+                default:
+                    throw new("Vehicle Type is empty");
+            }
+        }
+    }
 
+    private string? _selectedVehicleType;
     private bool _isPrivatePersonalCar;
     private bool _isProfessionalPersonalCar;
     private bool _isBus;
@@ -49,13 +74,14 @@ public class VehicleBlueprintViewModel : ViewModelBase
         "Truck"
     };
 
-    #region Properties
 
     public string? SelectedVehicleType
     {
         get => _selectedVehicleType;
         set => this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
     }
+
+    #region Properties
 
     public bool IsPrivatePersonalCar
     {
@@ -87,7 +113,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _height;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _height, value);
         }
@@ -98,7 +124,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _width;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _width, value);
         }
@@ -109,7 +135,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _weight;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _weight, value);
         }
@@ -128,7 +154,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _numberOfSeats;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _numberOfSeats, value);
         }
@@ -147,7 +173,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _loadCapacity;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _loadCapacity, value);
         }
@@ -160,7 +186,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _drivenKilometers;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _drivenKilometers, value);
         }
@@ -171,7 +197,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _engineSize;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _engineSize, value);
         }
@@ -189,7 +215,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _numberOfSleepingSpaces;
         set
         {
-            OnlyNumbers(value);
+            NumberOnly(value);
 
             this.RaiseAndSetIfChanged(ref _numberOfSleepingSpaces, value);
         }
@@ -217,7 +243,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private void DoesHaveTowBar() => HasTowBar = true;
     private void DoesNotHaveTowBar() => HasTowBar = false;
 
-    private void OnlyNumbers(string? value)
+    private void NumberOnly(string? value)
     {
         if (!string.IsNullOrEmpty(value))
             if (!value.All(char.IsDigit))
