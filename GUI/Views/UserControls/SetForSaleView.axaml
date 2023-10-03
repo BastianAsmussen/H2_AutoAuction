@@ -176,7 +176,7 @@
                         Foreground="White"
                         Height="40"
                         MinWidth="240"
-                        SelectedDate="{Binding Path=StartDate, Mode=TwoWay}"
+                        SelectedDate="{Binding Path=StartDate}"
                         SelectedDateFormat="Custom"
                         Width="240" />
                 </StackPanel>
@@ -202,7 +202,7 @@
                         Foreground="White"
                         Height="40"
                         MinWidth="240"
-                        SelectedDate="{Binding Path=EndDate, Mode=TwoWay}"
+                        SelectedDate="{Binding Path=EndDate}"
                         Watermark="01/01/1970"
                         Width="240" />
                 </StackPanel>
@@ -216,10 +216,13 @@
             Grid.Column="1"
             Grid.Row="0"
             Grid.RowSpan="2"
-            Height="335"
+            Height="380"
             Width="295">
 
-            <UserControl Content="{Binding Path=VehicleBlueprintControl}" />
+            <UserControl
+                Content="{Binding Path=VehicleBlueprintControl}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
 
         </WrapPanel>
 

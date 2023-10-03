@@ -286,7 +286,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Loads the Dates and time")]
     private void LoadDates()
     {
-        
     }
 
     private void NumberOnly(string? value)
@@ -316,7 +315,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
         try
         {
-            return new PersonalCar(0, Byte.Parse(NumberOfSeats), GetDimensions(), new Vehicle());
+            return new PersonalCar(0, Byte.Parse(NumberOfSeats), GetDimensions(),
+                new Vehicle() { EngineSize = double.Parse(EngineSize) });
         }
         catch (Exception e)
         {
@@ -364,7 +364,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new HeavyVehicle(0, GetDimensions(), new Vehicle());
+            return new HeavyVehicle(0, GetDimensions(), new Vehicle() { EngineSize = double.Parse(EngineSize) });
         }
         catch (Exception e)
         {
