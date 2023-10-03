@@ -1,0 +1,176 @@
+@startuml
+class User implements IBuyer, ISeller {
+    +UserId: int
+    +Username: string
+    +Password: string
+    +Zipcode: string
+    +Balance: decimal
+
+    +User(id: int, username: string, password: string, zipcode: string, balance: decimal = 0)
+    +User(user: User)
+    +SubBalance(amount: decimal)
+    +PlaceBid(auction: Auction, newBid: decimal): bool
+    +ToString(): string
+    +SetForSale(startingBid: decimal, startDate: DateTime, endDate: DateTime, vehicle: Vehicle, seller: User): int
+
+    {abstract} +IBuyer
+    {abstract} +ISeller
+}
+
+class PrivateUser extends User {
+    +PrivateUserId: int
+    +Cpr: string
+
+    +PrivateUser(id: int, cpr: string, user: User)
+    +SubBalance(amount: decimal)
+    +PlaceBid(buyer: PrivateUser, auction: Auction, newBid: decimal): bool
+    +ToString(): string
+}
+
+class CorporateUser extends User {
+    +CorporateUserId: int
+    +Cvr: string
+    +Credit: decimal
+
+    +CorporateUser(id: int, cvr: string, credit: decimal, user: User)
+    +SubBalance(amount: decimal)
+    +PlaceBid(buyer: CorporateUser, auction: Auction, newBid: decimal): bool
+    +ToString(): string
+}
+
+interface IBuyer {
+    +PlaceBid(auction: Auction, newBid: decimal): bool
+}
+
+interface ISeller {
+    +SetForSale(startingBid: decimal, startDate: DateTime, endDate: DateTime, vehicle: Vehicle, seller: User): int
+}
+
+class Vehicle {
+    +VehicleId: int
+    +Name: string
+    +Km: double
+    +RegistrationNumber: string
+    +Year: short
+    +NewPrice: decimal
+    +HasTowbar: bool
+    +LicenseType: LicenseType
+    +EngineSize: double
+    +KmPerLiter: double
+    +FuelType: FuelType
+    +EnergyClass: EnergyType
+
+    +Vehicle(id: int, name: string, km: double, registrationNumber: string, year: short, newPrice: decimal, hasTowbar: bool, licenseType: LicenseType, engineSize: double, kmPerLiter: double, fuelType: FuelType, energyClass: EnergyType)
+    +GetEnergyClass(): EnergyType
+    +ToString(): string
+}
+
+class Dimensions {
+    +DimensionsId: int
+    +Length: double
+    +Width: double
+    +Height: double
+
+    +Dimensions(id: int, length: double, width: double, height: double)
+    +ToString(): string
+}
+
+class PersonalCar extends Vehicle {
+    +PersonalCarId: int
+    +NumberOfSeats: byte
+    +TrunkDimensions: Dimensions
+
+    +PersonalCar(id: int, numberOfSeats: byte, trunkDimensions: Dimensions, vehicle: Vehicle)
+    +ToString(): string
+}
+
+class PrivatePersonalCar extends PersonalCar {
+    +PrivatePersonalCarId: int
+    +HasIsofixFittings: bool
+
+    +PrivatePersonalCar(id: int, hasIsofixFittings: bool, personalCar: PersonalCar)
+    +ToString(): string
+}
+
+class ProfessionalPersonalCar extends PersonalCar {
+    +ProfessionalPersonalCarId: int
+    +HasSafetyBar: bool
+    +LoadCapacity: double
+
+    +ProfessionalPersonalCar(id: int, hasSafetyBar: bool, loadCapacity: double, personalCar: PersonalCar)
+    +ToString(): string
+}
+
+class HeavyVehicle extends Vehicle {
+    +HeavyVehicleId: int
+    +Dimensions: Dimensions
+
+    +HeavyVehicle(id: int, dimensions: Dimensions, vehicle: Vehicle)
+    +ToString(): string
+}
+
+class Bus extends HeavyVehicle {
+    +BusId: int
+    +NumberOfSeats: byte
+    +NumberOfSleepingSpaces: byte
+    +HasToilet: bool
+
+    +Bus(id: int, numberOfSeats: byte, numberOfSleepingSpaces: byte, hasToilet: bool, heavyVehicle: HeavyVehicle)
+    +ToString(): string
+}
+
+class Truck extends HeavyVehicle {
+    +TruckId: int
+    +LoadCapacity: double
+
+    +Truck(id: int, loadCapacity: double, heavyVehicle: HeavyVehicle)
+    +ToString(): string
+}
+
+enum FuelType {
+    Diesel
+    Benzine
+}
+
+enum EnergyType {
+    A
+    B
+    C
+    D
+}
+
+enum LicenseType {
+    A
+    B
+    C
+    D
+    BE
+    CE
+    DE
+}
+
+class Auction {
+    +AuctionId: int
+    +StartingBid: decimal
+    +CurrentBid: decimal
+    +StartDate: DateTime
+    +EndDate: DateTime
+    +Vehicle: Vehicle
+    +Seller: ISeller
+    +Buyer: IBuyer
+
+    +Auction(id: int, startingBid: decimal, startDate: DateTime, endDate: DateTime, vehicle: Vehicle, seller: User, buyer: User)
+    +ToString(): string
+}
+
+class Bid {
+    +BidId: int
+    +Amount: decimal
+    +Auction: Auction
+    +Buyer: IBuyer
+
+    +Bid(id: int, amount: decimal, auction: Auction, buyer: User)
+    +ToString(): string
+}
+
+@enduml
