@@ -13,8 +13,7 @@ public partial class ContentArea : UserControl
     {
         InitializeComponent();
         _instance ??= this;
-        Navigate(new CreateUserView());
-
+        Navigate(new HomeScreenView());
     }
     
     public static void Navigate(UserControl? userControl)

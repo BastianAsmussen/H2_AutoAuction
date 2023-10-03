@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="250"
+        x:Class="GUI.Views.PlaceBidWindow"
+        Title="Placer Bud"
+        xmlns:vm="clr-namespace:GUI.ViewModels"
+        x:DataType="vm:PlaceBidWindowViewModel">
+        <StackPanel>
+                <TextBlock Text="Placer Bud" FontSize="20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Bud:"/>
+                <TextBox Text="{Binding Amount}" x:Name="Amount"/>
+                <Button Content="Placer Bud" Command="{Binding PlaceBidCommand}" CommandParameter="{Binding $parent[Window]}"/>
+        </StackPanel>
+</Window>

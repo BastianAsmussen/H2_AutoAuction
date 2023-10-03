@@ -621,7 +621,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Bids" +
-                              "    WHERE AuctionId = @Id";
+                              " WHERE AuctionId = @Id";
         command.Parameters.AddWithValue("@Id", auction.AuctionId);
 
         var reader = command.ExecuteReader();
