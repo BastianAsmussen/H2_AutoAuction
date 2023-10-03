@@ -1,10 +1,51 @@
-﻿namespace Data.Classes.Vehicles;
+﻿using System.Text.RegularExpressions;
+
+namespace Data.Classes.Vehicles;
 
 /// <summary>
 ///     The vehicle class is the base class for all vehicles.
 /// </summary>
 public class Vehicle
 {
+    /// <summary>
+    ///     The constructor for the vehicle class.
+    /// </summary>
+    /// <param name="id">The ID of the vehicle in the database.</param>
+    /// <param name="name">The name of the vehicle.</param>
+    /// <param name="km">The number of kilometers the vehicle has driven.</param>
+    /// <param name="registrationNumber">The registration number of the vehicle.</param>
+    /// <param name="year">The year the vehicle was manufactured.</param>
+    /// <param name="newPrice">The new price of the vehicle.</param>
+    /// <param name="hasTowbar">Whether the vehicle has a towbar or not.</param>
+    /// <param name="licenseType">The vehicles type of drivers license.</param>
+    /// <param name="engineSize">The size of the engine.</param>
+    /// <param name="kmPerLiter">How many kilometers the vehicle drives per liter.</param>
+    /// <param name="fuelType">What type of fuel the vehicle uses.</param>
+    /// <param name="energyClass">The energy class of a vehicle.</param>
+    public Vehicle(int id, string name, double km, string registrationNumber, short year, decimal newPrice,
+        bool hasTowbar, LicenseType licenseType, double engineSize, double kmPerLiter, FuelType fuelType,
+        EnergyType energyClass)
+    {
+        VehicleId = id;
+        Name = name;
+        Km = km;
+        RegistrationNumber = registrationNumber;
+        Year = year;
+        NewPrice = newPrice;
+        HasTowbar = hasTowbar;
+        LicenseType = licenseType;
+        EngineSize = engineSize;
+        KmPerLiter = kmPerLiter;
+        FuelType = fuelType;
+        EnergyClass = energyClass;
+
+        // Calculate the energy class of the vehicle.
+        EnergyClass = CalculateEnergyType(this);
+
+        // Validate the registration number.
+        ValidateRegistrationNumber(RegistrationNumber);
+    }
+
     /// <summary>
     ///     The ID of the vehicle in the database.
     /// </summary>
@@ -66,100 +107,85 @@ public class Vehicle
     public EnergyType EnergyClass { get; set; }
 
     /// <summary>
-    ///     The constructor for the vehicle class.
-    /// </summary>
-    /// <param name="id">The ID of the vehicle in the database.</param>
-    /// <param name="name">The name of the vehicle.</param>
-    /// <param name="km">The number of kilometers the vehicle has driven.</param>
-    /// <param name="registrationNumber">The registration number of the vehicle.</param>
-    /// <param name="year">The year the vehicle was manufactured.</param>
-    /// <param name="newPrice">The new price of the vehicle.</param>
-    /// <param name="hasTowbar">Whether the vehicle has a towbar or not.</param>
-    /// <param name="licenseType">The vehicles type of drivers license.</param>
-    /// <param name="engineSize">The size of the engine.</param>
-    /// <param name="kmPerLiter">How many kilometers the vehicle drives per liter.</param>
-    /// <param name="fuelType">What type of fuel the vehicle uses.</param>
-    /// <param name="energyClass">The energy class of a vehicle.</param>
-    public Vehicle(int id, string name, double km, string registrationNumber, short year, decimal newPrice, bool hasTowbar, LicenseType licenseType, double engineSize, double kmPerLiter, FuelType fuelType, EnergyType energyClass)
-    {
-        VehicleId = id;
-        Name = name;
-        Km = km;
-        RegistrationNumber = registrationNumber;
-        Year = year;
-        NewPrice = newPrice;
-        HasTowbar = hasTowbar;
-        LicenseType = licenseType;
-        EngineSize = engineSize;
-        KmPerLiter = kmPerLiter;
-        FuelType = fuelType;
-        EnergyClass = energyClass;
-    }
-
-    /// <summary>
     ///     Calculates the energy class of a vehicle based on the year and fuel type.
     /// </summary>
     /// <returns>The energy class of the vehicle.</returns>
-    public EnergyType GetEnergyClass()
+    private static EnergyType CalculateEnergyType(Vehicle vehicle)
     {
-        if (Year < 2010)
+        if (vehicle.Year < 2010)
         {
-            if (FuelType == FuelType.Diesel)
-            {
-                return KmPerLiter switch
+            if (vehicle.FuelType == FuelType.Diesel)
+                return vehicle.KmPerLiter switch
                 {
                     >= 23 => EnergyType.A,
                     >= 18 => EnergyType.B,
                     >= 13 => EnergyType.C,
                     _ => EnergyType.D
                 };
-            }
-            else
+            return vehicle.KmPerLiter switch
             {
-                return KmPerLiter switch
-                {
-                    >= 18 => EnergyType.A,
-                    >= 14 => EnergyType.B,
-                    >= 10 => EnergyType.C,
-                    _ => EnergyType.D
-                };
-            }
+                >= 18 => EnergyType.A,
+                >= 14 => EnergyType.B,
+                >= 10 => EnergyType.C,
+                _ => EnergyType.D
+            };
         }
-        else
+
+        if (vehicle.FuelType == FuelType.Diesel)
+            return vehicle.KmPerLiter switch
+            {
+                >= 25 => EnergyType.A,
+                >= 20 => EnergyType.B,
+                >= 15 => EnergyType.C,
+                _ => EnergyType.D
+            };
+        return vehicle.KmPerLiter switch
         {
-            if (FuelType == FuelType.Diesel)
-            {
-                return KmPerLiter switch
-                {
-                    >= 25 => EnergyType.A,
-                    >= 20 => EnergyType.B,
-                    >= 15 => EnergyType.C,
-                    _ => EnergyType.D
-                };
-            }
-            else
-            {
-                return KmPerLiter switch
-                {
-                    >= 20 => EnergyType.A,
-                    >= 16 => EnergyType.B,
-                    >= 12 => EnergyType.C,
-                    _ => EnergyType.D
-                };
-            }
-        }
+            >= 20 => EnergyType.A,
+            >= 16 => EnergyType.B,
+            >= 12 => EnergyType.C,
+            _ => EnergyType.D
+        };
     }
 
-    public override string ToString() =>
-        $"Id: {VehicleId}\n" +
-        $"Name: {Name}\n" +
-        $"Km: {Km}\n" +
-        $"Registration Number: {RegistrationNumber}\n" +
-        $"Year: {Year}\n" +
-        $"Has Towbar: {HasTowbar}\n" +
-        $"License Type: {LicenseType}\n" +
-        $"Engine Size: {EngineSize}\n" +
-        $"Km Per Liter: {KmPerLiter}\n" +
-        $"Fuel Type: {FuelType}\n" +
-        $"Energy Class: {EnergyClass}";
+    /// <summary>
+    ///     Checks if the registration number is valid.
+    /// </summary>
+    /// <param name="registrationNumber">The registration number to check.</param>
+    /// <exception cref="ArgumentException">Thrown when the registration number is invalid.</exception>
+    private static void ValidateRegistrationNumber(string registrationNumber)
+    {
+        // A registration number must be 7 characters long.
+        if (registrationNumber.Length != 7)
+            throw new ArgumentException("The registration number must be 7 characters long!");
+
+        // A registration number must start with 2 uppercase ASCII letters, followed by 5 numbers.
+        if (!new Regex(@"^[A-Z]{2}[0-9]{5}$").IsMatch(registrationNumber))
+            throw new ArgumentException("The registration number must be 2 letters followed by 5 numbers!");
+    }
+
+    /// <summary>
+    ///     Returns the registration number of the vehicle with only the middle three numbers visible.
+    ///     Example: AB12345 -> **123**
+    /// </summary>
+    /// <returns>The formatted registration number.</returns>
+    public string GetObfuscatedRegistrationNumber()
+    {
+        return $"**{RegistrationNumber.Substring(2, 3)}**";
+    }
+
+    public override string ToString()
+    {
+        return $"Id: {VehicleId}\n" +
+               $"Name: {Name}\n" +
+               $"Km: {Km}\n" +
+               $"Registration Number: {RegistrationNumber}\n" +
+               $"Year: {Year}\n" +
+               $"Has Towbar: {HasTowbar}\n" +
+               $"License Type: {LicenseType}\n" +
+               $"Engine Size: {EngineSize}\n" +
+               $"Km Per Liter: {KmPerLiter}\n" +
+               $"Fuel Type: {FuelType}\n" +
+               $"Energy Class: {EnergyClass}";
+    }
 }
