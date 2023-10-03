@@ -21,6 +21,7 @@
             FontSize="40"
             Foreground="White"
             HorizontalAlignment="Center" />
+
         <StackPanel>
 
             <!--  UserName Input  -->
@@ -108,14 +109,14 @@
                     IsVisible="{Binding Path=IsChecked, ElementName=IsPrivateteButton, Mode=TwoWay}"
                     x:Name="PrivateUserInfo">
 
-                    <TextBox
+                    <MaskedTextBox
                         FontSize="22"
                         Foreground="White"
-                        MaxLength="10"
+                        Mask="00 00 00 - 00 00"
                         Text="{Binding CprNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="Cpr number"
-                        Width="160" />
+                        Width="170" />
 
                     <TextBox
                         FontSize="22"

@@ -85,17 +85,11 @@ public class CreateUserViewModel : ViewModelBase
         get => _cprNumber;
         set
         {
-            if (!string.IsNullOrEmpty(value))
-                if (!value.All(char.IsDigit))
-                    if (!value.Contains("-"))
-                    {
-                        throw new DataValidationException("Numbers only");
-                    }
+            // if (!string.IsNullOrEmpty(value))
+            //     if (!value.All(char.IsDigit))
+            //         if (!value.Contains("-"))
+            //             throw new DataValidationException("Numbers only");
 
-            if (value.Length == 10)
-            {
-                value = value.Insert(6, "-");
-            }
 
             this.RaiseAndSetIfChanged(ref _cprNumber, value);
         }
@@ -167,7 +161,7 @@ public class CreateUserViewModel : ViewModelBase
     /// </summary>
     private void CreatePrivateUser(string username, string password, string zipCode, string cprNumber)
     {
-        PrivateUser privateUser = new(0, cprNumber, new(0, username, password, zipCode));
+        PrivateUser privateUser = new(0, cprNumber, new(0, username, password.Trim(), zipCode));
         try
         {
             DatabaseManager.SignUp(privateUser);
