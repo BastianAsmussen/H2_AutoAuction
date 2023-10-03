@@ -27,53 +27,18 @@ public class CorporateUser : User
     }
 
     /// <summary>
-    ///     Overrides the SubBalance method to subtract a specified amount from the sum of balance and credit.
-    ///     If the subtraction results in a negative value, an DataException is thrown.
+    ///     Subtracts the amount from the balance. the balance will go negative if the credit is sufficient.
     /// </summary>
     /// <param name="amount">The amount to subtract from the balance.</param>
-    /// <exception cref="DataException">Thrown when the Balance + Credit is not sufficent.</exception>
+    /// <exception cref="DataException">Thrown when Credit threshold exceeded.</exception>
     public override void SubBalance(decimal amount)
     {
         if (!HasSufficientFunds(Balance, Credit, amount))
-            throw new DataException("Balance and Credit is not sufficient!");
+            throw new DataException("Credit threshold exceeded!");
 
-        var startingValues = (Credit, Balance);
-        
-        // Start by subtracting the amount from the credit.
-        if (Credit >= amount)
-        {
-            Credit -= amount;
-
-            return;
-        }
-        else
-        {
-            amount -= Credit;
-            
-            Credit = 0;
-        }
-        
-        // If the amount is still greater than 0, then we need to take it from the balance.
-        if (Balance >= amount)
-        {
-            Balance -= amount;
-
-            amount = 0;
-
-            return;
-        }
-        
-        // Reset the values.
-        Credit = startingValues.Credit;
-        Balance = startingValues.Balance;
-        
-        throw new DataException("Balance + Credit is not sufficient.");
+        Balance -= amount;
     }
-
     
-    
-
-
     /// <summary>
     ///  Receives a bid from a buyer.
     ///  Then checks if new bid is higher than the current highest bid.
