@@ -70,7 +70,6 @@ public class PrivateUser : User
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error in PlaceBid: " + e.Message);
             throw;
         }
         
