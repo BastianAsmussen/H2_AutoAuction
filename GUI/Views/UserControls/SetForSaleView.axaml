@@ -92,6 +92,7 @@
                         BorderThickness="2"
                         FontSize="25"
                         Foreground="White"
+                        MaxLength="11"
                         MinWidth="240"
                         Text="{Binding Path=RegNumber}"
                         VerticalAlignment="Center" />

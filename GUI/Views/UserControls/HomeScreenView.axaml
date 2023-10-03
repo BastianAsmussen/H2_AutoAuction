@@ -25,6 +25,7 @@
             <RowDefinition />
             <RowDefinition MinHeight="40" />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
 
         <!--  Users auctions  -->
@@ -60,7 +61,7 @@
                         MinWidth="130" />
 
                     <DataGridTextColumn
-                        Binding="{Binding CurrentPrice}"
+                        Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
                         Foreground="White"
                         Header="Bud"
                         MinWidth="130" />
@@ -72,7 +73,8 @@
         <StackPanel
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.Row="2">
+            Grid.Row="2"
+            Grid.RowSpan="2">
             <Label
                 Content="Current Auctions"
                 FontSize="22"
@@ -100,7 +102,7 @@
                         Width="130" />
 
                     <DataGridTextColumn
-                        Binding="{Binding CurrentPrice}"
+                        Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
                         Foreground="White"
                         Header="Bud"
                         Width="130" />
