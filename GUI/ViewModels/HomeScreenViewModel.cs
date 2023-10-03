@@ -71,7 +71,7 @@ public class HomeScreenViewModel : ViewModelBase
     }
 
     private void ShowUserProfile() => Utilities.ContentArea.Navigate(new UserProfileView());
-    private void ShowBidHistory() => Utilities.ContentArea.Navigate(new UserProfileView());
+    private void ShowBidHistory() => Utilities.ContentArea.Navigate(new BidHistoryView());
     private void ShowSetForSale() => Utilities.ContentArea.Navigate(new SetForSaleView());
 
     private void SignOut()

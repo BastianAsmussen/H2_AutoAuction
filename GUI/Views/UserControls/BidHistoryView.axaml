@@ -3,14 +3,61 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.BidHistoryView"
+    x:DataType="viewModels:BidHistoryViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    &lt;TextBlock
-    FontSize="44"
-    Foreground="White"
-    HorizontalAlignment="Center"
-    VerticalAlignment="Center"&gt;
-    Bid History    &lt;/TextBlock&gt;
+
+    <UserControl.DataContext>
+        <viewModels:BidHistoryViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <Label FontSize="25" Margin="20">Your bid history</Label>
+
+            <DataGrid
+                HorizontalScrollBarVisibility="Visible"
+                IsReadOnly="True"
+                ItemsSource="{Binding BidHistory}"
+                Margin="15,0,200,0"
+                MinHeight="150"
+                MinWidth="390">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Auction.Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name"
+                        Width="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Auction.Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        Width="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Auction.CurrentPrice, StringFormat=' {0:C}'}"
+                        Foreground="White"
+                        Header="Bud"
+                        Width="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Amount}"
+                        Foreground="White"
+                        Header="Final"
+                        Width="130" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+    </Grid>
 </UserControl>

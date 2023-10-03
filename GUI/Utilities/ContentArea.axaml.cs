@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using GUI.Views.UserControls;
@@ -14,14 +15,19 @@ public partial class ContentArea : UserControl
         InitializeComponent();
         _instance ??= this;
         Navigate(new CreateUserView());
-
     }
-    
+
     public static void Navigate(UserControl? userControl)
     {
         if (_instance == null) return;
         if (userControl == null) return;
-
-        _instance.Content = userControl;
+        try
+        {
+            _instance.Content = userControl;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }
