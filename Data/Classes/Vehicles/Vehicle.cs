@@ -46,6 +46,11 @@ public class Vehicle
         ValidateRegistrationNumber(RegistrationNumber);
     }
 
+    public Vehicle()
+    {
+        // To Create an empty vehicle
+    }
+
     /// <summary>
     ///     The ID of the vehicle in the database.
     /// </summary>
