@@ -23,14 +23,14 @@ public class LoginViewModel : ViewModelBase
     public string UserName
     {
         get => _userName;
-        set => this.RaiseAndSetIfChanged(ref _userName, value);
+        set => this.RaiseAndSetIfChanged(ref _userName, value.Trim());
     }
 
     [MinLength(1, ErrorMessage = "Password is required")]
     public string PassWord
     {
         get => _passWord;
-        set => this.RaiseAndSetIfChanged(ref _passWord, value);
+        set => this.RaiseAndSetIfChanged(ref _passWord, value.Trim());
     }
 
     public bool BtnLoginEnabled
