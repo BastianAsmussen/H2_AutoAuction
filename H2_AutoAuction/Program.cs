@@ -12,8 +12,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        var random = new Random();
         /*
+        var random = new Random();
+
         const int totalUsers = 1_000;
         const string defaultPassword = "1234";
 
@@ -61,7 +62,7 @@ internal class Program
         {
             var name = Faker.Name.First();
             var km = random.Next(0, 1_000_000);
-            var registrationNumber = random.Next(1_000_000, 9_999_999).ToString();
+            var registrationNumber = $"{(char)random.Next('A', 'Z')}{(char)random.Next('A', 'Z')}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}";
             var year = (short)random.Next(1900, 2021);
             var newPrice = random.Next(0, 1_000_000);
             var hasTowbar = random.Next() % 2 == 0;

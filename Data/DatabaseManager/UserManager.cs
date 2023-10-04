@@ -294,77 +294,6 @@ public partial class DatabaseManager
 
         return GetPrivateUserByUserId(userId)!;
     }
-
-    /// <summary>
-    ///     Checks if a given password matches a given hash.
-    /// </summary>
-    /// <param name="password">The plaintext password.</param>
-    /// <param name="hash">The hashed password.</param>
-    /// <returns>True if the password matches the hash, false otherwise.</returns>
-    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
-    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
-    private static bool IsValidPassword(string password, string hash)
-    {
-        return BC.Verify(password, hash);
-    }
-
-    /// <summary>
-    ///     Checks if a username is already taken.
-    /// </summary>
-    /// <param name="username">The username to check.</param>
-    /// <returns>True if the username is taken, false otherwise.</returns>
-    private static bool IsUsernameTaken(string username)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", username);
-
-        var reader = command.ExecuteReader();
-        if (reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            return true;
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return false;
-    }
-
-    /// <summary>
-    ///     Checks if a user is a corporate user or not.
-    /// </summary>
-    /// <param name="userId">The ID of the user to check.</param>
-    /// <returns>True if the user is a corporate user, false otherwise.</returns>
-    private static bool IsCorporateUser(int userId)
-    {
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM CorporateUsers" +
-                              " WHERE UserId = @UserId";
-        command.Parameters.AddWithValue("@UserId", userId);
-
-        var reader = command.ExecuteReader();
-        if (reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            return true;
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return false;
-    }
     #endregion
 
     #region Signup
@@ -433,53 +362,6 @@ public partial class DatabaseManager
         var createdCorporateUser = CreateCorporateUser(corporateUserToCreate);
 
         return createdCorporateUser;
-    }
-
-    /// <summary>
-    ///     Validates a user.
-    /// </summary>
-    /// <param name="user">The user to validate.</param>
-    /// <exception cref="ArgumentException">Thrown when a value is detected as invalid.</exception>
-    private static void ValidateUser(User user)
-    {
-        if (string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("Username cannot be empty!");
-        }
-
-        if (string.IsNullOrWhiteSpace(user.Password))
-        {
-            throw new ArgumentException("Password cannot be empty!");
-        }
-
-        if (string.IsNullOrWhiteSpace(user.Zipcode))
-        {
-            throw new ArgumentException("Zipcode cannot be empty!");
-        }
-
-        switch (user)
-        {
-            // If the user is a private user, make sure the CPR number is not empty.
-            case PrivateUser privateUser when string.IsNullOrWhiteSpace(privateUser.Cpr):
-                throw new ArgumentException("CPR number cannot be empty!");
-            // If the user is a corporate user, make sure the CVR number is not empty.
-            case CorporateUser corporateUser when string.IsNullOrWhiteSpace(corporateUser.Cvr):
-                throw new ArgumentException("CVR number cannot be empty!");
-        }
-    }
-
-    /// <summary>
-    ///     Hashes a password using BCrypt.
-    /// </summary>
-    /// <param name="password">The plaintext password.</param>
-    /// <returns>The hashed password.</returns>
-    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
-    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
-    private static string? HashPassword(string password)
-    {
-        var hash = BC.HashPassword(password, BC.GenerateSalt());
-
-        return hash;
     }
     #endregion
 
@@ -727,6 +609,93 @@ public partial class DatabaseManager
         }
 
         connection.Close();
+    }
+
+    /// <summary>
+    ///     Validates a CPR number.
+    /// </summary>
+    /// <param name="number">The CPR number to validate.</param>
+    /// <param name="isMale">Whether the person is male or not.</param>
+    /// <exception cref="ArgumentException">Thrown if the CPR number is invalid.</exception>
+    public static void ValidateCprNumber(string number, bool isMale = true)
+    {
+        // A CPR number must follow the format of DDMMYY-XXXX where X is a secret number unique to the person and D, M, and Y are the day, month, and year of birth respectively.
+        // A secret number is exactly 4 digits long, and the last digit is uneven if the person is male, otherwise the number is even.
+        // The first 6 digits of the CPR number must be a valid date.
+
+        // Check if the CPR number is exactly 11 characters long.
+        if (number.Length != 11)
+            throw new ArgumentException("CPR number must be exactly 11 characters long!");
+
+        // Check if the CPR number contains a hyphen.
+        if (!number.Contains('-'))
+            throw new ArgumentException("CPR number must contain a hyphen!");
+
+        var cprNumberParts = number.Split('-');
+
+        // Check if the CPR number contains exactly 2 parts.
+        if (cprNumberParts.Length != 2)
+            throw new ArgumentException("CPR number must contain exactly 2 parts separated by a hyphen!");
+
+        var datePart = cprNumberParts[0];
+
+        // Check if the date part is exactly 6 characters long.
+        if (datePart.Length != 6)
+            throw new ArgumentException("CPR number date part must be exactly 6 characters long!");
+
+        // Check if the date has passed, i.e. if the date is in the future.
+        var date = DateTime.ParseExact(datePart, "ddMMyy", null);
+        if (date > DateTime.Now)
+            throw new ArgumentException("CPR number date part must be a date in the past!");
+
+        var secretPart = cprNumberParts[1];
+
+        // Check if the secret part is exactly 4 characters long.
+        if (secretPart.Length != 4)
+            throw new ArgumentException("CPR number secret part must be exactly 4 characters long!");
+
+        // Check if the secret part contains only digits.
+        if (!secretPart.All(char.IsDigit))
+            throw new ArgumentException("CPR number secret part must contain only digits!");
+
+        // Check if the last digit is uneven if the person is male.
+        var lastDigit = int.Parse(secretPart[^1].ToString());
+        if (isMale && lastDigit % 2 == 0)
+            throw new ArgumentException("CPR number secret part last digit must be uneven if the person is male!");
+        
+        // If we got this far, the CPR number is valid, but we still need to check if it is unique.
+        if (IsCprNumberTaken(number))
+            throw new ArgumentException("CPR number is already taken!");
+    }
+
+    /// <summary>
+    ///     Checks if a CPR number is already taken.
+    /// </summary>
+    /// <param name="number">The CPR number to check.</param>
+    /// <returns>True if the CPR number is taken, false otherwise.</returns>
+    private static bool IsCprNumberTaken(string number)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM PrivateUsers" +
+                              " WHERE Cpr = @Cpr";
+
+        command.Parameters.AddWithValue("@Cpr", number);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
     }
     #endregion
 
@@ -980,6 +949,150 @@ public partial class DatabaseManager
         }
 
         connection.Close();
+    }
+    #endregion
+
+    #region Misc
+    /// <summary>
+    ///     Checks if a given password matches a given hash.
+    /// </summary>
+    /// <param name="password">The plaintext password.</param>
+    /// <param name="hash">The hashed password.</param>
+    /// <returns>True if the password matches the hash, false otherwise.</returns>
+    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
+    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
+    private static bool IsValidPassword(string password, string hash)
+    {
+        return BC.Verify(password, hash);
+    }
+
+    /// <summary>
+    ///     Checks if a username is already taken.
+    /// </summary>
+    /// <param name="username">The username to check.</param>
+    /// <returns>True if the username is taken, false otherwise.</returns>
+    private static bool IsUsernameTaken(string username)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM Users" +
+                              " WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Checks if a user is a corporate user or not.
+    /// </summary>
+    /// <param name="userId">The ID of the user to check.</param>
+    /// <returns>True if the user is a corporate user, false otherwise.</returns>
+    public static bool IsCorporateUser(int userId)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM CorporateUsers" +
+                              " WHERE UserId = @UserId";
+        command.Parameters.AddWithValue("@UserId", userId);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
+    }
+
+    /// <summary>
+    ///     Validates a user.
+    /// </summary>
+    /// <param name="user">The user to validate.</param>
+    /// <exception cref="ArgumentException">Thrown when a value is detected as invalid.</exception>
+    private static void ValidateUser(User user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Username))
+        {
+            throw new ArgumentException("Username cannot be empty!");
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Password))
+        {
+            throw new ArgumentException("Password cannot be empty!");
+        }
+
+        if (string.IsNullOrWhiteSpace(user.Zipcode))
+        {
+            throw new ArgumentException("Zipcode cannot be empty!");
+        }
+
+        switch (user)
+        {
+            // If the user is a private user, make sure the CPR number is not empty.
+            case PrivateUser privateUser when string.IsNullOrWhiteSpace(privateUser.Cpr):
+                throw new ArgumentException("CPR number cannot be empty!");
+            // If the user is a corporate user, make sure the CVR number is not empty.
+            case CorporateUser corporateUser when string.IsNullOrWhiteSpace(corporateUser.Cvr):
+                throw new ArgumentException("CVR number cannot be empty!");
+        }
+    }
+
+    /// <summary>
+    ///     Hashes a password using BCrypt.
+    /// </summary>
+    /// <param name="password">The plaintext password.</param>
+    /// <returns>The hashed password.</returns>
+    /// <exception cref="ArgumentException">Thrown when the password is null or empty.</exception>
+    /// <exception cref="SaltParseException">Thrown when the salt is invalid.</exception>
+    private static string? HashPassword(string password)
+    {
+        var hash = BC.HashPassword(password, BC.GenerateSalt());
+
+        return hash;
+    }
+
+    /// <summary>
+    ///     Updates a user's password.
+    /// </summary>
+    /// <param name="user">The user to update.</param>
+    /// <param name="oldPassword">The old password.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <returns>The updated user.</returns>
+    /// <exception cref="InvalidCredentialException">Thrown when the old password is incorrect.</exception>
+    /// <exception cref="DataException">Thrown when the new password could not be hashed.</exception>
+    public static User UpdatePassword(User user, string oldPassword, string newPassword)
+    {
+        if (!IsValidPassword(oldPassword, user.Password))
+            throw new InvalidCredentialException("Old password is incorrect!");
+
+        var hashedPassword = HashPassword(newPassword);
+
+        if (string.IsNullOrWhiteSpace(hashedPassword))
+            throw new DataException("Password could not be hashed!");
+
+        user.Password = hashedPassword;
+
+        return UpdateUser(user);
     }
     #endregion
 }

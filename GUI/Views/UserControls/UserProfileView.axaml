@@ -3,15 +3,23 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.UserProfileView"
+    x:DataType="vm:UserProfileViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <TextBlock
-        FontSize="44"
-        Foreground="White"
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center">
-        User Profile
-    </TextBlock>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:GUI.ViewModels">
+    <StackPanel>
+        <Label Content="Din Profil" FontSize="44"/>
+
+        <Label Content="{Binding Username, StringFormat='Brugernavn: {0}'}"/>
+        <Button Content="Skift Adgangskode" Command="{Binding ChangePasswordCommand}"/>
+        <Label Content="{Binding FormattedBalance}"/>
+
+        <Label Content="{Binding FormattedActiveAuctions}"/>
+        <Label Content="{Binding FormattedAuctionsSold}"/>
+        <Label Content="{Binding FormattedAuctionsWon}"/>
+
+        <Button Content="Tilbage" Command="{Binding BackCommand}"/>
+    </StackPanel>
 </UserControl>
