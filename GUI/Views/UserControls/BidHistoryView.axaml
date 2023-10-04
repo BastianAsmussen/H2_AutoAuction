@@ -14,16 +14,7 @@
         <viewModels:BidHistoryViewModel />
     </UserControl.DataContext>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <Grid RowDefinitions="*,*" ColumnDefinitions="*,Auto">
 
         <StackPanel>
             <Label FontSize="25" Margin="20">Your bid history</Label>
@@ -56,7 +47,7 @@
                         Width="130" />
 
                     <DataGridTextColumn
-                        Binding="{Binding Path=FinalPrice, RelativeSource={RelativeSource AncestorType=viewModels:BidHistoryViewModel}}"
+                        Binding="{Binding Path=FinalAuctionPrice}"
                         Foreground="White"
                         Header="Final"
                         Width="130" />
