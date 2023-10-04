@@ -257,17 +257,22 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand YesCommand { get; }
-    public ICommand NoCommand { get; }
+#pragma warning disable
+    public ICommand YesIsoFixCommand { get; set; } = null!;
+    public ICommand NoIsoFixCommand { get; set; } = null!;
+    public ICommand YesSafetyBarCommand { get; set; } = null!;
+    public ICommand NoSafetyBarCommand { get; set; } = null!;
+    public ICommand YesToiletCommand { get; set; } = null!;
+    public ICommand NoToiletCommand { get; set; } = null!;
+    public ICommand YesTowBarCommand { get; set; } = null!;
+    public ICommand NoTowBarCommand { get; set; } = null!;
+#pragma warning restore
 
     public VehicleBlueprintViewModel()
     {
-        YesCommand = ReactiveCommand.Create(DoesHaveTowBar);
-        NoCommand = ReactiveCommand.Create(DoesNotHaveTowBar);
-
         try
         {
-            LoadDates();
+            InitCommands();
         }
 
         catch (Exception e)
@@ -280,21 +285,12 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #region Methods
 
-    private void DoesHaveTowBar() => HasTowBar = true;
-    private void DoesNotHaveTowBar() => HasTowBar = false;
-
-    [Description("It Loads the Dates and time")]
-    private void LoadDates()
-    {
-    }
-
     private void NumberOnly(string? value)
     {
         if (!string.IsNullOrEmpty(value))
             if (!value.All(char.IsDigit))
                 throw new DataValidationException("Numbers only");
     }
-    //Personal Vehicles
 
     #region Personal Vehicles
 
@@ -316,7 +312,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         try
         {
             return new PersonalCar(0, Byte.Parse(NumberOfSeats), GetDimensions(),
-                new Vehicle() { EngineSize = double.Parse(EngineSize) });
+                new Vehicle() { EngineSize = double.Parse(EngineSize!), HasTowbar = HasTowBar });
         }
         catch (Exception e)
         {
@@ -355,8 +351,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #endregion
 
-    //Heavy Vehicles
-
     #region Heavy Vehicles
 
     [Description("It Returns a Heavy Vehicle Object")]
@@ -364,7 +358,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new HeavyVehicle(0, GetDimensions(), new Vehicle() { EngineSize = double.Parse(EngineSize) });
+            return new HeavyVehicle(0, GetDimensions(),
+                new Vehicle() { EngineSize = double.Parse(EngineSize!), HasTowbar = HasTowBar });
         }
         catch (Exception e)
         {
@@ -402,6 +397,38 @@ public class VehicleBlueprintViewModel : ViewModelBase
             throw new($"Error: {e.Message}");
         }
     }
+
+    #endregion
+
+    #region Command Methods
+
+    private void InitCommands()
+    {
+        YesIsoFixCommand = ReactiveCommand.Create(YesIsoFix);
+        NoIsoFixCommand = ReactiveCommand.Create(NoIsoFix);
+        YesSafetyBarCommand = ReactiveCommand.Create(YesSafetyBar);
+        NoSafetyBarCommand = ReactiveCommand.Create(NoSafetyBar);
+        YesToiletCommand = ReactiveCommand.Create(YesToilet);
+        NoToiletCommand = ReactiveCommand.Create(NoToilet);
+        YesTowBarCommand = ReactiveCommand.Create(YesTowBar);
+        NoTowBarCommand = ReactiveCommand.Create(NoTowBar);
+    }
+
+    private void NoToilet() => HasToilet = false;
+
+    private void YesToilet() => HasToilet = true;
+
+    private void NoSafetyBar() => HasSafetyBar = false;
+
+    private void YesSafetyBar() => HasSafetyBar = true;
+
+    private void NoIsoFix() => HasIsoFix = false;
+
+    private void YesIsoFix() => HasIsoFix = true;
+
+
+    private void YesTowBar() => HasTowBar = true;
+    private void NoTowBar() => HasTowBar = false;
 
     #endregion
 

@@ -29,7 +29,6 @@
                     Width="150" />
             </StackPanel>
 
-            <!--  Dimension  -->
             <!--  Height  -->
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
@@ -70,6 +69,25 @@
                 <TextBox Text="{Binding EngineSize}" Width="150" />
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Has Tow Bar"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton
+                        Command="{Binding YesTowBarCommand}"
+                        Content="Yes"
+                        Margin="10,0,0,0" />
+
+                    <RadioButton
+                        Command="{Binding NoTowBarCommand}"
+                        Content="No"
+                        Margin="10,0,0,0" />
+                </StackPanel>
+            </StackPanel>
+
             <!--  Private Personal Car  -->
             <WrapPanel
                 IsVisible="{Binding IsPrivatePersonalCar}"
@@ -96,8 +114,14 @@
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
-                        <RadioButton Content="Yes" Margin="10,0,10,0" />
-                        <RadioButton Content="No" Margin="10,0,0,0" />
+                        <RadioButton
+                            Command="{Binding YesIsoFixCommand}"
+                            Content="Yes"
+                            Margin="10,0,10,0" />
+                        <RadioButton
+                            Command="{Binding NoIsoFixCommand}"
+                            Content="No"
+                            Margin="10,0,0,0" />
                     </StackPanel>
                 </StackPanel>
 
@@ -137,8 +161,14 @@
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
-                        <RadioButton Content="Yes" Margin="10,0,5,0" />
-                        <RadioButton Content="No" Margin="10,0,0,0" />
+                        <RadioButton
+                            Command="{Binding YesSafetyBarCommand}"
+                            Content="Yes"
+                            Margin="10,0,5,0" />
+                        <RadioButton
+                            Command="{Binding NoSafetyBarCommand}"
+                            Content="No"
+                            Margin="10,0,0,0" />
                     </StackPanel>
                 </StackPanel>
             </WrapPanel>
@@ -175,8 +205,14 @@
                         Width="120" />
 
                     <StackPanel Orientation="Horizontal">
-                        <RadioButton Content="Yes" Margin="20,0,0,0" />
-                        <RadioButton Content="No" Margin="20,0,0,0" />
+                        <RadioButton
+                            Command="{Binding YesToiletCommand}"
+                            Content="Yes"
+                            Margin="20,0,0,0" />
+                        <RadioButton
+                            Command="{Binding NoToiletCommand}"
+                            Content="No"
+                            Margin="20,0,0,0" />
                     </StackPanel>
 
                 </StackPanel>
