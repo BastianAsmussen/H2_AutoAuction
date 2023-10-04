@@ -28,7 +28,26 @@ public class BidHistoryViewModel : ViewModelBase
     }
 
     private int _bidCount = 0;
-    public string FinalPrice => DatabaseManager.GetBidById(BidHistory[_bidCount++].BidId).Auction.CurrentPrice.ToString();
+
+    public string FinalPrice => "TBD";
+    //{
+        // get
+        // {
+        //     var bid = DatabaseManager.GetBidById(BidHistory[_bidCount++].BidId);
+        //     
+        //     if (bid.Auction.Buyer == null)
+        //     {
+        //         return "TBD";
+        //     }
+        //     else if (bid.Auction.Buyer == bid.Bidder)
+        //     {
+        //         return "You won the auction";
+        //     }
+        //     
+        //     return bid.Auction.CurrentPrice.ToString("C0");
+        // }
+    //}
+
 
     //     _finalPrices;
     // set => this.RaiseAndSetIfChanged(ref _finalPrices, value);
