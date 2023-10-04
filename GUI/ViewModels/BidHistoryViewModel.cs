@@ -11,46 +11,13 @@ namespace GUI.ViewModels;
 
 public class BidHistoryViewModel : ViewModelBase
 {
-    private ObservableCollection<Bid> _bidHistory;
-
-    public ObservableCollection<Bid> BidHistory
-    {
-        get => _bidHistory;
-        set => this.RaiseAndSetIfChanged(ref _bidHistory, value);
-    }
-
     private ObservableCollection<Bid> _userBids;
-
     public ObservableCollection<Bid> UserBids
     {
         get => _userBids;
         set => this.RaiseAndSetIfChanged(ref _userBids, value);
     }
 
-    private int _bidCount = 0;
-
-    public string FinalPrice => "TBD";
-    //{
-        // get
-        // {
-        //     var bid = DatabaseManager.GetBidById(BidHistory[_bidCount++].BidId);
-        //     
-        //     if (bid.Auction.Buyer == null)
-        //     {
-        //         return "TBD";
-        //     }
-        //     else if (bid.Auction.Buyer == bid.Bidder)
-        //     {
-        //         return "You won the auction";
-        //     }
-        //     
-        //     return bid.Auction.CurrentPrice.ToString("C0");
-        // }
-    //}
-
-
-    //     _finalPrices;
-    // set => this.RaiseAndSetIfChanged(ref _finalPrices, value);
     public ICommand CancelCommand { get; }
 
     public BidHistoryViewModel()
@@ -70,13 +37,4 @@ public class BidHistoryViewModel : ViewModelBase
     {
         UserBids = new ObservableCollection<Bid>(DatabaseManager.GetBidsByUser(UserInstance.GetCurrentUser()));
     }
-
-
-    // private void LoadBids()
-    // {
-    //     // var curentAuctions = DatabaseManager.get(bidder);
-    //     // var auctionBid = DatabaseManager.GetBidsByAuction(curentAuctions);
-    //     var allAuctions = DatabaseManager.GetBidsByUser(UserInstance.GetCurrentUser());
-    //     _bidHistory = new(allAuctions);
-    // }
 }
