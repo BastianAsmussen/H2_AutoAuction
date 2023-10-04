@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
+using Data.Classes;
 using Data.Classes.Auctions;
 using Data.DatabaseManager;
 using GUI.Utilities;
@@ -28,10 +29,34 @@ public class PlaceBidWindowViewModel : ViewModelBase
 
     private void PlaceBidClicked(object window)
     {
-        DatabaseManager.CreateBid(new Bid(0, DateTime.Now, Amount, UserInstance.GetCurrentUser(), Auction));
-
         Auction = DatabaseManager.GetAuctionById(Auction.AuctionId);
-        BuyerViewModel.Update(Auction);
+
+        var userId = UserInstance.GetCurrentUser().UserId;
+
+        if (DatabaseManager.IsCorporateUser(userId))
+        {
+            var corporateUser = DatabaseManager.GetCorporateUserByUserId(userId);
+
+            if (!corporateUser.PlaceBid(corporateUser, Auction, Amount))
+            {
+                Console.WriteLine("Bid was not placed!");
+
+                return;
+            }
+        }
+        else
+        {
+            var privateUser = DatabaseManager.GetPrivateUserByUserId(userId);
+
+            if (!privateUser.PlaceBid(privateUser, Auction, Amount))
+            {
+                Console.WriteLine("Bid was not placed!");
+
+                return;
+            }
+        }
+
+        BuyerViewModel.Update(DatabaseManager.GetAuctionById(Auction.AuctionId));
 
         ((Window)window).Close();
     }
