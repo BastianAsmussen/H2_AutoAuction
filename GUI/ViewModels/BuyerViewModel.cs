@@ -29,9 +29,15 @@ public class BuyerViewModel : ViewModelBase
         });
     }
 
-    public static BuyerViewModel Update(Auction auction)
+    public static void Update(Auction auction)
     {
-        return new BuyerViewModel(auction);
+        var vm = new BuyerViewModel(auction);
+        var view = new BuyerView()
+        {
+            DataContext = vm
+        };
+
+        Utilities.ContentArea.Navigate(view);
     }
 
     public Auction Auction { get; }
