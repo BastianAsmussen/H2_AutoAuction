@@ -14,59 +14,62 @@
         <viewModels:BidHistoryViewModel />
     </UserControl.DataContext>
 
-    <Grid RowDefinitions="*,*" ColumnDefinitions="*,Auto">
+    <Grid
+        ColumnDefinitions="Auto,Auto"
+        HorizontalAlignment="Center"
+        RowDefinitions="Auto,Auto">
 
         <StackPanel>
-            <Label FontSize="25" Margin="20">Your bid history</Label>
+            <Label
+                FontSize="25"
+                FontWeight="Medium"
+                HorizontalAlignment="Center"
+                Margin="20">
+                Din Bud Historik
+            </Label>
 
             <DataGrid
                 HorizontalScrollBarVisibility="Visible"
                 IsReadOnly="True"
                 ItemsSource="{Binding UserBids}"
-                Margin="15,0,200,0"
-                MinHeight="150"
-                MinWidth="390">
+                Margin="15">
+
+
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Binding="{Binding Auction.Vehicle.Name}"
                         Foreground="White"
-                        Header="Name"
-                        Width="130" />
+                        Header="Name" />
 
                     <DataGridTextColumn
                         Binding="{Binding Auction.Vehicle.Year}"
                         Foreground="White"
-                        Header="Årgang"
-                        Width="130" />
+                        Header="Årgang" />
 
                     <DataGridTextColumn
                         Binding="{Binding Path=Amount, StringFormat=' {0:C}'}"
                         Foreground="White"
-                        Header="Bud"
-                        Width="130" />
+                        Header="Bud" />
 
                     <DataGridTextColumn
                         Binding="{Binding Path=FinalAuctionPrice}"
                         Foreground="White"
-                        Header="Final"
-                        Width="130" />
+                        Header="Final" />
                 </DataGrid.Columns>
             </DataGrid>
+
+            <Button
+                Command="{Binding Path=CancelCommand}"
+                HorizontalAlignment="Right"
+                Margin="20">
+
+                <Label
+                    Content="Tilbage"
+                    FontSize="23"
+                    Foreground="Red" />
+            </Button>
+
         </StackPanel>
-
-        <Button
-            Command="{Binding Path=CancelCommand}"
-            Grid.Column="1"
-            Grid.Row="1"
-            HorizontalAlignment="Right"
-            Margin="20">
-
-            <Label
-                Content="Cancel"
-                FontSize="23"
-                Foreground="Red" />
-        </Button>
-
     </Grid>
 </UserControl>
