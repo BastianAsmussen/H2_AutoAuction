@@ -70,9 +70,20 @@ public class HomeScreenViewModel : ViewModelBase
         SignOutCommand = ReactiveCommand.Create(SignOut);
     }
 
-    private void ShowUserProfile() => Utilities.ContentArea.Navigate(new UserProfileView());
-    private void ShowBidHistory() => Utilities.ContentArea.Navigate(new UserProfileView());
-    private void ShowSetForSale() => Utilities.ContentArea.Navigate(new SetForSaleView());
+    private void ShowUserProfile()
+    {
+        var user = UserInstance.GetCurrentUser();
+
+        var vm = new UserProfileViewModel(user);
+        var view = new UserProfileView
+        {
+            DataContext = vm
+        };
+
+        ContentArea.Navigate(view);
+    }
+    private void ShowBidHistory() => ContentArea.Navigate(new UserProfileView());
+    private void ShowSetForSale() => ContentArea.Navigate(new SetForSaleView());
 
     private void SignOut()
     {
