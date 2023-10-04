@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 using Avalonia.Data;
@@ -13,6 +14,86 @@ namespace GUI.ViewModels;
 
 public class VehicleBlueprintViewModel : ViewModelBase
 {
+    private string _name;
+    private double _mileage;
+    private string _regNumber;
+    private int _manufacturingyear;
+    private object _licenseType;
+
+
+    private string? _selectedVehicleType;
+    private bool _isPrivatePersonalCar;
+    private bool _isProfessionalPersonalCar;
+    private bool _isBus;
+    private bool _isTruck;
+    private int _height;
+    private int _width;
+    private int _weight;
+
+    // Private Personal Car
+    private bool _hasIsoFix;
+    private int _numberOfSeats;
+
+    // Professoinal Personal Car
+    private bool _hasSafetyBar;
+    private int _loadCapacity;
+
+    // Personal Car
+    private int _drivenKilometers;
+    private double _engineSize;
+    private bool _hasTowBar;
+
+    // Bus
+    private int _numberOfSleepingSpaces;
+    private bool _hasToilet;
+
+    #region Properties
+
+    public int Manufacturingyear
+    {
+        get => _manufacturingyear;
+        set
+        {
+            NumberOnly(value);
+
+            this.RaiseAndSetIfChanged(ref _manufacturingyear, value);
+        }
+    }
+
+    public double Mileage
+    {
+        get => _mileage;
+        set
+        {
+            NumberOnly(value);
+
+            this.RaiseAndSetIfChanged(ref _mileage, value);
+        }
+    }
+
+    public string RegNumber
+    {
+        get => _regNumber;
+        set
+        {
+            NumberOnly(value);
+
+            this.RaiseAndSetIfChanged(ref _regNumber, value);
+        }
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+    public object LisenceType
+    {
+        get => _licenseType;
+        set => this.RaiseAndSetIfChanged(ref _licenseType, value);
+    }
+
     public Vehicle VehicleData
     {
         get
@@ -33,34 +114,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
             }
         }
     }
-
-    private string? _selectedVehicleType;
-    private bool _isPrivatePersonalCar;
-    private bool _isProfessionalPersonalCar;
-    private bool _isBus;
-    private bool _isTruck;
-    private string? _height;
-    private string? _width;
-    private string? _weight;
-
-    // Private Personal Car
-    private bool _hasIsoFix;
-    private string? _numberOfSeats;
-
-    // Professoinal Personal Car
-    private bool _hasSafetyBar;
-    private string? _loadCapacity;
-
-    // Personal Car
-    private string? _drivenKilometers;
-    private string? _engineSize;
-    private bool _hasTowBar;
-
-    // Bus
-    private string? _numberOfSleepingSpaces;
-    private bool _hasToilet;
-
-    #region Properties
 
     public List<string> VehicleType { get; } = new()
     {
@@ -137,7 +190,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     }
 
     //Dimensions Properties
-    public string? Height
+    public int Height
     {
         get => _height;
         set
@@ -148,7 +201,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
     }
 
-    public string? Width
+    public int Width
     {
         get => _width;
         set
@@ -159,7 +212,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
     }
 
-    public string? Weight
+    public int Weight
     {
         get => _weight;
         set
@@ -178,7 +231,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _hasIsoFix, value);
     }
 
-    public string? NumberOfSeats
+    public int NumberOfSeats
     {
         get => _numberOfSeats;
         set
@@ -196,7 +249,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _hasSafetyBar, value);
     }
 
-    public string? LoadCapacity
+    public int LoadCapacity
     {
         get => _loadCapacity;
         set
@@ -209,7 +262,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     // Personal Car Properties
 
-    public string? DrivenKilometers
+    public int DrivenKilometers
     {
         get => _drivenKilometers;
         set
@@ -220,7 +273,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
     }
 
-    public string? EngineSize
+    public double EngineSize
     {
         get => _engineSize;
         set
@@ -238,7 +291,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     }
 
     // Bus Properties
-    public string? NumberOfSLeeepingSpaces
+    public int NumberOfSLeeepingSpaces
     {
         get => _numberOfSleepingSpaces;
         set
@@ -257,6 +310,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #endregion
 
+    #region Icommands
+
 #pragma warning disable
     public ICommand YesIsoFixCommand { get; set; } = null!;
     public ICommand NoIsoFixCommand { get; set; } = null!;
@@ -267,6 +322,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     public ICommand YesTowBarCommand { get; set; } = null!;
     public ICommand NoTowBarCommand { get; set; } = null!;
 #pragma warning restore
+
+    #endregion
 
     public VehicleBlueprintViewModel()
     {
@@ -285,11 +342,27 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #region Methods
 
-    private void NumberOnly(string? value)
+    public void SetRegNumber(string regNumber)
     {
-        if (!string.IsNullOrEmpty(value))
-            if (!value.All(char.IsDigit))
-                throw new DataValidationException("Numbers only");
+        RegNumber = regNumber;
+    }
+
+    public void SetMileAge(double mileage)
+    {
+        Mileage = mileage;
+    }
+
+    public void SetLicenseType(LicenseType licenseType)
+    {
+        LisenceType = licenseType;
+    }
+
+    private void NumberOnly(object? value)
+    {
+        if (value is string val)
+            if (!string.IsNullOrEmpty(val))
+                if (!val.All(char.IsDigit))
+                    throw new DataValidationException("Numbers only");
     }
 
     #region Personal Vehicles
@@ -297,22 +370,30 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns the Dimensions of the vehicle")]
     public Dimensions GetDimensions()
     {
-        if (string.IsNullOrEmpty(Height) || string.IsNullOrEmpty(Width) || string.IsNullOrEmpty(Weight))
-            throw new("Please fill out all fields");
-
-        return new Dimensions(0, int.Parse(Height), int.Parse(Width), int.Parse(Weight));
+        return new Dimensions(0, Height, Width, Weight);
     }
 
     [Description("It Returns a PersonalCar Object")]
     public PersonalCar GetPersonalCar()
     {
-        if (string.IsNullOrEmpty(NumberOfSeats))
-            throw new("Please fill out all fields");
-
         try
         {
-            return new PersonalCar(0, Byte.Parse(NumberOfSeats), GetDimensions(),
-                new Vehicle() { EngineSize = double.Parse(EngineSize!), HasTowbar = HasTowBar });
+            var seatNumber = Convert.ToByte(NumberOfSeats);
+
+            var vehicle = new Vehicle()
+            {
+                VehicleId = 0,
+                Km = DrivenKilometers,
+                HasTowbar = HasTowBar,
+                EngineSize = EngineSize,
+                Name = Name,
+                KmPerLiter = Mileage,
+                RegistrationNumber = this.RegNumber,
+                Year = (short)Manufacturingyear,
+                LicenseType = (LicenseType)LisenceType,
+            };
+
+            return new PersonalCar(0, seatNumber, GetDimensions(), vehicle);
         }
         catch (Exception e)
         {
@@ -337,8 +418,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Professional Personal Car Object")]
     public ProfessionalPersonalCar GetProfessionalCar()
     {
-        if (string.IsNullOrEmpty(LoadCapacity))
-            throw new("Load Capacity is empty");
         try
         {
             return new ProfessionalPersonalCar(0, HasSafetyBar, Convert.ToDouble(LoadCapacity), GetPersonalCar());
@@ -359,7 +438,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         try
         {
             return new HeavyVehicle(0, GetDimensions(),
-                new Vehicle() { EngineSize = double.Parse(EngineSize!), HasTowbar = HasTowBar });
+                new Vehicle() { EngineSize = EngineSize, HasTowbar = HasTowBar });
         }
         catch (Exception e)
         {
@@ -370,8 +449,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Bus Object")]
     public Bus GetBus()
     {
-        if (string.IsNullOrEmpty(NumberOfSeats) || string.IsNullOrEmpty(NumberOfSLeeepingSpaces))
-            throw new("Numbers of seats or sleeping spaces is empty");
+        // if (string.IsNullOrEmpty(NumberOfSeats) || string.IsNullOrEmpty(NumberOfSLeeepingSpaces))
+        // throw new("Numbers of seats or sleeping spaces is empty");
         try
         {
             return new Bus(0, Convert.ToByte(NumberOfSeats), Convert.ToByte(NumberOfSLeeepingSpaces), HasToilet,
@@ -386,8 +465,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Truck Object")]
     public Truck GetTruck()
     {
-        if (string.IsNullOrEmpty(LoadCapacity))
-            throw new("Load Capacity is empty");
+        // if (string.IsNullOrEmpty(LoadCapacity))
+        //     throw new("Load Capacity is empty");
         try
         {
             return new Truck(0, Convert.ToDouble(LoadCapacity), GetHeavyVehicle());
@@ -433,4 +512,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #endregion
 
     #endregion
+
+    public Vehicle GetVehicleBlueprint() => VehicleData;
 }

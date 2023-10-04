@@ -46,9 +46,33 @@ public class Vehicle
         ValidateRegistrationNumber(RegistrationNumber);
     }
 
+#pragma warning disable
     public Vehicle()
     {
         // To Create an empty vehicle
+    }
+#pragma warning restore public Vehicle()
+
+    public Vehicle(Vehicle vehicle)
+    {
+        VehicleId = vehicle.VehicleId;
+        Name = vehicle.Name;
+        Km = vehicle.Km;
+        RegistrationNumber = vehicle.RegistrationNumber;
+        Year = vehicle.Year;
+        NewPrice = vehicle.NewPrice;
+        HasTowbar = vehicle.HasTowbar;
+        LicenseType = vehicle.LicenseType;
+        EngineSize = vehicle.EngineSize;
+        KmPerLiter = vehicle.KmPerLiter;
+        FuelType = vehicle.FuelType;
+        EnergyClass = vehicle.EnergyClass;
+
+        // Calculate the energy class of the vehicle.
+        EnergyClass = CalculateEnergyType(this);
+
+        // Validate the registration number.
+        ValidateRegistrationNumber(vehicle.RegistrationNumber);
     }
 
     /// <summary>

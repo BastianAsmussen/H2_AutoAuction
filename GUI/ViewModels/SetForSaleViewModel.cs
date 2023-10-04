@@ -1,10 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
-using Data.Classes.Vehicles.PersonalCars;
 using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
@@ -15,22 +16,32 @@ namespace GUI.ViewModels;
 public class SetForSaleViewModel : ViewModelBase
 {
     private string _name = null!;
-    private string _mileage = null!;
+    private double _mileage;
     private string _regNumber = null!;
-    private string _startingBid = null!;
-    private DateTime _year;
+    private decimal _startingBid;
     private DateTime _startDate;
     private DateTime _endDate;
-    private UserControl _vehicleBlueprintControl;
+    private UserControl _vehicleBlueprintControl = null!;
     private LicenseType _licenseType;
     private FuelType _fuelType;
     private EnergyType _energyType;
     private VehicleBlueprintViewModel _vehiclebpVm = new();
+    private object _selectedLicenseType;
 
     #region Properties
 
-    public int ThisYear => DateTime.Now.Year;
+    public List<LicenseType> LicenseTypes { get; } = Enum.GetValues(typeof(LicenseType)).Cast<LicenseType>().ToList();
 
+    public object SelectedLicenseType
+    {
+        get => _selectedLicenseType;
+        set
+        {
+            _vehiclebpVm.SetLicenseType((LicenseType)SelectedLicenseType);
+
+            this.RaiseAndSetIfChanged(ref _selectedLicenseType, value);
+        }
+    }
 
     public string Name
     {
@@ -38,40 +49,56 @@ public class SetForSaleViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _name, value);
     }
 
-    public string Mileage
+    public double Mileage
     {
         get => _mileage;
-        set => this.RaiseAndSetIfChanged(ref _mileage, value);
+        set
+        {
+            _vehiclebpVm.SetMileAge(Mileage);
+            this.RaiseAndSetIfChanged(ref _mileage, value);
+        }
     }
 
     public string RegNumber
     {
         get => _regNumber;
-        set => this.RaiseAndSetIfChanged(ref _regNumber, value);
+        set
+        {
+            _vehiclebpVm.SetRegNumber(RegNumber);
+
+            this.RaiseAndSetIfChanged(ref _regNumber, value);
+        }
     }
 
-    public string StartingBid
+    public decimal StartingBid
     {
         get => _startingBid;
         set => this.RaiseAndSetIfChanged(ref _startingBid, value);
     }
 
-    public DateTime Year
-    {
-        get => _year;
-        set => this.RaiseAndSetIfChanged(ref _year, value);
-    }
-
     public DateTime StartDate
     {
         get => _startDate;
-        set => this.RaiseAndSetIfChanged(ref _startDate, value);
+        set
+        {
+            if (value < Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy")))
+                this.RaiseAndSetIfChanged(ref _startDate, Convert.ToDateTime(DateTime.Now.ToString("dd-MM-yyyy")));
+
+            this.RaiseAndSetIfChanged(ref _startDate, value);
+        }
     }
 
     public DateTime EndDate
     {
         get => _endDate;
-        set => this.RaiseAndSetIfChanged(ref _endDate, value);
+        set
+        {
+            if (value < StartDate)
+                this.RaiseAndSetIfChanged(ref _startDate,
+                    Convert.ToDateTime(DateTime.Now.AddDays(+1).ToString("dd-MM-yyyy")));
+
+            this.RaiseAndSetIfChanged(ref _endDate, value);
+        }
     }
 
     public UserControl VehicleBlueprintControl
@@ -82,67 +109,60 @@ public class SetForSaleViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand CreateSaleCommand { get; }
-    public ICommand CancelCommand { get; }
+    public ICommand CreateSaleCommand { get; set; } = null!;
+    public ICommand CancelCommand { get; set; } = null!;
 
     public SetForSaleViewModel()
     {
+        InitVehicleBlueprint();
+        InitCommands();
+        InitDateTimes();
+    }
+
+    #region Methods
+
+    private void InitCommands()
+    {
         CreateSaleCommand = ReactiveCommand.Create(CreateSale);
         CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
+    }
 
+    private void InitVehicleBlueprint()
+    {
+        _vehiclebpVm = new VehicleBlueprintViewModel();
         var blueprintView = new VehicleBlueprintView
         {
             DataContext = _vehiclebpVm
         };
 
         VehicleBlueprintControl = blueprintView;
-
-        DateOnly currentDate = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-        try
-        {
-            StartDate = Convert.ToDateTime(currentDate);
-        }
-        catch (Exception e)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
-        }
-        
-        try
-        {
-            EndDate = Convert.ToDateTime(currentDate).AddDays(+1);
-            var a = EndDate;
-        }
-        catch (Exception e)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
-        }
     }
 
-    #region Methods
+    private void InitDateTimes()
+    {
+        StartDate = Convert.ToDateTime(DateTime.Now.ToString("hh:mm:ss"));
+        EndDate = Convert.ToDateTime(DateTime.Now.AddDays(+1).ToString("hh:mm:ss"));
+    }
 
     private void CreateSale()
     {
         try
         {
-            Auction auction = new(0, Convert.ToDecimal(StartingBid), Convert.ToDecimal(StartingBid), StartDate, EndDate,
-                _vehiclebpVm.VehicleData, UserInstance.GetCurrentUser(), null);
+            var vehicle = _vehiclebpVm.GetVehicleBlueprint();
+            
+            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, vehicle, UserInstance.GetCurrentUser(),
+                null);
 
-            DatabaseManager.CreateAuction(auction);
+            var aa = auction;
+
+            // DatabaseManager.CreateAuction(auction);
         }
         catch (Exception e)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
         }
 
-        Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("Sale created");
-        Console.ResetColor();
     }
 
     #endregion
