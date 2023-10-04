@@ -4,6 +4,7 @@ using Data.Classes.Vehicles;
 using Data.Classes.Vehicles.HeavyVehicles;
 using Data.Classes.Vehicles.PersonalCars;
 using Data.Interfaces;
+using GUI;
 using DatabaseManager = Data.DatabaseManager.DatabaseManager;
 
 namespace H2_AutoAuction;
@@ -12,6 +13,21 @@ internal class Program
 {
     private static void Main(string[] args)
     {
+        new Thread(() =>
+        {
+            while (true)
+            {
+                Console.WriteLine("Resolving auctions...");
+                DatabaseManager.ResolveAuctions();
+
+                // Sleep for 1 minute.
+                Thread.Sleep(1_000 * 60);
+            }
+        }).Start();
+
+        // Start the GUI.
+        Gui.Main(args);
+
         /*
         var random = new Random();
 
