@@ -54,16 +54,25 @@ public class PrivateUser : User
         try
         {
             auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
-            
-            var ourbid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
 
-            var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
+            List<Bid> bids;
+            try
+            {
+                bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
+            }
+            catch (Exception e) when (e is DataException)
+            {
+                Console.WriteLine($"Warning: {e.Message}");
+
+                bids = new List<Bid>();
+            }
+
+            var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
 
             var highestBid = bids.Max(b => b.Amount);
-
-            if (ourbid.Amount > highestBid)
+            if (ourBid.Amount > highestBid)
             {
-                auction.Buyer = buyer;
+                auction.CurrentPrice = ourBid.Amount;
             }
 
             DatabaseManager.DatabaseManager.UpdateAuction(auction);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Avalonia.Data;
@@ -17,20 +18,14 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         get
         {
-            switch (SelectedVehicleType)
+            return SelectedVehicleType switch
             {
-                case
-                    "Private Personal Car":
-                    return GetPrivatePersonalCar();
-                case "Professional Personal Car":
-                    return GetProfessionalCar();
-                case "Bus":
-                    return GetBus();
-                case "Truck":
-                    return GetBus();
-                default:
-                    throw new("Vehicle Type is empty");
-            }
+                "Private Personal Car" => GetPrivatePersonalCar(),
+                "Professional Personal Car" => GetProfessionalCar(),
+                "Bus" => GetBus(),
+                "Truck" => GetBus(),
+                _ => throw new InvalidDataException("Vehicle type is empty!")
+            };
         }
     }
 
