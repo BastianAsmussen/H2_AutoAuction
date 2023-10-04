@@ -20,13 +20,18 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
         <StackPanel>
             <Label FontSize="25" Margin="20">Your bid history</Label>
 
             <DataGrid
                 HorizontalScrollBarVisibility="Visible"
                 IsReadOnly="True"
-                ItemsSource="{Binding BidHistory}"
+                ItemsSource="{Binding UserBids}"
                 Margin="15,0,200,0"
                 MinHeight="150"
                 MinWidth="390">
@@ -45,19 +50,32 @@
                         Width="130" />
 
                     <DataGridTextColumn
-                        Binding="{Binding Auction.CurrentPrice, StringFormat=' {0:C}'}"
+                        Binding="{Binding Path=Amount, StringFormat=' {0:C}'}"
                         Foreground="White"
                         Header="Bud"
                         Width="130" />
 
                     <DataGridTextColumn
-                        Binding="{Binding Amount}"
+                        Binding="{Binding Path=FinalPrice, RelativeSource={RelativeSource AncestorType=viewModels:BidHistoryViewModel}}"
                         Foreground="White"
                         Header="Final"
                         Width="130" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
+
+        <Button
+            Command="{Binding Path=CancelCommand}"
+            Grid.Column="1"
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            Margin="20">
+
+            <Label
+                Content="Cancel"
+                FontSize="23"
+                Foreground="Red" />
+        </Button>
 
     </Grid>
 </UserControl>
