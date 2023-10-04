@@ -728,6 +728,93 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
+    /// <summary>
+    ///     Validates a CPR number.
+    /// </summary>
+    /// <param name="number">The CPR number to validate.</param>
+    /// <param name="isMale">Whether the person is male or not.</param>
+    /// <exception cref="ArgumentException">Thrown if the CPR number is invalid.</exception>
+    public static void ValidateCprNumber(string number, bool isMale = true)
+    {
+        // A CPR number must follow the format of DDMMYY-XXXX where X is a secret number unique to the person and D, M, and Y are the day, month, and year of birth respectively.
+        // A secret number is exactly 4 digits long, and the last digit is uneven if the person is male, otherwise the number is even.
+        // The first 6 digits of the CPR number must be a valid date.
+
+        // Check if the CPR number is exactly 11 characters long.
+        if (number.Length != 11)
+            throw new ArgumentException("CPR number must be exactly 11 characters long!");
+
+        // Check if the CPR number contains a hyphen.
+        if (!number.Contains('-'))
+            throw new ArgumentException("CPR number must contain a hyphen!");
+
+        var cprNumberParts = number.Split('-');
+
+        // Check if the CPR number contains exactly 2 parts.
+        if (cprNumberParts.Length != 2)
+            throw new ArgumentException("CPR number must contain exactly 2 parts separated by a hyphen!");
+
+        var datePart = cprNumberParts[0];
+
+        // Check if the date part is exactly 6 characters long.
+        if (datePart.Length != 6)
+            throw new ArgumentException("CPR number date part must be exactly 6 characters long!");
+
+        // Check if the date has passed, i.e. if the date is in the future.
+        var date = DateTime.ParseExact(datePart, "ddMMyy", null);
+        if (date > DateTime.Now)
+            throw new ArgumentException("CPR number date part must be a date in the past!");
+
+        var secretPart = cprNumberParts[1];
+
+        // Check if the secret part is exactly 4 characters long.
+        if (secretPart.Length != 4)
+            throw new ArgumentException("CPR number secret part must be exactly 4 characters long!");
+
+        // Check if the secret part contains only digits.
+        if (!secretPart.All(char.IsDigit))
+            throw new ArgumentException("CPR number secret part must contain only digits!");
+
+        // Check if the last digit is uneven if the person is male.
+        var lastDigit = int.Parse(secretPart[^1].ToString());
+        if (isMale && lastDigit % 2 == 0)
+            throw new ArgumentException("CPR number secret part last digit must be uneven if the person is male!");
+        
+        // If we got this far, the CPR number is valid, but we still need to check if it is unique.
+        if (IsCprNumberTaken(number))
+            throw new ArgumentException("CPR number is already taken!");
+    }
+
+    /// <summary>
+    ///     Checks if a CPR number is already taken.
+    /// </summary>
+    /// <param name="number">The CPR number to check.</param>
+    /// <returns>True if the CPR number is taken, false otherwise.</returns>
+    private static bool IsCprNumberTaken(string number)
+    {
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id FROM PrivateUsers" +
+                              " WHERE Cpr = @Cpr";
+
+        command.Parameters.AddWithValue("@Cpr", number);
+
+        var reader = command.ExecuteReader();
+        if (reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            return true;
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return false;
+    }
     #endregion
 
     #region CorporateUser
