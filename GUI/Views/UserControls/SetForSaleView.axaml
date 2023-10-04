@@ -92,6 +92,7 @@
                         BorderThickness="2"
                         FontSize="25"
                         Foreground="White"
+                        MaxLength="11"
                         MinWidth="240"
                         Text="{Binding Path=RegNumber}"
                         VerticalAlignment="Center" />
@@ -113,7 +114,7 @@
                         BorderBrush="Black"
                         BorderThickness="4"
                         DayVisible="False"
-                        Foreground="Red"
+                        Foreground="Green"
                         Height="35"
                         MaxYear="{Binding Path=ThisYear}"
                         MonthVisible="False"
@@ -175,7 +176,7 @@
                         Foreground="White"
                         Height="40"
                         MinWidth="240"
-                        SelectedDate="{Binding Path=StartDate, Mode=TwoWay}"
+                        SelectedDate="{Binding Path=StartDate}"
                         SelectedDateFormat="Custom"
                         Width="240" />
                 </StackPanel>
@@ -201,7 +202,7 @@
                         Foreground="White"
                         Height="40"
                         MinWidth="240"
-                        SelectedDate="{Binding Path=EndDate, Mode=TwoWay}"
+                        SelectedDate="{Binding Path=EndDate}"
                         Watermark="01/01/1970"
                         Width="240" />
                 </StackPanel>
@@ -211,19 +212,18 @@
 
         <!--  Vehicle type User Control  -->
         <WrapPanel
-            Background="Green"
+            Background="#302d3b"
             Grid.Column="1"
             Grid.Row="0"
             Grid.RowSpan="2"
-            Height="330"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Width="290">
-            <Label
-                Content="Set for sale"
-                FontSize="44"
-                Foreground="#ffffff" />
-            <StackPanel />
+            Height="380"
+            Width="295">
+
+            <UserControl
+                Content="{Binding Path=VehicleBlueprintControl}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+
         </WrapPanel>
 
         <!--  Footer  -->
@@ -245,12 +245,6 @@
                         FontSize="23"
                         Foreground="Red" />
                 </Button>
-
-                <!-- <Button Command="{Binding Path=CreateSaleCommand}" HorizontalAlignment="Right"> -->
-                <!--  <Label  -->
-                <!--  Content="Create auction"  -->
-                <!--  FontSize="23"  -->
-                <!--  Foreground="Green" />  -->
 
                 <Border Background="{DynamicResource ErrorBrush}" ToolTip.Placement="Right">
                     <ToolTip.Tip>

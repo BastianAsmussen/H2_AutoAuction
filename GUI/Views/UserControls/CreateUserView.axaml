@@ -21,12 +21,13 @@
             FontSize="40"
             Foreground="White"
             HorizontalAlignment="Center" />
+
         <StackPanel>
 
             <!--  UserName Input  -->
             <TextBox
                 FontSize="22"
-                Foreground="Black"
+                Foreground="White"
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 Text="{Binding UserName}"
@@ -36,7 +37,7 @@
             <StackPanel>
                 <TextBox
                     FontSize="22"
-                    Foreground="Black"
+                    Foreground="White"
                     Margin="0,20,0,0"
                     MaxWidth="400"
                     PasswordChar="*"
@@ -46,7 +47,7 @@
 
             <TextBox
                 FontSize="22"
-                Foreground="Black"
+                Foreground="White"
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 PasswordChar="*"
@@ -84,7 +85,8 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
+                        MaxLength="11"
                         Text="{Binding CvrNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="CVR"
@@ -92,7 +94,7 @@
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         Margin="22,0,0,0"
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
@@ -107,18 +109,18 @@
                     IsVisible="{Binding Path=IsChecked, ElementName=IsPrivateteButton, Mode=TwoWay}"
                     x:Name="PrivateUserInfo">
 
-                    <TextBox
+                    <MaskedTextBox
                         FontSize="22"
-                        Foreground="Black"
-                        MaxLength="10"
+                        Foreground="White"
+                        Mask="00 00 00 - 00 00"
                         Text="{Binding CprNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
                         Watermark="Cpr number"
-                        Width="160" />
+                        Width="170" />
 
                     <TextBox
                         FontSize="22"
-                        Foreground="Black"
+                        Foreground="White"
                         Margin="22,0,0,0"
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
@@ -139,6 +141,7 @@
 
                 <Button
                     Command="{Binding Path=CreateCommand}"
+                    IsDefault="True"
                     IsEnabled="{Binding Path=BtnCreateEnabled}"
                     Margin="40,0,0,0">
                     <Label

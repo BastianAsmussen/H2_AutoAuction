@@ -1,7 +1,7 @@
 ﻿<UserControl
     Background="#1b1827"
-    Height="450"
-    Width="800"
+    MinHeight="450"
+    MinWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.HomeScreenView"
     x:DataType="vm:HomeScreenViewModel"
@@ -23,7 +23,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="40" />
+            <RowDefinition MinHeight="40" />
+            <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
 
@@ -43,27 +44,27 @@
                 IsReadOnly="True"
                 ItemsSource="{Binding UserAuctions}"
                 Margin="0,0,200,0"
-                Width="390">
+                MinWidth="390">
 
                 <DataGrid.Columns>
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Name}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Name"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Årgang"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Bud"  -->
-                    <!--  Width="130" />  -->
+
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name"
+                        MinWidth="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        MinWidth="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
+                        Foreground="White"
+                        Header="Bud"
+                        MinWidth="130" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
@@ -72,39 +73,39 @@
         <StackPanel
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Grid.Row="2">
+            Grid.Row="2"
+            Grid.RowSpan="2">
             <Label
                 Content="Current Auctions"
                 FontSize="22"
                 Foreground="White" />
 
             <DataGrid
-                Height="150"
                 HorizontalScrollBarVisibility="Visible"
                 IsReadOnly="True"
                 ItemsSource="{Binding CurrentAuctions}"
                 Margin="0,0,200,0"
-                Width="390">
+                MinHeight="150"
+                MinWidth="390" SelectionChanged="OnAuctionSelectionChange" SelectedItem="{Binding}">
 
                 <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name"
+                        Width="130" />
 
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Name}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Name"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Årgang"  -->
-                    <!--  Width="130" />  -->
-                    <!--    -->
-                    <!--  <DataGridTextColumn  -->
-                    <!--  Binding="{Binding Year}"  -->
-                    <!--  Foreground="White"  -->
-                    <!--  Header="Bud"  -->
-                    <!--  Width="130" />  -->
+                    <DataGridTextColumn
+                        Binding="{Binding Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang"
+                        Width="130" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
+                        Foreground="White"
+                        Header="Bud"
+                        Width="130" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
@@ -136,6 +137,18 @@
                 FontSize="22"
                 Foreground="White"
                 HorizontalContentAlignment="Center"
+                MinWidth="180" />
+
+            <Button
+                Background="Red"
+                BorderThickness="33"
+                Command="{Binding SignOutCommand}"
+                Content="Sign Out"
+                CornerRadius="32,32,32,32"
+                FontSize="22"
+                Foreground="White"
+                HorizontalContentAlignment="Center"
+                Margin="0,100,0,0"
                 MinWidth="180" />
 
         </StackPanel>

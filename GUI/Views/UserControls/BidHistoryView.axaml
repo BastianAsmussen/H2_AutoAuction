@@ -3,14 +3,73 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="GUI.Views.UserControls.BidHistoryView"
+    x:DataType="viewModels:BidHistoryViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:GUI.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    &lt;TextBlock
-    FontSize="44"
-    Foreground="White"
-    HorizontalAlignment="Center"
-    VerticalAlignment="Center"&gt;
-    Bid History    &lt;/TextBlock&gt;
+
+    <UserControl.DataContext>
+        <viewModels:BidHistoryViewModel />
+    </UserControl.DataContext>
+
+    <Grid
+        ColumnDefinitions="Auto,Auto"
+        HorizontalAlignment="Center"
+        RowDefinitions="Auto,Auto">
+
+        <StackPanel>
+            <Label
+                FontSize="25"
+                FontWeight="Medium"
+                HorizontalAlignment="Center"
+                Margin="20">
+                Din Bud Historik
+            </Label>
+
+            <DataGrid
+                HorizontalScrollBarVisibility="Visible"
+                IsReadOnly="True"
+                ItemsSource="{Binding UserBids}"
+                Margin="15">
+
+
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Auction.Vehicle.Name}"
+                        Foreground="White"
+                        Header="Name" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Auction.Vehicle.Year}"
+                        Foreground="White"
+                        Header="Årgang" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Path=Amount, StringFormat=' {0:C}'}"
+                        Foreground="White"
+                        Header="Bud" />
+
+                    <DataGridTextColumn
+                        Binding="{Binding Path=FinalAuctionPrice}"
+                        Foreground="White"
+                        Header="Final" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button
+                Command="{Binding Path=CancelCommand}"
+                HorizontalAlignment="Right"
+                Margin="20">
+
+                <Label
+                    Content="Tilbage"
+                    FontSize="23"
+                    Foreground="Red" />
+            </Button>
+
+        </StackPanel>
+    </Grid>
 </UserControl>

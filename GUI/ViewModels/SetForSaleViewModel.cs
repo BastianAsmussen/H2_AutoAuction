@@ -1,9 +1,10 @@
 ﻿using System;
-using System.IO;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
-using Avalonia.Data;
+using Avalonia.Controls;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
+using Data.Classes.Vehicles.PersonalCars;
 using Data.DatabaseManager;
 using GUI.Utilities;
 using GUI.Views.UserControls;
@@ -13,8 +14,6 @@ namespace GUI.ViewModels;
 
 public class SetForSaleViewModel : ViewModelBase
 {
-    #region Properties
-
     private string _name = null!;
     private string _mileage = null!;
     private string _regNumber = null!;
@@ -22,11 +21,16 @@ public class SetForSaleViewModel : ViewModelBase
     private DateTime _year;
     private DateTime _startDate;
     private DateTime _endDate;
+    private UserControl _vehicleBlueprintControl;
+    private LicenseType _licenseType;
+    private FuelType _fuelType;
+    private EnergyType _energyType;
+    private VehicleBlueprintViewModel _vehiclebpVm = new();
 
-    public DateTime ThisYear
-    {
-        get => DateTime.Now;
-    }
+    #region Properties
+
+    public int ThisYear => DateTime.Now.Year;
+
 
     public string Name
     {
@@ -61,29 +65,22 @@ public class SetForSaleViewModel : ViewModelBase
     public DateTime StartDate
     {
         get => _startDate;
-        set
-        {
-            if (StartDate < EndDate)
-                throw new DataValidationException("Start date cannot be before today");
-
-            this.RaiseAndSetIfChanged(ref _startDate, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _startDate, value);
     }
 
     public DateTime EndDate
     {
         get => _endDate;
-        set
-        {
-            if (EndDate < StartDate)
-                throw new DataValidationException("End date cannot be before start date");
+        set => this.RaiseAndSetIfChanged(ref _endDate, value);
+    }
 
-            this.RaiseAndSetIfChanged(ref _endDate, value);
-        }
+    public UserControl VehicleBlueprintControl
+    {
+        get => _vehicleBlueprintControl;
+        set => this.RaiseAndSetIfChanged(ref _vehicleBlueprintControl, value);
     }
 
     #endregion
-
 
     public ICommand CreateSaleCommand { get; }
     public ICommand CancelCommand { get; }
@@ -93,13 +90,17 @@ public class SetForSaleViewModel : ViewModelBase
         CreateSaleCommand = ReactiveCommand.Create(CreateSale);
         CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
 
-        DateTime localDate = DateTime.Now;
+        var blueprintView = new VehicleBlueprintView
+        {
+            DataContext = _vehiclebpVm
+        };
 
-        DateOnly d = new();
+        VehicleBlueprintControl = blueprintView;
 
+        DateOnly currentDate = new(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
         try
         {
-            StartDate = (DateTime.Now);
+            StartDate = Convert.ToDateTime(currentDate);
         }
         catch (Exception e)
         {
@@ -107,10 +108,11 @@ public class SetForSaleViewModel : ViewModelBase
             Console.WriteLine($"Error : {e.Message}");
             Console.ResetColor();
         }
-
+        
         try
         {
-            EndDate = DateTime.Now.AddDays(+1);
+            EndDate = Convert.ToDateTime(currentDate).AddDays(+1);
+            var a = EndDate;
         }
         catch (Exception e)
         {
@@ -126,14 +128,10 @@ public class SetForSaleViewModel : ViewModelBase
     {
         try
         {
-            // Sale creation
-            //
-            // Auction newAuction = new(0, new Vehicle(0, Name, float.Parse(Mileage), RegNumber, Convert.ToUInt16(Year),
-            //     true, LicenseType.B, 22, 22, FuelType.Diesel,
-            //     EnergyType.A
-            // ), UserInstance.GetCurrentUser(), null, 0, decimal.Parse(StartingBid));
-            //
-            // DatabaseManager.CreateAuction(newAuction);
+            Auction auction = new(0, Convert.ToDecimal(StartingBid), Convert.ToDecimal(StartingBid), StartDate, EndDate,
+                _vehiclebpVm.VehicleData, UserInstance.GetCurrentUser(), null);
+
+            DatabaseManager.CreateAuction(auction);
         }
         catch (Exception e)
         {

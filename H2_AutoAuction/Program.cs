@@ -12,69 +12,9 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        // Create a new thread for the database manager.
-        new Thread(() =>
-        {
-            while (true)
-            {
-                var startTime = DateTime.Now;
-
-                DatabaseManager.ResolveAuctions();
-
-                Console.WriteLine($"Resolved auctions in {DateTime.Now - startTime}.");
-
-                // Sleep for 1 minute.
-                Thread.Sleep(1_000 * 60);
-            }
-        }).Start();
-
-        /*
-        const string username = "test";
-        const string password = "test";
-
-        var signupTimes = new List<TimeSpan>();
-        var loginTimes = new List<TimeSpan>();
-
-        for (var i = 0; i < 100; i++)
-        {
-            try
-            {
-                var signupStartTime = DateTime.Now;
-                var signup =
-                    DatabaseManager.SignUp(
-                        new PrivateUser(0, "123456-7890", new User(0, username, password, "1234", 0)));
-                var signupEndTime = DateTime.Now - signupStartTime;
-
-                signupTimes.Add(signupEndTime);
-
-                Console.WriteLine($"Signup took {signupEndTime.TotalMilliseconds} ms.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            try
-            {
-                var loginStartTime = DateTime.Now;
-                var login = DatabaseManager.Login(username, password);
-                var loginEndTime = DateTime.Now - loginStartTime;
-
-                loginTimes.Add(loginEndTime);
-
-                Console.WriteLine($"Login took {loginEndTime.TotalMilliseconds} ms.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        // Console.WriteLine($"Average signup time: {signupTimes.Average(time => time.TotalMilliseconds)} ms.");
-        Console.WriteLine($"Average login time: {loginTimes.Average(time => time.TotalMilliseconds)} ms.");
-        */
         /*
         var random = new Random();
+
         const int totalUsers = 1_000;
         const string defaultPassword = "1234";
 
@@ -122,7 +62,6 @@ internal class Program
         {
             var name = Faker.Name.First();
             var km = random.Next(0, 1_000_000);
-            // A registration number is 2 letters followed by 5 numbers.
             var registrationNumber = $"{(char)random.Next('A', 'Z')}{(char)random.Next('A', 'Z')}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}{random.Next(0, 9)}";
             var year = (short)random.Next(1900, 2021);
             var newPrice = random.Next(0, 1_000_000);

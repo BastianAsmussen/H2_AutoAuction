@@ -1,0 +1,120 @@
+﻿<UserControl
+    Background="#302d3b"
+    Height="380"
+    Width="295"
+    mc:Ignorable="d"
+    x:Class="GUI.Views.UserControls.VehicleBlueprintView"
+    x:DataType="vm:VehicleBlueprintViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top">
+
+        <StackPanel>
+            <!--  Vehicle Type  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Vehicle type"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <ComboBox
+                    ItemsSource="{Binding Path=VehicleType}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedVehicleType}"
+                    Width="150" />
+            </StackPanel>
+
+            <!--  Dimension  -->
+            <!--  Height  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Height"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Text="{Binding Height}" Width="150" />
+            </StackPanel>
+
+            <!--  Length  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Length"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Text="{Binding Width}" Width="150" />
+            </StackPanel>
+
+            <!--  Weight  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Weight"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Text="{Binding Weight}" Width="150" />
+            </StackPanel>
+
+            <!--  Engine Size  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Engine Size"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <TextBox Text="{Binding EngineSize}" Width="150" />
+            </StackPanel>
+
+            <!--  Private Personal Car  -->
+            <WrapPanel Margin="0,5,0,5" Orientation="Horizontal">
+
+                <!--  Number of seats  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Number Of Seats"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+                </StackPanel>
+
+                <!--  Has Isofix  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text=" Has Iso fix"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+                </StackPanel>
+
+                <!--  Number of seats  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Number Of Seats"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+                </StackPanel>
+
+                <!--  Number of seats  -->
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Number Of Seats"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+                </StackPanel>
+
+
+            </WrapPanel>
+        </StackPanel>
+    </WrapPanel>
+</UserControl>

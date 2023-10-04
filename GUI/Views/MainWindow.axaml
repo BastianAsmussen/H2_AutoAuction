@@ -1,11 +1,14 @@
 <Window
-    Background="White"
+    Background="#1d1827"
     ExtendClientAreaToDecorationsHint="True"
+    Height="500"
     Icon="../Assets/icon.ico"
     MinHeight="500"
     MinWidth="850"
     Title="Auto Auction"
     TransparencyLevelHint="AcrylicBlur"
+    Width="850"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d"
     x:Class="GUI.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -20,7 +23,7 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <UserControl Background="#1b1827" Margin="0,32,0,0">
+    <UserControl Background="#1b1827" Margin="4,32,4,4">
         <utilities:ContentArea />
     </UserControl>
 </Window>

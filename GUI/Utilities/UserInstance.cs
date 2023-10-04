@@ -1,13 +1,10 @@
 ﻿using System;
 using Data.Classes;
-using Data.Interfaces;
 using GUI.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using ReactiveUI;
 
 namespace GUI.Utilities;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+#pragma warning disable
 /// <summary>
 /// This class is used to store the current user instance
 /// </summary>
@@ -40,9 +37,16 @@ public abstract class UserInstance : ViewModelBase
     /// <returns>The currently set user.</returns>
     public static User GetCurrentUser()
     {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (_user == null)
-            throw new NullReferenceException("UserInstance is not set");
-        
+            Console.WriteLine("UserInstance is not set");
+
         return _user;
+    }
+
+    public static void LogOut()
+    {
+        _user = null;
+        _canEdit = true;
     }
 }

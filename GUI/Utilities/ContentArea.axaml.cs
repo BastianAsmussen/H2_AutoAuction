@@ -1,6 +1,4 @@
-﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using GUI.Views.UserControls;
 
 namespace GUI.Utilities;
@@ -13,14 +11,9 @@ public partial class ContentArea : UserControl
     {
         InitializeComponent();
         _instance ??= this;
-        Home();
+        Navigate(new LoginView());
     }
-
-    private void Home()
-    {
-        Navigate(new HomeScreenView());
-    }
-
+    
     public static void Navigate(UserControl? userControl)
     {
         if (_instance == null) return;

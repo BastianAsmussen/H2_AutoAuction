@@ -1,3 +1,4 @@
+using System.Data;
 using Data.Classes;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
@@ -21,7 +22,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Auctions";
-
+        
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
         {
@@ -448,7 +449,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Auctions" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -555,6 +556,12 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when the auction does not exist.</exception>
     public static Auction UpdateAuction(Auction auction)
     {
+        var buyerQuery = "";
+        if (auction.Buyer != null)
+        {
+            buyerQuery = ",    BuyerId = @BuyerId";
+        }
+
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
@@ -564,16 +571,17 @@ public partial class DatabaseManager
                               "     StartDate = @StartDate," +
                               "     EndDate = @EndDate," +
                               "     VehicleId = @VehicleId," +
-                              "     SellerId = @SellerId," +
-                              "     BuyerId = @BuyerId" +
+                              "     SellerId = @SellerId" +
+                              buyerQuery +
                               " WHERE Id = @Id";
         command.Parameters.AddWithValue("@CurrentPrice", auction.CurrentPrice);
-        command.Parameters.AddWithValue("@StandingBid", auction.StartingBid);
+        command.Parameters.AddWithValue("@StartingBid", auction.StartingBid);
         command.Parameters.AddWithValue("@StartDate", auction.StartDate);
         command.Parameters.AddWithValue("@EndDate", auction.EndDate);
         command.Parameters.AddWithValue("@VehicleId", auction.Vehicle.VehicleId);
         command.Parameters.AddWithValue("@SellerId", auction.Seller.UserId);
-        command.Parameters.AddWithValue("@BuyerId", auction.Buyer?.UserId ?? 0);
+        if (auction.Buyer != null)
+            command.Parameters.AddWithValue("@BuyerId", auction.Buyer.UserId);
         command.Parameters.AddWithValue("@Id", auction.AuctionId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -709,14 +717,14 @@ public partial class DatabaseManager
     /// </summary>
     /// <param name="auction">The auction.</param>
     /// <returns>A list of bids.</returns>
-    /// <exception cref="ArgumentException">Thrown when the auction does not exist.</exception>
+    /// <exception cref="DataException">Thrown when no bids exist for the auction.</exception>
     public static List<Bid> GetBidsByAuction(Auction auction)
     {
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Bids" +
-                              "    WHERE AuctionId = @Id";
+                              " WHERE AuctionId = @Id";
         command.Parameters.AddWithValue("@Id", auction.AuctionId);
 
         var reader = command.ExecuteReader();
@@ -725,7 +733,7 @@ public partial class DatabaseManager
             reader.Close();
             connection.Close();
 
-            throw new ArgumentException("Auction does not exist!");
+            throw new DataException("No bids on the auction exist!");
         }
 
         var bids = new List<Bid>();
@@ -763,8 +771,8 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "INSERT INTO Bids (Date, Amount, BidderId, AuctionId)" +
-                              "    OUTPUT inserted.Id" +
-                              "    VALUES (@Date, @Amount, @BidderId, @AuctionId)";
+                              " OUTPUT inserted.Id" +
+                              " VALUES (@Date, @Amount, @BidderId, @AuctionId)";
         command.Parameters.AddWithValue("@Date", bid.Time);
         command.Parameters.AddWithValue("@Amount", bid.Amount);
         command.Parameters.AddWithValue("@BidderId", bid.Bidder.UserId);
@@ -802,7 +810,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Bids" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", id);
 
         var reader = command.ExecuteReader();
@@ -878,7 +886,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM Bids" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", bid.BidId);
 
         if (command.ExecuteNonQuery() == 0)
@@ -911,8 +919,8 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT DISTINCT U.Id FROM Users U" +
-                              "    INNER JOIN Auctions A ON U.Id = A.SellerId" +
-                              "    WHERE Zipcode BETWEEN @From AND @To";
+                              " INNER JOIN Auctions A ON U.Id = A.SellerId" +
+                              " WHERE Zipcode BETWEEN @From AND @To";
         command.Parameters.AddWithValue("@From", from);
         command.Parameters.AddWithValue("@To", to);
 

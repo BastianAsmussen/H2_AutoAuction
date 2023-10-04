@@ -1,5 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Data.Classes.Auctions;
+using Data.DatabaseManager;
+using GUI.Utilities;
 using GUI.Views.UserControls;
 using ReactiveUI;
 
@@ -9,16 +14,16 @@ public class HomeScreenViewModel : ViewModelBase
 {
     #region Properties
 
-    private ObservableCollection<string> _userAuctions = new() ;
-    private ObservableCollection<string> _currentAuctions = new();
+    private ObservableCollection<Auction> _userAuctions = new();
+    private ObservableCollection<Auction> _currentAuctions = new();
 
-    public ObservableCollection<string> UserAuctions
+    public ObservableCollection<Auction> UserAuctions
     {
         get => _userAuctions;
         set => this.RaiseAndSetIfChanged(ref _userAuctions, value);
     }
 
-    public ObservableCollection<string> CurrentAuctions
+    public ObservableCollection<Auction> CurrentAuctions
     {
         get => _currentAuctions;
         set => this.RaiseAndSetIfChanged(ref _currentAuctions, value);
@@ -26,35 +31,53 @@ public class HomeScreenViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand SetForSaleCommand { get; }
-    public ICommand UserProfileCommand { get; }
-    public ICommand BidHistoryCommand { get; }
+    public ICommand? SetForSaleCommand { get; set; }
+    public ICommand? UserProfileCommand { get; set; }
+    public ICommand? BidHistoryCommand { get; set; }
+    public ICommand? SignOutCommand { get; set; }
 
     public HomeScreenViewModel()
     {
-        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
-        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
-        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
+        CommandsLoader();
 
+        try
+        {
+            LoadAuctions();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading auctions: {e.Message}");
+        }
     }
 
 
     #region Methods
 
-    private void ShowUserProfile()
+    private void LoadAuctions()
     {
-        Utilities.ContentArea.Navigate(new UserProfileView());
+        var allAuctions = DatabaseManager.GetAllAuctions();
+        CurrentAuctions = new(allAuctions);
+       
+        var auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
+        UserAuctions = new(auctionsByThisUser);
     }
 
-
-    private void ShowBidHistory()
+    private void CommandsLoader()
     {
-        Utilities.ContentArea.Navigate(new UserProfileView());
+        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
+        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
+        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
+        SignOutCommand = ReactiveCommand.Create(SignOut);
     }
 
-    private void ShowSetForSale()
+    private void ShowUserProfile() => Utilities.ContentArea.Navigate(new UserProfileView());
+    private void ShowBidHistory() => Utilities.ContentArea.Navigate(new BidHistoryView());
+    private void ShowSetForSale() => Utilities.ContentArea.Navigate(new SetForSaleView());
+
+    private void SignOut()
     {
-        Utilities.ContentArea.Navigate(new SetForSaleView());
+        UserInstance.LogOut();
+        Utilities.ContentArea.Navigate(new LoginView());
     }
 
     #endregion
