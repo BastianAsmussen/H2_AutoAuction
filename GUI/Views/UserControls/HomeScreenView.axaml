@@ -86,7 +86,7 @@
                 ItemsSource="{Binding CurrentAuctions}"
                 Margin="0,0,200,0"
                 MinHeight="150"
-                MinWidth="390">
+                MinWidth="390" SelectionChanged="OnAuctionSelectionChange" SelectedItem="{Binding}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
