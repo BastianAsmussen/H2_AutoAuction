@@ -4,14 +4,16 @@ using System;
 
 namespace GUI;
 
-class Program
+public static class Gui
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
+    public static void Main(string[] args)
+    {
+        Start();
+    }
+
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    private static void Start() => BuildAvaloniaApp()
+        .StartWithClassicDesktopLifetime(Array.Empty<string>());
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
