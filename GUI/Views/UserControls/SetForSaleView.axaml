@@ -249,8 +249,10 @@
                 <Border Background="{DynamicResource ErrorBrush}" ToolTip.Placement="Right">
                     <ToolTip.Tip>
                         <StackPanel>
-                            <TextBlock Classes="h1">ToolTip</TextBlock>
-                            <TextBlock Classes="h2">A control which pops up a hint when a control is hovered</TextBlock>
+                            <TextBlock>
+                                Remember to fill everything up
+                                <TextBlock.FontWeight>Black</TextBlock.FontWeight>
+                            </TextBlock>
                         </StackPanel>
                     </ToolTip.Tip>
                     <Button

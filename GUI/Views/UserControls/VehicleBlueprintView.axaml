@@ -36,7 +36,10 @@
                     Text="Height"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Text="{Binding Height}" Width="150" />
+                <TextBox
+                    MaxLength="5"
+                    Text="{Binding Height}"
+                    Width="150" />
             </StackPanel>
 
             <!--  Length  -->
@@ -46,7 +49,10 @@
                     Text="Length"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Text="{Binding Width}" Width="150" />
+                <TextBox
+                    MaxLength="5"
+                    Text="{Binding Width}"
+                    Width="150" />
             </StackPanel>
 
             <!--  Weight  -->
@@ -56,7 +62,10 @@
                     Text="Weight"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Text="{Binding Weight}" Width="150" />
+                <TextBox
+                    MaxLength="5"
+                    Text="{Binding Weight}"
+                    Width="150" />
             </StackPanel>
 
             <!--  Engine Size  -->
@@ -66,7 +75,10 @@
                     Text="Engine Size"
                     VerticalAlignment="Center"
                     Width="120" />
-                <TextBox Text="{Binding EngineSize}" Width="150" />
+                <TextBox
+                    MaxLength="5"
+                    Text="{Binding EngineSize}"
+                    Width="150" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -100,7 +112,10 @@
                         Text="Number Of Seats"
                         VerticalAlignment="Center"
                         Width="120" />
-                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+                    <TextBox
+                        MaxLength="2"
+                        Text="{Binding NumberOfSeats}"
+                        Width="150" />
                 </StackPanel>
 
                 <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
