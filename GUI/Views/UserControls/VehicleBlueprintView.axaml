@@ -71,9 +71,11 @@
             </StackPanel>
 
             <!--  Private Personal Car  -->
-            <WrapPanel Margin="0,5,0,5" Orientation="Horizontal">
+            <WrapPanel
+                IsVisible="{Binding IsPrivatePersonalCar}"
+                Margin="0,5,0,5"
+                Orientation="Horizontal">
 
-                <!--  Number of seats  -->
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
@@ -83,17 +85,30 @@
                     <TextBox Text="{Binding NumberOfSeats}" Width="150" />
                 </StackPanel>
 
-                <!--  Has Isofix  -->
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
                         Text=" Has Iso fix"
                         VerticalAlignment="Center"
                         Width="120" />
-                    <TextBox Text="{Binding NumberOfSeats}" Width="150" />
+
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                        <RadioButton Content="Yes" Margin="10,0,10,0" />
+                        <RadioButton Content="No" Margin="10,0,0,0" />
+                    </StackPanel>
                 </StackPanel>
 
-                <!--  Number of seats  -->
+            </WrapPanel>
+
+            <!--  Professional Personal Car  -->
+            <WrapPanel
+                IsVisible="{Binding IsProfessionalPersonalCar}"
+                Margin="0,5,0,5"
+                Orientation="Horizontal">
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
@@ -103,17 +118,84 @@
                     <TextBox Text="{Binding NumberOfSeats}" Width="150" />
                 </StackPanel>
 
-                <!--  Number of seats  -->
+                <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Load Capacity"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding LoadCapacity}" Width="150" />
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Number Of Seats"
+                        Text="Has Safety Cage"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                        <RadioButton Content="Yes" Margin="10,0,5,0" />
+                        <RadioButton Content="No" Margin="10,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </WrapPanel>
+
+            <!--  Bus  -->
+            <WrapPanel
+                IsVisible="{Binding IsBus}"
+                Margin="0,10,0,10"
+                Orientation="Horizontal">
+
+                <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Num. Of Seats"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding NumberOfSeats}" Width="150" />
                 </StackPanel>
 
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Num. Of Sleeping Space"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding NumberOfSLeeepingSpaces}" Width="150" />
+                </StackPanel>
 
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Has Toilet"
+                        VerticalAlignment="Center"
+                        Width="120" />
+
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Content="Yes" Margin="20,0,0,0" />
+                        <RadioButton Content="No" Margin="20,0,0,0" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </WrapPanel>
+
+            <!--  Truck  -->
+            <WrapPanel
+                IsVisible="{Binding IsTruck}"
+                Margin="0,5,0,5"
+                Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        Text="Load Capacity"
+                        VerticalAlignment="Center"
+                        Width="120" />
+                    <TextBox Text="{Binding LoadCapacity}" Width="150" />
+                </StackPanel>
             </WrapPanel>
         </StackPanel>
     </WrapPanel>

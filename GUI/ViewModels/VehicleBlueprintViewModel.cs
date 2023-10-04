@@ -75,7 +75,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         get => _selectedVehicleType;
         set
         {
-            switch (SelectedVehicleType)
+            switch (value)
             {
                 case
                     "Private Personal Car":
