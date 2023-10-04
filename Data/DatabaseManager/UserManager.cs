@@ -342,7 +342,7 @@ public partial class DatabaseManager
     /// </summary>
     /// <param name="userId">The ID of the user to check.</param>
     /// <returns>True if the user is a corporate user, false otherwise.</returns>
-    private static bool IsCorporateUser(int userId)
+    public static bool IsCorporateUser(int userId)
     {
         var connection = Instance.GetConnection();
 
