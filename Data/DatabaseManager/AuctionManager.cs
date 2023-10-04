@@ -783,7 +783,7 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "DELETE FROM Bids" +
-                              "    WHERE Id = @Id";
+                              " WHERE Id = @Id";
         command.Parameters.AddWithValue("@Id", bid.BidId);
 
         if (command.ExecuteNonQuery() == 0)
