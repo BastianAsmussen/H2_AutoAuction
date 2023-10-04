@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Data.Classes.Auctions;
 using Data.DatabaseManager;
@@ -42,7 +43,7 @@ public class HomeScreenViewModel : ViewModelBase
 
         try
         {
-            LoadAuctions();
+            GetAuctions();
         }
         catch (Exception e)
         {
@@ -53,13 +54,33 @@ public class HomeScreenViewModel : ViewModelBase
 
     #region Methods
 
-    private void LoadAuctions()
+    /// <summary>
+    /// Asynchronously gets all auctions and user's auctions. 
+    /// </summary>
+    public async Task GetAuctions()
+    {
+        // a Task to load all auctions
+        Task allAuctions = LoadAllAuctions();
+        // a Task to load user's auctions
+        Task usersAuctions = LoadUsersAuctions();
+
+        // Await the completion of both tasks.
+        await Task.WhenAll(allAuctions, usersAuctions);
+    }
+
+    private async Task LoadAllAuctions()
     {
         var allAuctions = DatabaseManager.GetAllAuctions();
         CurrentAuctions = new(allAuctions);
-       
+        Console.WriteLine($"ALl auctions: Done loading");
+    }
+
+    private async Task LoadUsersAuctions()
+    {
         var auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
         UserAuctions = new(auctionsByThisUser);
+
+        Console.WriteLine($"User auctions: Done loading");
     }
 
     private void CommandsLoader()
@@ -70,14 +91,14 @@ public class HomeScreenViewModel : ViewModelBase
         SignOutCommand = ReactiveCommand.Create(SignOut);
     }
 
-    private void ShowUserProfile() => Utilities.ContentArea.Navigate(new UserProfileView());
-    private void ShowBidHistory() => Utilities.ContentArea.Navigate(new UserProfileView());
-    private void ShowSetForSale() => Utilities.ContentArea.Navigate(new SetForSaleView());
+    private void ShowUserProfile() => ContentArea.Navigate(new UserProfileView());
+    private void ShowBidHistory() => ContentArea.Navigate(new UserProfileView());
+    private void ShowSetForSale() => ContentArea.Navigate(new SetForSaleView());
 
     private void SignOut()
     {
         UserInstance.LogOut();
-        Utilities.ContentArea.Navigate(new LoginView());
+        ContentArea.Navigate(new LoginView());
     }
 
     #endregion
