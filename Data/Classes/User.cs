@@ -20,7 +20,8 @@ public class User : IBuyer, ISeller
         Zipcode = zipcode;
         Balance = balance;
     }
- public User(User user)
+    
+    public User(User user)
     {
         UserId = user.UserId;
         Username = user.Username;
@@ -59,7 +60,7 @@ public class User : IBuyer, ISeller
     /// <param name="seller">The seller of the auction.</param>
     /// <returns>The ID of the auction.</returns>
     /// <exception cref="ArgumentException">Thrown when the start date is after the end date, the current bid is less than 0 or the auction fails to be created.</exception>
-    public int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, User seller)
+    public int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller)
     {
         // If the start date is after the end date, throw an exception.
         if (startDate > endDate)
@@ -83,4 +84,6 @@ public class User : IBuyer, ISeller
         
         return auction.AuctionId;
     }
+    
+
 }

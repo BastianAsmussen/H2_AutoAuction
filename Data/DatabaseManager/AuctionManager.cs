@@ -30,7 +30,7 @@ public partial class DatabaseManager
             reader.Close();
             connection.Close();
 
-            throw new ArgumentException("No users exist!");
+            throw new ArgumentException("No auctions exist!");
         }
 
         var auctions = new List<Auction>();
@@ -70,6 +70,32 @@ public partial class DatabaseManager
     }
 
     /// <summary>
+    ///     Gets all active auctions from the database that have not ended yet.
+    /// </summary>
+    /// <returns>A list of auctions.</returns>
+    public static List<Auction> GetAllActiveAuctions()
+    {
+        var auctions = GetAllAuctions();
+
+        auctions = auctions.Where(auction => auction.EndDate > DateTime.Now).ToList();
+
+        return auctions;
+    }
+
+    /// <summary>
+    ///     Gets all inactive auctions from the database that have ended.
+    /// </summary>
+    /// <returns>A list of auctions.</returns>
+    public static List<Auction> GetAllInactiveAuctions()
+    {
+        var auctions = GetAllAuctions();
+
+        auctions = auctions.Where(auction => auction.EndDate < DateTime.Now).ToList();
+
+        return auctions;
+    }
+
+    /// <summary>
     ///     Gets all auctions by a user.
     /// </summary>
     /// <param name="user">The user.</param>
@@ -81,7 +107,8 @@ public partial class DatabaseManager
 
         var command = connection.CreateCommand();
         command.CommandText = "SELECT * FROM Auctions" +
-                              "    WHERE SellerId = @Id OR BuyerId = @Id";
+                              " WHERE SellerId = @Id" +
+                              "    OR BuyerId = @Id";
         command.Parameters.AddWithValue("@Id", user.UserId);
 
         var reader = command.ExecuteReader();
@@ -127,6 +154,76 @@ public partial class DatabaseManager
         reader.Close();
 
         return auctions;
+    }
+
+    /// <summary>
+    ///     Resolve all auctions that have ended.
+    /// </summary>
+    public static void ResolveAuctions()
+    {
+        var auctions = GetAllInactiveAuctions();
+        if (auctions.Count == 0)
+            return;
+
+        foreach (var auction in auctions)
+        {
+            // If the auction already has a buyer, it has already been resolved.
+            if (auction.Buyer != null)
+                continue;
+
+            var bids = GetBidsByAuction(auction);
+
+            // If there are no bids, the auction cannot be resolved.
+            if (bids.Count == 0)
+                continue;
+
+            // Loop over all the bids sorted by amount.
+            bids = bids.OrderBy(bid => bid.Amount).ToList();
+            foreach (var bid in bids)
+            {
+                try
+                {
+                    // Update the balance of the bidder.
+                    if (IsCorporateUser(bid.Bidder.UserId))
+                    {
+                        var buyer = (CorporateUser)bid.Bidder;
+
+                        buyer.SubBalance(bid.Amount);
+
+                        UpdateCorporateUser(buyer);
+                        UpdateUser(buyer);
+                    }
+                    else
+                    {
+                        var buyer = (PrivateUser)bid.Bidder;
+
+                        buyer.SubBalance(bid.Amount);
+
+                        UpdateUser(buyer);
+                    }
+                } catch (ArgumentException)
+                {
+                    // If the bidder does not have enough balance, continue to the next bid.
+                    Console.WriteLine($"Bidder #{bid.Bidder.UserId} does not have enough balance to buy the vehicle, moving on...");
+
+                    continue;
+                }
+
+                // Update the balance of the seller.
+                var seller = GetUserById(auction.Seller.UserId);
+                seller.Balance += bid.Amount;
+
+                UpdateUser(seller);
+
+                // Update the auction.
+                auction.CurrentPrice = bid.Amount;
+                auction.Buyer = bid.Bidder;
+
+                UpdateAuction(auction);
+
+                break;
+            }
+        }
     }
 
     /// <summary>
