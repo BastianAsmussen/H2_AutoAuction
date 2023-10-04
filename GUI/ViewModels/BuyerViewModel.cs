@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Windows.Input;
 using Data.Classes;
 using Data.Classes.Auctions;
@@ -79,7 +80,23 @@ public class BuyerViewModel : ViewModelBase
 
     public string FormattedAuctionEnd => Auction.EndDate.ToString("dd/MM/yyyy HH:mm");
     public string FormattedCurrentBid => Auction.CurrentPrice.ToString("C");
-    public string FormattedBidCount => DatabaseManager.GetBidsByAuction(Auction).Count.ToString("N0");
+    public string FormattedBidCount => GetBidsCount().ToString("N0");
 
     public ICommand PlaceBidCommand { get; }
+
+    private int GetBidsCount()
+    {
+        try
+        {
+            var bids = DatabaseManager.GetBidsByAuction(Auction);
+
+            return bids.Count;
+        }
+        catch (Exception e) when (e is DataException)
+        {
+            Console.WriteLine($"Warning: {e.Message}");
+
+            return 0;
+        }
+    }
 }
