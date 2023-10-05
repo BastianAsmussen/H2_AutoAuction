@@ -53,7 +53,7 @@ public class SetForSaleViewModel : ViewModelBase
     public string RegNumber
     {
         get => _regNumber;
-        set => this.RaiseAndSetIfChanged(ref _regNumber, value);
+        set => this.RaiseAndSetIfChanged(ref _regNumber, value.ToUpper());
     }
 
     public decimal StartingBid
@@ -146,6 +146,7 @@ public class SetForSaleViewModel : ViewModelBase
 
             DatabaseManager.CreateAuction(auction);
             Console.WriteLine("Sale created");
+            Utilities.ContentArea.Navigate(new HomeScreenView());
         }
         catch (Exception e)
         {
