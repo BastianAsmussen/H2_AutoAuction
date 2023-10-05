@@ -44,10 +44,19 @@ public class PrivateUser : User
     /// <exception cref="ArgumentException">Thrown when an error occurs in the database.</exception>
     public bool PlaceBid(PrivateUser buyer, Auction auction, decimal newBid)
     {
+        // If the new bid is less than or equal to the current price, return false.
+        if (newBid <= auction.CurrentPrice)
+            return false;
+
+        // If the buyer does not have sufficient funds, return false.
         if (!HasSufficientFunds(buyer.Balance, auction.CurrentPrice))
             return false;
 
-        if (newBid < auction.CurrentPrice)
+        // If the last bidder is the same as the current bidder, return false.
+        var latestBid = DatabaseManager.DatabaseManager.GetBidsByAuction(auction)
+                                                            .OrderByDescending(b => b.Time)
+                                                            .First();
+        if (latestBid.Bidder.UserId == buyer.UserId)
             return false;
 
         // Checks if the newBid is higher than the current highest bid.
