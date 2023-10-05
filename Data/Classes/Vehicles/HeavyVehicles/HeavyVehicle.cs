@@ -29,6 +29,10 @@ public class HeavyVehicle : Vehicle
         Dimensions = dimensions;
     }
 
+    public HeavyVehicle()
+    {
+        /// Empty constructor for empty user
+    }
     public override string ToString() =>
         $"{base.ToString()}\n" +
         $"HeavyVehicleId: {HeavyVehicleId}\n" +

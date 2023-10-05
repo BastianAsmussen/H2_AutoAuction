@@ -26,7 +26,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 "Private Personal Car" => GetPrivatePersonalCar(),
                 "Professional Personal Car" => GetProfessionalCar(),
                 "Bus" => GetBus(),
-                "Truck" => GetBus(),
+                "Truck" => GetTruck(),
                 _ => throw new InvalidDataException("Vehicle type is empty!")
             };
         }
@@ -381,8 +381,23 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new HeavyVehicle(0, GetDimensions(),
-                new Vehicle() { EngineSize = EngineSize, HasTowbar = HasTowBar });
+            // Vehicle vehicle = 
+            var heavyVehicle = new HeavyVehicle(0, GetDimensions(), new Vehicle()
+            {
+                VehicleId = 0,
+                Km = DrivenKilometers,
+                NewPrice = 0,
+                HasTowbar = HasTowBar,
+                EngineSize = EngineSize,
+                RegistrationNumber = _regNumber,
+                Year = (short)SetForSaleView.Year,
+                LicenseType = _selectedLicenseType,
+                FuelType = SelectedFuelType,
+                KmPerLiter = _mileage,
+                Name = _name,
+            });
+
+            return heavyVehicle;
         }
         catch (Exception e)
         {
@@ -393,8 +408,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Bus Object")]
     public Bus GetBus()
     {
-        // if (string.IsNullOrEmpty(NumberOfSeats) || string.IsNullOrEmpty(NumberOfSLeeepingSpaces))
-        // throw new("Numbers of seats or sleeping spaces is empty");
         try
         {
             return new Bus(0, Convert.ToByte(NumberOfSeats), Convert.ToByte(NumberOfSLeeepingSpaces), HasToilet,
@@ -409,8 +422,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Truck Object")]
     public Truck GetTruck()
     {
-        // if (string.IsNullOrEmpty(LoadCapacity))
-        //     throw new("Load Capacity is empty");
+       
         try
         {
             return new Truck(0, Convert.ToDouble(LoadCapacity), GetHeavyVehicle());
