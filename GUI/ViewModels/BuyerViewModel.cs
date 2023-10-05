@@ -1,10 +1,10 @@
 using System;
 using System.Data;
 using System.Windows.Input;
-using Data.Classes;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.DatabaseManager;
+using GUI.Utilities;
 using GUI.Views;
 using GUI.Views.UserControls;
 using ReactiveUI;
@@ -18,7 +18,7 @@ public class BuyerViewModel : ViewModelBase
         Auction = auction;
         Vehicle = Auction.Vehicle;
 
-        BackCommand = ReactiveCommand.Create(() => Utilities.ContentArea.Navigate(new HomeScreenView()));
+        BackCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
         PlaceBidCommand = ReactiveCommand.Create(() =>
         {
             var placeBidWindow = new PlaceBidWindow();
@@ -28,17 +28,6 @@ public class BuyerViewModel : ViewModelBase
             placeBidWindow.DataContext = placeBidWindowViewModel;
             placeBidWindow.Show();
         });
-    }
-
-    public static void Update(Auction auction)
-    {
-        var vm = new BuyerViewModel(auction);
-        var view = new BuyerView()
-        {
-            DataContext = vm
-        };
-
-        Utilities.ContentArea.Navigate(view);
     }
 
     public Auction Auction { get; }
@@ -83,6 +72,17 @@ public class BuyerViewModel : ViewModelBase
     public string FormattedBidCount => GetBidsCount().ToString("N0");
 
     public ICommand PlaceBidCommand { get; }
+
+    public static void Update(Auction auction)
+    {
+        var vm = new BuyerViewModel(auction);
+        var view = new BuyerView
+        {
+            DataContext = vm
+        };
+
+        ContentArea.Navigate(view);
+    }
 
     private int GetBidsCount()
     {

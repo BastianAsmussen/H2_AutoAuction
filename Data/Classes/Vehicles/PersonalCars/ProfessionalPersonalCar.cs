@@ -5,6 +5,14 @@
 /// </summary>
 public class ProfessionalPersonalCar : PersonalCar
 {
+    public ProfessionalPersonalCar(int id, bool hasSafetyBar, double loadCapacity, PersonalCar personalCar) : base(
+        personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
+    {
+        ProfessionalPersonalCarId = id;
+        HasSafetyBar = hasSafetyBar;
+        LoadCapacity = loadCapacity;
+    }
+
     /// <summary>
     ///     The ID of the professional personal car in the database.
     /// </summary>
@@ -20,16 +28,11 @@ public class ProfessionalPersonalCar : PersonalCar
     /// </summary>
     public double LoadCapacity { get; set; }
 
-    public ProfessionalPersonalCar(int id, bool hasSafetyBar, double loadCapacity, PersonalCar personalCar) : base(personalCar.PersonalCarId, personalCar.NumberOfSeats, personalCar.TrunkDimensions, personalCar)
+    public override string ToString()
     {
-        ProfessionalPersonalCarId = id;
-        HasSafetyBar = hasSafetyBar;
-        LoadCapacity = loadCapacity;
+        return $"{base.ToString()}\n" +
+               $"ProfessionalPersonalCarId: {ProfessionalPersonalCarId}\n" +
+               $"HasSafetyBar: {HasSafetyBar}\n" +
+               $"LoadCapacity: {LoadCapacity}";
     }
-
-    public override string ToString() =>
-        $"{base.ToString()}\n" +
-        $"ProfessionalPersonalCarId: {ProfessionalPersonalCarId}\n" +
-        $"HasSafetyBar: {HasSafetyBar}\n" +
-        $"LoadCapacity: {LoadCapacity}";
 }

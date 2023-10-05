@@ -1,6 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.ReactiveUI;
-using System;
 
 namespace GUI;
 
@@ -12,14 +12,19 @@ public static class Gui
     }
 
     [STAThread]
-    private static void Start() => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(Array.Empty<string>());
+    private static void Start()
+    {
+        BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(Array.Empty<string>());
+    }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
             .UseReactiveUI();
+    }
 }

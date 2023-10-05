@@ -13,6 +13,11 @@ public class UserProfileViewModel : ViewModelBase
 {
     private readonly User _user;
 
+    public UserProfileViewModel(User user)
+    {
+        _user = user;
+    }
+
     public string Username => _user.Username;
 
     public string FormattedBalance => $"Konto: {_user.Balance:C0}";
@@ -79,9 +84,4 @@ public class UserProfileViewModel : ViewModelBase
     });
 
     public ICommand BackCommand => ReactiveCommand.Create(() => { ContentArea.Navigate(new HomeScreenView()); });
-
-    public UserProfileViewModel(User user)
-    {
-        _user = user;
-    }
 }

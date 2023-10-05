@@ -1,9 +1,6 @@
 using System;
 using System.Reactive;
-using System.Windows.Input;
-using Avalonia;
 using Avalonia.Controls;
-using Data.Classes;
 using Data.Classes.Auctions;
 using Data.DatabaseManager;
 using GUI.Utilities;
@@ -13,12 +10,6 @@ namespace GUI.ViewModels;
 
 public class PlaceBidWindowViewModel : ViewModelBase
 {
-    public Auction Auction { get; set; }
-
-    public decimal Amount { get; set; }
-
-    public ReactiveCommand<object, Unit> PlaceBidCommand { get; }
-
     public PlaceBidWindowViewModel(Auction auction)
     {
         Auction = auction;
@@ -26,6 +17,12 @@ public class PlaceBidWindowViewModel : ViewModelBase
 
         PlaceBidCommand = ReactiveCommand.Create<object>(PlaceBidClicked);
     }
+
+    public Auction Auction { get; set; }
+
+    public decimal Amount { get; set; }
+
+    public ReactiveCommand<object, Unit> PlaceBidCommand { get; }
 
     private void PlaceBidClicked(object window)
     {

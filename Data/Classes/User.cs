@@ -6,12 +6,6 @@ namespace Data.Classes;
 
 public class User : IBuyer, ISeller
 {
-    public int UserId { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public string Zipcode { get; set; }
-    public decimal Balance { get; set; }
-
     public User(int id, string username, string password, string zipcode, decimal balance = 0)
     {
         UserId = id;
@@ -20,15 +14,21 @@ public class User : IBuyer, ISeller
         Zipcode = zipcode;
         Balance = balance;
     }
-    
+
     public User(User user)
     {
         UserId = user.UserId;
         Username = user.Username;
         Password = user.Password;
-        Zipcode =  user.Zipcode;
-        Balance =  user.Balance;
+        Zipcode = user.Zipcode;
+        Balance = user.Balance;
     }
+
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string Zipcode { get; set; }
+    public decimal Balance { get; set; }
+    public int UserId { get; set; }
 
     public virtual void SubBalance(decimal amount)
     {
@@ -40,16 +40,6 @@ public class User : IBuyer, ISeller
         throw new NotImplementedException();
     }
 
-    public override string ToString()
-    {
-        return $"{base.ToString()}" +
-               $"UserId: {UserId}\n" +
-               $"Username: {Username}\n" +
-               $"Password: {Password}\n" +
-               $"Zipcode: {Zipcode}\n" +
-               $"Balance: {Balance}\n";
-    }
-
     /// <summary>
     ///     Sets a vehicle for sale.
     /// </summary>
@@ -59,7 +49,10 @@ public class User : IBuyer, ISeller
     /// <param name="vehicle">The vehicle to set for sale.</param>
     /// <param name="seller">The seller of the auction.</param>
     /// <returns>The ID of the auction.</returns>
-    /// <exception cref="ArgumentException">Thrown when the start date is after the end date, the current bid is less than 0 or the auction fails to be created.</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when the start date is after the end date, the current bid is less than 0 or
+    ///     the auction fails to be created.
+    /// </exception>
     public int SetForSale(decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller)
     {
         // If the start date is after the end date, throw an exception.
@@ -81,9 +74,17 @@ public class User : IBuyer, ISeller
             Console.WriteLine("Error in SetForSale: " + e.Message);
             throw;
         }
-        
+
         return auction.AuctionId;
     }
-    
 
+    public override string ToString()
+    {
+        return $"{base.ToString()}" +
+               $"UserId: {UserId}\n" +
+               $"Username: {Username}\n" +
+               $"Password: {Password}\n" +
+               $"Zipcode: {Zipcode}\n" +
+               $"Balance: {Balance}\n";
+    }
 }

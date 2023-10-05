@@ -12,6 +12,14 @@ namespace GUI.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
+    public LoginViewModel()
+    {
+        LoginCommand = ReactiveCommand.Create(SignIn);
+        SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
+
+        ValidateInput();
+    }
+
     #region Properties
 
     private string _userName = null!;
@@ -44,14 +52,6 @@ public class LoginViewModel : ViewModelBase
 
     #endregion
 
-    public LoginViewModel()
-    {
-        LoginCommand = ReactiveCommand.Create(SignIn);
-        SignUpCommand = ReactiveCommand.Create(GoToCreateScreen);
-
-        ValidateInput();
-    }
-
     #region Methods
 
     private void SignIn()
@@ -63,14 +63,11 @@ public class LoginViewModel : ViewModelBase
 
             SetCurrentUser(receivedUserData);
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Success : User signed in successfully.");
+            Console.WriteLine("Success : User signed in successfully.");
             Console.ResetColor();
-            
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (GetCurrentUser() != null)
-            {
-                GoToHomeScreen();
-            }
+            if (GetCurrentUser() != null) GoToHomeScreen();
         }
         catch (Exception e)
         {
@@ -84,12 +81,19 @@ public class LoginViewModel : ViewModelBase
         }
     }
 
-    private void GoToHomeScreen() => ContentArea.Navigate(new HomeScreenView());
-    private void GoToCreateScreen() => ContentArea.Navigate(new CreateUserView());
+    private void GoToHomeScreen()
+    {
+        ContentArea.Navigate(new HomeScreenView());
+    }
+
+    private void GoToCreateScreen()
+    {
+        ContentArea.Navigate(new CreateUserView());
+    }
 
 
     /// <summary>
-    /// If the user has entered a username and password, the login button will be enabled.
+    ///     If the user has entered a username and password, the login button will be enabled.
     /// </summary>
     private void ValidateInput()
     {

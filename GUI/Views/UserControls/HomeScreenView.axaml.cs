@@ -1,7 +1,4 @@
-﻿using System;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+﻿using Avalonia.Controls;
 using Data.Classes.Auctions;
 using GUI.Utilities;
 using GUI.ViewModels;

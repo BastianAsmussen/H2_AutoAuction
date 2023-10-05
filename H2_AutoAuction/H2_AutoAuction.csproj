@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../Data/Data.csproj" />
-        <ProjectReference Include="../GUI/GUI.csproj" />
+        <ProjectReference Include="../Data/Data.csproj"/>
+        <ProjectReference Include="../GUI/GUI.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Faker.Net" Version="2.0.154" />
+        <PackageReference Include="Faker.Net" Version="2.0.154"/>
     </ItemGroup>
 
 </Project>

@@ -5,6 +5,22 @@ namespace Data.Classes.Auctions;
 
 public class Auction
 {
+    public Auction(int id, decimal currentPrice, decimal startingBid, DateTime startDate, DateTime endDate,
+        Vehicle vehicle, ISeller seller, IBuyer? buyer)
+    {
+        AuctionId = id;
+
+        CurrentPrice = currentPrice;
+        StartingBid = startingBid;
+
+        StartDate = startDate;
+        EndDate = endDate;
+
+        Vehicle = vehicle;
+        Seller = seller;
+        Buyer = buyer;
+    }
+
     /// <summary>
     ///     The ID of the auction.
     /// </summary>
@@ -45,28 +61,13 @@ public class Auction
     /// </summary>
     public IBuyer? Buyer { get; set; }
 
-    public Auction(int id, decimal currentPrice, decimal startingBid, DateTime startDate, DateTime endDate, Vehicle vehicle, ISeller seller, IBuyer? buyer)
-    {
-        AuctionId = id;
-
-        CurrentPrice = currentPrice;
-        StartingBid = startingBid;
-        
-        StartDate = startDate;
-        EndDate = endDate;
-        
-        Vehicle = vehicle;
-        Seller = seller;
-        Buyer = buyer;
-    }
-
     public override string ToString()
     {
         return $"Auction ID: {AuctionId}\n" +
                $"Current price: {CurrentPrice}\n" +
                $"Starting Bid: {StartingBid}\n" +
                $"Start Date: {StartDate}\n" +
-               $"End Date: {EndDate}\n" + 
+               $"End Date: {EndDate}\n" +
                $"Vehicle: {Vehicle}\n" +
                $"Seller: {Seller}\n" +
                $"Buyer: {Buyer}";

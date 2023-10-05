@@ -10,7 +10,6 @@ namespace Data.DatabaseManager;
 public partial class DatabaseManager
 {
     private static DatabaseManager? _instance;
-    public static DatabaseManager Instance => _instance ??= new DatabaseManager();
 
     private SqlConnection? _connection;
 
@@ -18,6 +17,8 @@ public partial class DatabaseManager
     {
         _instance ??= this;
     }
+
+    public static DatabaseManager Instance => _instance ??= new DatabaseManager();
 
     /// <summary>
     ///     Returns a connection to the database.
@@ -32,7 +33,7 @@ public partial class DatabaseManager
             DataSource = $"{credentials.Item1},{credentials.Item2.ToString()}",
             InitialCatalog = credentials.Item3,
             UserID = credentials.Item4,
-            Password = credentials.Item5,
+            Password = credentials.Item5
         };
 
         var connectionString = sb.ConnectionString;
@@ -44,7 +45,7 @@ public partial class DatabaseManager
     }
 
     /// <summary>
-    ///    Returns the credentials for the database.
+    ///     Returns the credentials for the database.
     /// </summary>
     /// <returns>The credentials.</returns>
     /// <exception cref="InvalidCredentialException">If the credentials are invalid.</exception>
@@ -57,34 +58,19 @@ public partial class DatabaseManager
 
         // Check if credentials are valid.
         var host = env["SQL_HOST"];
-        if (string.IsNullOrWhiteSpace(host))
-        {
-            throw new InvalidCredentialException("SQL Host is invalid!");
-        }
+        if (string.IsNullOrWhiteSpace(host)) throw new InvalidCredentialException("SQL Host is invalid!");
 
         var port = env["SQL_PORT"];
-        if (!int.TryParse(port, out var _))
-        {
-            throw new InvalidCredentialException("SQL Port is invalid!");
-        }
+        if (!int.TryParse(port, out var _)) throw new InvalidCredentialException("SQL Port is invalid!");
 
         var database = env["SQL_DATABASE"];
-        if (string.IsNullOrWhiteSpace(database))
-        {
-            throw new InvalidCredentialException("SQL Database is invalid!");
-        }
+        if (string.IsNullOrWhiteSpace(database)) throw new InvalidCredentialException("SQL Database is invalid!");
 
         var username = env["SQL_USERNAME"];
-        if (string.IsNullOrWhiteSpace(username))
-        {
-            throw new InvalidCredentialException("SQL User is invalid!");
-        }
+        if (string.IsNullOrWhiteSpace(username)) throw new InvalidCredentialException("SQL User is invalid!");
 
         var password = env["SQL_PASSWORD"];
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            throw new InvalidCredentialException("SQL Password is invalid!");
-        }
+        if (string.IsNullOrWhiteSpace(password)) throw new InvalidCredentialException("SQL Password is invalid!");
 
         return (host, uint.Parse(port), database, username, password);
     }

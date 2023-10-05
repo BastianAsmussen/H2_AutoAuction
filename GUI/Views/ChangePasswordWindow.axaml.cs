@@ -43,7 +43,8 @@ public partial class ChangePasswordWindow : Window
             _user = DatabaseManager.UpdatePassword(_user, oldPassword, newPassword);
 
             Console.WriteLine("Password changed successfully!");
-        } catch (Exception exception)
+        }
+        catch (Exception exception)
         {
             Console.WriteLine($"Error: {exception.Message}");
         }

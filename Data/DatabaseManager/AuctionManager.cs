@@ -10,7 +10,61 @@ namespace Data.DatabaseManager;
 /// </summary>
 public partial class DatabaseManager
 {
+    #region Seller
+
+    /// <summary>
+    ///     Gets all sellers within a given zipcode range from the database.
+    /// </summary>
+    /// <param name="from">The lower bound of the zipcode range.</param>
+    /// <param name="to">The upper bound of the zipcode range.</param>
+    /// <returns>A list of sellers within the given zipcode range.</returns>
+    /// <exception cref="ArgumentException">
+    ///     Thrown when no sellers exist or when the lower bound is greater than the upper
+    ///     bound.
+    /// </exception>
+    public static List<User> GetSellersByZipcodeRange(int from, int to)
+    {
+        if (from > to) throw new ArgumentException("'from' value cannot be greater than 'to' value!");
+
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT DISTINCT U.Id FROM Users U" +
+                              " INNER JOIN Auctions A ON U.Id = A.SellerId" +
+                              " WHERE Zipcode BETWEEN @From AND @To";
+        command.Parameters.AddWithValue("@From", from);
+        command.Parameters.AddWithValue("@To", to);
+
+        var reader = command.ExecuteReader();
+
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new ArgumentException("No sellers within the given zipcode range exist!");
+        }
+
+        var sellers = new List<User>();
+
+        while (reader.Read())
+        {
+            var userId = reader.GetInt32(0);
+            var user = GetUserById(userId);
+
+            sellers.Add(user);
+        }
+
+        reader.Close();
+        connection.Close();
+
+        return sellers;
+    }
+
+    #endregion
+
     #region Auctions
+
     /// <summary>
     ///     Gets all auctions from the database.
     /// </summary>
@@ -51,7 +105,8 @@ public partial class DatabaseManager
 
             if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null));
+                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller,
+                    null));
 
                 continue;
             }
@@ -139,7 +194,8 @@ public partial class DatabaseManager
 
             if (reader.IsDBNull(7))
             {
-                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller, null));
+                auctions.Add(new Auction(auctionId, currentPrice, standingBid, startDate, endDate, vehicle, seller,
+                    null));
 
                 continue;
             }
@@ -200,10 +256,12 @@ public partial class DatabaseManager
 
                         UpdateUser(buyer);
                     }
-                } catch (ArgumentException)
+                }
+                catch (ArgumentException)
                 {
                     // If the bidder does not have enough balance, continue to the next bid.
-                    Console.WriteLine($"Bidder #{bid.Bidder.UserId} does not have enough balance to buy the vehicle, moving on...");
+                    Console.WriteLine(
+                        $"Bidder #{bid.Bidder.UserId} does not have enough balance to buy the vehicle, moving on...");
 
                     continue;
                 }
@@ -434,7 +492,8 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new Auction(auctionId, auction.CurrentPrice, auction.StartingBid, auction.StartDate, auction.EndDate, auction.Vehicle, auction.Seller, auction.Buyer);
+        return new Auction(auctionId, auction.CurrentPrice, auction.StartingBid, auction.StartDate, auction.EndDate,
+            auction.Vehicle, auction.Seller, auction.Buyer);
     }
 
     /// <summary>
@@ -557,10 +616,7 @@ public partial class DatabaseManager
     public static Auction UpdateAuction(Auction auction)
     {
         var buyerQuery = "";
-        if (auction.Buyer != null)
-        {
-            buyerQuery = ",    BuyerId = @BuyerId";
-        }
+        if (auction.Buyer != null) buyerQuery = ",    BuyerId = @BuyerId";
 
         var connection = Instance.GetConnection();
 
@@ -618,9 +674,11 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
     #endregion
 
     #region Bids
+
     /// <summary>
     ///     Gets all bids from the database.
     /// </summary>
@@ -898,56 +956,6 @@ public partial class DatabaseManager
 
         connection.Close();
     }
-    #endregion
 
-    #region Seller
-    /// <summary>
-    ///     Gets all sellers within a given zipcode range from the database.
-    /// </summary>
-    /// <param name="from">The lower bound of the zipcode range.</param>
-    /// <param name="to">The upper bound of the zipcode range.</param>
-    /// <returns>A list of sellers within the given zipcode range.</returns>
-    /// <exception cref="ArgumentException">Thrown when no sellers exist or when the lower bound is greater than the upper bound.</exception>
-    public static List<User> GetSellersByZipcodeRange(int from, int to)
-    {
-        if (from > to)
-        {
-            throw new ArgumentException("'from' value cannot be greater than 'to' value!");
-        }
-
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-        command.CommandText = "SELECT DISTINCT U.Id FROM Users U" +
-                              " INNER JOIN Auctions A ON U.Id = A.SellerId" +
-                              " WHERE Zipcode BETWEEN @From AND @To";
-        command.Parameters.AddWithValue("@From", from);
-        command.Parameters.AddWithValue("@To", to);
-
-        var reader = command.ExecuteReader();
-
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new ArgumentException("No sellers within the given zipcode range exist!");
-        }
-
-        var sellers = new List<User>();
-
-        while (reader.Read())
-        {
-            var userId = reader.GetInt32(0);
-            var user = GetUserById(userId);
-
-            sellers.Add(user);
-        }
-
-        reader.Close();
-        connection.Close();
-
-        return sellers;
-    }
     #endregion
 }

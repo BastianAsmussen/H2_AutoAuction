@@ -5,18 +5,19 @@ namespace Data.Classes;
 
 public class PrivateUser : User
 {
-    private static bool HasSufficientFunds(decimal balance, decimal amount)
-    {
-        return balance - amount >= 0;
-    }
-    
-    public int PrivateUserId { get; set; }
-    public string Cpr { get; set; }
-
-    public PrivateUser(int id, string cpr, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode, user.Balance)
+    public PrivateUser(int id, string cpr, User user) : base(user.UserId, user.Username, user.Password, user.Zipcode,
+        user.Balance)
     {
         PrivateUserId = id;
         Cpr = cpr;
+    }
+
+    public int PrivateUserId { get; set; }
+    public string Cpr { get; set; }
+
+    private static bool HasSufficientFunds(decimal balance, decimal amount)
+    {
+        return balance - amount >= 0;
     }
 
     /// <summary>
@@ -61,8 +62,8 @@ public class PrivateUser : User
 
             if (latestBid.Bidder.UserId == buyer.UserId)
                 return false;
-
-        } catch (Exception e) when (e is DataException)
+        }
+        catch (Exception e) when (e is DataException)
         {
             Console.WriteLine($"Warning: {e.Message}");
         }
@@ -75,10 +76,7 @@ public class PrivateUser : User
             var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
 
             var highestBid = bids.Max(b => b.Amount);
-            if (newBid > highestBid)
-            {
-                auction.CurrentPrice = newBid;
-            }
+            if (newBid > highestBid) auction.CurrentPrice = newBid;
         }
         catch (Exception e) when (e is DataException)
         {
@@ -92,7 +90,7 @@ public class PrivateUser : User
 
         return true;
     }
-    
+
     public override string ToString()
     {
         return $"{base.ToString()}\n" +

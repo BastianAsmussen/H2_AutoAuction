@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -18,6 +17,49 @@ namespace GUI.ViewModels;
 
 public class VehicleBlueprintViewModel : ViewModelBase
 {
+    // Personal Car
+    private int _drivenKilometers;
+    private double _engineSize;
+
+    // Private Personal Car
+    private bool _hasIsoFix;
+
+    // Professoinal Personal Car
+    private bool _hasSafetyBar;
+    private bool _hasToilet;
+    private bool _hasTowBar;
+    private int _height;
+    private bool _isBus;
+    private bool _isPrivatePersonalCar;
+    private bool _isProfessionalPersonalCar;
+    private bool _isTruck;
+    private int _loadCapacity;
+    private double _mileage;
+    private string _name;
+    private int _numberOfSeats;
+
+    // Bus
+    private int _numberOfSleepingSpaces;
+    private string _regNumber;
+    private FuelType _selectedFuelType;
+    private LicenseType _selectedLicenseType;
+
+    private string? _selectedVehicleType;
+    private int _weight;
+    private int _width;
+
+    public VehicleBlueprintViewModel()
+    {
+        YesIsoFixCommand = ReactiveCommand.Create(YesIsoFix);
+        NoIsoFixCommand = ReactiveCommand.Create(NoIsoFix);
+        YesSafetyBarCommand = ReactiveCommand.Create(YesSafetyBar);
+        NoSafetyBarCommand = ReactiveCommand.Create(NoSafetyBar);
+        YesToiletCommand = ReactiveCommand.Create(YesToilet);
+        NoToiletCommand = ReactiveCommand.Create(NoToilet);
+        YesTowBarCommand = ReactiveCommand.Create(YesTowBar);
+        NoTowBarCommand = ReactiveCommand.Create(NoTowBar);
+    }
+
     public Vehicle VehicleData
     {
         get
@@ -33,36 +75,30 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
     }
 
-    private string? _selectedVehicleType;
-    private bool _isPrivatePersonalCar;
-    private bool _isProfessionalPersonalCar;
-    private bool _isBus;
-    private bool _isTruck;
-    private int _height;
-    private int _width;
-    private int _weight;
-    private string _regNumber;
-    private LicenseType _selectedLicenseType;
-    private FuelType _selectedFuelType;
-    private double _mileage;
-    private string _name;
+    public void SetRegistrationNumber(string regNumber)
+    {
+        _regNumber = regNumber;
+    }
 
-    // Private Personal Car
-    private bool _hasIsoFix;
-    private int _numberOfSeats;
+    public void SetMileage(double mileage)
+    {
+        _mileage = mileage;
+    }
 
-    // Professoinal Personal Car
-    private bool _hasSafetyBar;
-    private int _loadCapacity;
+    public void SetLicenseType(LicenseType licenseType)
+    {
+        _selectedLicenseType = licenseType;
+    }
 
-    // Personal Car
-    private int _drivenKilometers;
-    private double _engineSize;
-    private bool _hasTowBar;
+    public void SetVehicleName(string vehicleName)
+    {
+        _name = vehicleName;
+    }
 
-    // Bus
-    private int _numberOfSleepingSpaces;
-    private bool _hasToilet;
+    public Vehicle GetVehicleBlueprint()
+    {
+        return VehicleData;
+    }
 
 
     #region Properties
@@ -285,18 +321,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #endregion
 
-    public VehicleBlueprintViewModel()
-    {
-        YesIsoFixCommand = ReactiveCommand.Create(YesIsoFix);
-        NoIsoFixCommand = ReactiveCommand.Create(NoIsoFix);
-        YesSafetyBarCommand = ReactiveCommand.Create(YesSafetyBar);
-        NoSafetyBarCommand = ReactiveCommand.Create(NoSafetyBar);
-        YesToiletCommand = ReactiveCommand.Create(YesToilet);
-        NoToiletCommand = ReactiveCommand.Create(NoToilet);
-        YesTowBarCommand = ReactiveCommand.Create(YesTowBar);
-        NoTowBarCommand = ReactiveCommand.Create(NoTowBar);
-    }
-
     #region Methods
 
     private void NumberOnly(object? value)
@@ -310,7 +334,10 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #region Personal Vehicles
 
     [Description("It Returns the Dimensions of the vehicle")]
-    public Dimensions GetDimensions() => DatabaseManager.CreateDimensions(new Dimensions(0, Height, Width, Weight));
+    public Dimensions GetDimensions()
+    {
+        return DatabaseManager.CreateDimensions(new Dimensions(0, Height, Width, Weight));
+    }
 
     [Description("It Returns a PersonalCar Object")]
     public PersonalCar GetPersonalCar()
@@ -319,7 +346,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         {
             var seatNumber = Convert.ToByte(NumberOfSeats);
 
-            var vehicle = new Vehicle()
+            var vehicle = new Vehicle
             {
                 VehicleId = 0,
                 Km = DrivenKilometers,
@@ -331,7 +358,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 LicenseType = _selectedLicenseType,
                 FuelType = SelectedFuelType,
                 KmPerLiter = _mileage,
-                Name = _name,
+                Name = _name
             };
 
             // Vehicle vehicle = 
@@ -342,7 +369,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -355,7 +382,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -370,7 +397,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -383,7 +410,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            var vehicle = new Vehicle()
+            var vehicle = new Vehicle
             {
                 VehicleId = 0,
                 Km = DrivenKilometers,
@@ -395,7 +422,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 LicenseType = _selectedLicenseType,
                 FuelType = SelectedFuelType,
                 KmPerLiter = _mileage,
-                Name = _name,
+                Name = _name
             };
 
             // Vehicle vehicle = 
@@ -405,7 +432,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -420,7 +447,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -433,7 +460,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            throw new($"Error: {e.Message}");
+            throw new Exception($"Error: {e.Message}");
         }
     }
 
@@ -441,30 +468,48 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #region Command Methods
 
-    private void NoToilet() => HasToilet = false;
+    private void NoToilet()
+    {
+        HasToilet = false;
+    }
 
-    private void YesToilet() => HasToilet = true;
+    private void YesToilet()
+    {
+        HasToilet = true;
+    }
 
-    private void NoSafetyBar() => HasSafetyBar = false;
+    private void NoSafetyBar()
+    {
+        HasSafetyBar = false;
+    }
 
-    private void YesSafetyBar() => HasSafetyBar = true;
+    private void YesSafetyBar()
+    {
+        HasSafetyBar = true;
+    }
 
-    private void NoIsoFix() => HasIsoFix = false;
+    private void NoIsoFix()
+    {
+        HasIsoFix = false;
+    }
 
-    private void YesIsoFix() => HasIsoFix = true;
+    private void YesIsoFix()
+    {
+        HasIsoFix = true;
+    }
 
 
-    private void YesTowBar() => HasTowBar = true;
-    private void NoTowBar() => HasTowBar = false;
+    private void YesTowBar()
+    {
+        HasTowBar = true;
+    }
+
+    private void NoTowBar()
+    {
+        HasTowBar = false;
+    }
 
     #endregion
 
     #endregion
-
-    public void SetRegistrationNumber(string regNumber) => _regNumber = regNumber;
-    public void SetMileage(double mileage) => _mileage = mileage;
-    public void SetLicenseType(LicenseType licenseType) => _selectedLicenseType = licenseType;
-    public void SetVehicleName(string vehicleName) => _name = vehicleName;
-
-    public Vehicle GetVehicleBlueprint() => VehicleData;
 }

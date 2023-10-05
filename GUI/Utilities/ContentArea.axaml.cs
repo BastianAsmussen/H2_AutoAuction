@@ -13,7 +13,7 @@ public partial class ContentArea : UserControl
         _instance ??= this;
         Navigate(new LoginView());
     }
-    
+
     public static void Navigate(UserControl? userControl)
     {
         if (_instance == null) return;

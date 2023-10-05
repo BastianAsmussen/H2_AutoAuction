@@ -10,6 +10,7 @@ namespace Data.DatabaseManager;
 public partial class DatabaseManager
 {
     #region Vehicle
+
     /// <summary>
     ///     Gets all vehicles from the database.
     /// </summary>
@@ -48,7 +49,8 @@ public partial class DatabaseManager
             var fuelType = (FuelType)reader.GetByte(10);
             var energyClass = (EnergyType)reader.GetByte(11);
 
-            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, newPrice, hasTowbar, licenseType, engineSize,
+            vehicles.Add(new Vehicle(vehicleId, name, km, registrationNumber, year, newPrice, hasTowbar, licenseType,
+                engineSize,
                 kmPerLiter, fuelType, energyClass));
         }
 
@@ -294,7 +296,7 @@ public partial class DatabaseManager
         var command = connection.CreateCommand();
         command.CommandText = "SELECT Id FROM Vehicles" +
                               " WHERE LicenseTypeId = @Id";
-        command.Parameters.AddWithValue("@Id",  (byte)licenseType);
+        command.Parameters.AddWithValue("@Id", (byte)licenseType);
 
         var reader = command.ExecuteReader();
         if (!reader.HasRows)
@@ -327,7 +329,10 @@ public partial class DatabaseManager
     /// <param name="km">The number of kilometers the vehicles have driven.</param>
     /// <param name="newPrice">The price of the vehicles when new.</param>
     /// <returns>A list of vehicles with the given number of kilometers driven and price when new.</returns>
-    /// <exception cref="ArgumentException">Thrown if no vehicle with the given number of kilometers driven and price when new exists.</exception>
+    /// <exception cref="ArgumentException">
+    ///     Thrown if no vehicle with the given number of kilometers driven and price when new
+    ///     exists.
+    /// </exception>
     public static List<Vehicle> GetVehiclesByKmAndPrice(float km, decimal newPrice)
     {
         var connection = Instance.GetConnection();
@@ -427,16 +432,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", vehicle.VehicleId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No vehicle with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No vehicle with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region Dimensions
+
     /// <summary>
     ///     Get a list of all dimensions.
     /// </summary>
@@ -462,7 +466,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId =  reader.GetInt32(0);
+            var dimensionId = reader.GetInt32(0);
             var length = reader.GetDouble(1);
             var width = reader.GetDouble(2);
             var height = reader.GetDouble(3);
@@ -541,7 +545,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var dimensionId =  reader.GetInt32(0);
+        var dimensionId = reader.GetInt32(0);
         var length = reader.GetDouble(1);
         var width = reader.GetDouble(2);
         var height = reader.GetDouble(3);
@@ -579,7 +583,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId =  reader.GetInt32(0);
+            var dimensionId = reader.GetInt32(0);
             var width = reader.GetDouble(2);
             var height = reader.GetDouble(3);
 
@@ -619,7 +623,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId =  reader.GetInt32(0);
+            var dimensionId = reader.GetInt32(0);
             var length = reader.GetDouble(1);
             var height = reader.GetDouble(3);
 
@@ -659,7 +663,7 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var dimensionId =  reader.GetInt32(0);
+            var dimensionId = reader.GetInt32(0);
             var length = reader.GetDouble(1);
             var width = reader.GetDouble(2);
 
@@ -716,16 +720,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", dimensions.DimensionsId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No dimension with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No dimension with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region HeavyVehicle
+
     /// <summary>
     ///     Get a list of all heavy vehicles.
     /// </summary>
@@ -751,10 +754,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var heavyVehicleId =  reader.GetInt32(0);
+            var heavyVehicleId = reader.GetInt32(0);
 
-            var dimensions = GetDimensionsById( reader.GetInt32(1));
-            var vehicle = GetVehicleById( reader.GetInt32(2));
+            var dimensions = GetDimensionsById(reader.GetInt32(1));
+            var vehicle = GetVehicleById(reader.GetInt32(2));
 
             heavyVehicles.Add(new HeavyVehicle(heavyVehicleId, dimensions, vehicle));
         }
@@ -828,10 +831,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var heavyVehicleId =  reader.GetInt32(0);
+        var heavyVehicleId = reader.GetInt32(0);
 
-        var dimensions = GetDimensionsById( reader.GetInt32(1));
-        var vehicle = GetVehicleById( reader.GetInt32(2));
+        var dimensions = GetDimensionsById(reader.GetInt32(1));
+        var vehicle = GetVehicleById(reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -885,16 +888,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", heavyVehicle);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No heavy vehicle with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No heavy vehicle with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region Truck
+
     /// <summary>
     ///     Get a list of all trucks.
     /// </summary>
@@ -920,10 +922,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var truckId =  reader.GetInt32(0);
+            var truckId = reader.GetInt32(0);
 
             var loadCapacity = reader.GetDouble(1);
-            var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
+            var heavyVehicle = GetHeavyVehicleById(reader.GetInt32(2));
 
             trucks.Add(new Truck(truckId, loadCapacity, heavyVehicle));
         }
@@ -1004,10 +1006,10 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var truckId =  reader.GetInt32(0);
+        var truckId = reader.GetInt32(0);
 
         var loadCapacity = reader.GetDouble(1);
-        var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(2));
+        var heavyVehicle = GetHeavyVehicleById(reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -1061,16 +1063,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", truck.TruckId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No truck with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No truck with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region Bus
+
     /// <summary>
     ///     Get a list of all buses.
     /// </summary>
@@ -1100,12 +1101,12 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var busId =  reader.GetInt32(0);
+            var busId = reader.GetInt32(0);
 
             var numberOfSeats = reader.GetByte(1);
             var numberOfSleepingSpaces = reader.GetByte(2);
             var hasToilet = reader.GetBoolean(3);
-            var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(4));
+            var heavyVehicle = GetHeavyVehicleById(reader.GetInt32(4));
 
             buses.Add(new Bus(busId, numberOfSeats, numberOfSleepingSpaces, hasToilet, heavyVehicle));
         }
@@ -1192,12 +1193,12 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var busId =  reader.GetInt32(0);
+        var busId = reader.GetInt32(0);
 
         var numberOfSeats = reader.GetByte(1);
         var numberOfSleepingSpaces = reader.GetByte(2);
         var hasToilet = reader.GetBoolean(3);
-        var heavyVehicle = GetHeavyVehicleById( reader.GetInt32(4));
+        var heavyVehicle = GetHeavyVehicleById(reader.GetInt32(4));
 
         reader.Close();
         connection.Close();
@@ -1255,16 +1256,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", bus.BusId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No bus with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No bus with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region PersonalCar
+
     /// <summary>
     ///     Get a list of all personal cars.
     /// </summary>
@@ -1290,10 +1290,10 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var personalCarId =  reader.GetInt32(0);
+            var personalCarId = reader.GetInt32(0);
             var numberOfSeats = reader.GetByte(1);
-            var dimensions = GetDimensionsById( reader.GetInt32(2));
-            var vehicle = GetVehicleById( reader.GetInt32(3));
+            var dimensions = GetDimensionsById(reader.GetInt32(2));
+            var vehicle = GetVehicleById(reader.GetInt32(3));
 
             personalCars.Add(new PersonalCar(personalCarId, numberOfSeats, dimensions, vehicle));
         }
@@ -1377,11 +1377,11 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var personalCarId =  reader.GetInt32(0);
+        var personalCarId = reader.GetInt32(0);
 
         var numberOfSeats = reader.GetByte(1);
-        var trunkDimensions = GetDimensionsById( reader.GetInt32(2));
-        var vehicle = GetVehicleById( reader.GetInt32(3));
+        var trunkDimensions = GetDimensionsById(reader.GetInt32(2));
+        var vehicle = GetVehicleById(reader.GetInt32(3));
 
         reader.Close();
         connection.Close();
@@ -1437,16 +1437,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", personalCar.PersonalCarId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No personal car with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No personal car with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region PrivatePersonalCar
+
     /// <summary>
     ///     Get a list of all private personal cars.
     /// </summary>
@@ -1472,9 +1471,9 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var privatePersonalCarId =  reader.GetInt32(0);
+            var privatePersonalCarId = reader.GetInt32(0);
             var hasIsoFittings = reader.GetBoolean(1);
-            var personalCar = GetPersonalCarById( reader.GetInt32(2));
+            var personalCar = GetPersonalCarById(reader.GetInt32(2));
 
             privatePersonalCars.Add(new PrivatePersonalCar(privatePersonalCarId, hasIsoFittings, personalCar));
         }
@@ -1555,9 +1554,9 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var privatePersonalCarId =  reader.GetInt32(0);
+        var privatePersonalCarId = reader.GetInt32(0);
         var hasIsoFittings = reader.GetBoolean(1);
-        var personalCar = GetPersonalCarById( reader.GetInt32(2));
+        var personalCar = GetPersonalCarById(reader.GetInt32(2));
 
         reader.Close();
         connection.Close();
@@ -1611,16 +1610,15 @@ public partial class DatabaseManager
         command.Parameters.AddWithValue("@Id", privatePersonalCar.PrivatePersonalCarId);
 
         // If it fails, throw an exception.
-        if (command.ExecuteNonQuery() == 0)
-        {
-            throw new ArgumentException("No private personal car with that ID exists!");
-        }
+        if (command.ExecuteNonQuery() == 0) throw new ArgumentException("No private personal car with that ID exists!");
 
         connection.Close();
     }
+
     #endregion
 
     #region ProfessionalPersonalCar
+
     /// <summary>
     ///     Get a list of all professional personal cars.
     /// </summary>
@@ -1646,12 +1644,13 @@ public partial class DatabaseManager
 
         while (reader.Read())
         {
-            var professionalPersonalCarId =  reader.GetInt32(0);
+            var professionalPersonalCarId = reader.GetInt32(0);
             var hasSafetyBar = reader.GetBoolean(1);
             var loadCapacity = reader.GetDouble(2);
             var personalCar = GetPersonalCarById(reader.GetInt32(3));
 
-            professionalPersonalCars.Add(new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar, loadCapacity, personalCar));
+            professionalPersonalCars.Add(new ProfessionalPersonalCar(professionalPersonalCarId, hasSafetyBar,
+                loadCapacity, personalCar));
         }
 
         reader.Close();
@@ -1733,7 +1732,7 @@ public partial class DatabaseManager
 
         reader.Read();
 
-        var professionalPersonalCarId =  reader.GetInt32(0);
+        var professionalPersonalCarId = reader.GetInt32(0);
         var hasSafetyBar = reader.GetBoolean(1);
         var loadCapacity = reader.GetDouble(2);
         var personalCar = GetPersonalCarById(reader.GetInt32(3));
@@ -1793,11 +1792,10 @@ public partial class DatabaseManager
 
         // If it fails, throw an exception.
         if (command.ExecuteNonQuery() == 0)
-        {
             throw new ArgumentException("No professional personal car with that ID exists!");
-        }
 
         connection.Close();
     }
+
     #endregion
 }

@@ -8,32 +8,32 @@
              x:DataType="vm:BuyerViewModel">
     <Grid ColumnDefinitions="*,*">
         <StackPanel Grid.Column="0">
-            <Label Content="Auktions Køber"/>
+            <Label Content="Auktions Køber" />
 
-            <Label Content="Information"/>
+            <Label Content="Information" />
             <StackPanel>
-                <Label Content="{Binding Vehicle.Name, StringFormat='Name: {0}'}"/>
-                <Label Content="{Binding FormattedRegistrationNumber, StringFormat='Registrerings Nummer: {0}'}"/>
-                <Label Content="{Binding Vehicle.Year, StringFormat='Årgang: {0}'}"/>
-                <Label Content="{Binding Vehicle.Km, StringFormat='Kørt: {0} km.'}"/>
-                <Label Content="{Binding FormattedHasTowbar, StringFormat='Har Anhængertræk? {0}'}"/>
-                <Label Content="{Binding FormattedFuelType, StringFormat='Brændstof: {0}'}"/>
-                <Label Content="{Binding FormattedEnergyType, StringFormat='Energiklasse: {0}'}"/>
-                <Label Content="{Binding FormattedLicenseType, StringFormat='Kørekort Type: {0}'}"/>
-                <Label Content="{Binding Vehicle.KmPerLiter, StringFormat='Km/L: {0}'}"/>
-                <Label Content="{Binding Vehicle.EngineSize, StringFormat='Motor Størrelse: {0} L'}"/>
-                <Label Content="{Binding FormattedPrice, StringFormat='Pris: {0}'}"/>
+                <Label Content="{Binding Vehicle.Name, StringFormat='Name: {0}'}" />
+                <Label Content="{Binding FormattedRegistrationNumber, StringFormat='Registrerings Nummer: {0}'}" />
+                <Label Content="{Binding Vehicle.Year, StringFormat='Årgang: {0}'}" />
+                <Label Content="{Binding Vehicle.Km, StringFormat='Kørt: {0} km.'}" />
+                <Label Content="{Binding FormattedHasTowbar, StringFormat='Har Anhængertræk? {0}'}" />
+                <Label Content="{Binding FormattedFuelType, StringFormat='Brændstof: {0}'}" />
+                <Label Content="{Binding FormattedEnergyType, StringFormat='Energiklasse: {0}'}" />
+                <Label Content="{Binding FormattedLicenseType, StringFormat='Kørekort Type: {0}'}" />
+                <Label Content="{Binding Vehicle.KmPerLiter, StringFormat='Km/L: {0}'}" />
+                <Label Content="{Binding Vehicle.EngineSize, StringFormat='Motor Størrelse: {0} L'}" />
+                <Label Content="{Binding FormattedPrice, StringFormat='Pris: {0}'}" />
             </StackPanel>
 
-            <Button Command="{Binding Path=BackCommand}" Content="Tilbage"/>
+            <Button Command="{Binding Path=BackCommand}" Content="Tilbage" />
         </StackPanel>
 
         <StackPanel Grid.Column="1">
-            <Label Content="{Binding FormattedAuctionEnd, StringFormat='Slutter: {0}'}"/>
-            <Label Content="{Binding FormattedCurrentBid, StringFormat='Højeste Bud: {0}'}"/>
-            <Label Content="{Binding FormattedBidCount, StringFormat='Antal Bud: {0}'}"/>
+            <Label Content="{Binding FormattedAuctionEnd, StringFormat='Slutter: {0}'}" />
+            <Label Content="{Binding FormattedCurrentBid, StringFormat='Højeste Bud: {0}'}" />
+            <Label Content="{Binding FormattedBidCount, StringFormat='Antal Bud: {0}'}" />
 
-            <Button Command="{Binding Path=PlaceBidCommand}" Content="Byd"/>
+            <Button Command="{Binding Path=PlaceBidCommand}" Content="Byd" />
         </StackPanel>
     </Grid>
 </UserControl>

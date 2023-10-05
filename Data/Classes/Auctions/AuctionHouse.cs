@@ -19,7 +19,7 @@ public static class AuctionHouse
         //TODO: A3 - SetForSale
         throw new NotImplementedException();
     }
-    
+
     /// <summary>
     ///     Receives a bid from a buyer.
     ///     Checks if the bid is eligible, by ...
@@ -127,7 +127,4 @@ public static class AuctionHouse
     }
 
     #endregion
-
-
-
 }

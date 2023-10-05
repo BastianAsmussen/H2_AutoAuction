@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,6 +12,28 @@ namespace GUI.ViewModels;
 
 public class HomeScreenViewModel : ViewModelBase
 {
+    public HomeScreenViewModel()
+    {
+        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
+        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
+        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
+        SignOutCommand = ReactiveCommand.Create(SignOut);
+
+        try
+        {
+            GetAuctions();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading auctions: {e.Message}");
+        }
+    }
+
+    public ICommand SetForSaleCommand { get; }
+    public ICommand UserProfileCommand { get; }
+    public ICommand BidHistoryCommand { get; }
+    public ICommand SignOutCommand { get; }
+
     #region Properties
 
     private ObservableCollection<Auction> _userAuctions = new();
@@ -32,40 +53,18 @@ public class HomeScreenViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand SetForSaleCommand { get; }
-    public ICommand UserProfileCommand { get; }
-    public ICommand BidHistoryCommand { get; }
-    public ICommand SignOutCommand { get; }
-
-    public HomeScreenViewModel()
-    {
-        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
-        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
-        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
-        SignOutCommand = ReactiveCommand.Create(SignOut);
-
-        try
-        {
-            GetAuctions();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error loading auctions: {e.Message}");
-        }
-    }
-
 
     #region Methods
 
     /// <summary>
-    /// Asynchronously gets all auctions and user's auctions. 
+    ///     Asynchronously gets all auctions and user's auctions.
     /// </summary>
     public async Task GetAuctions()
     {
         // a Task to load all auctions
-        Task allAuctions = LoadAllAuctions();
+        var allAuctions = LoadAllAuctions();
         // a Task to load user's auctions
-        Task usersAuctions = LoadUsersAuctions();
+        var usersAuctions = LoadUsersAuctions();
 
         // Await the completion of both tasks.
         await Task.WhenAll(allAuctions, usersAuctions);
@@ -74,16 +73,16 @@ public class HomeScreenViewModel : ViewModelBase
     private async Task LoadAllAuctions()
     {
         var allAuctions = DatabaseManager.GetAllAuctions();
-        CurrentAuctions = new(allAuctions);
-        Console.WriteLine($"ALl auctions: Done loading");
+        CurrentAuctions = new ObservableCollection<Auction>(allAuctions);
+        Console.WriteLine("ALl auctions: Done loading");
     }
 
     private async Task LoadUsersAuctions()
     {
         var auctionsByThisUser = DatabaseManager.GetAuctionsByUser(UserInstance.GetCurrentUser());
-        UserAuctions = new(auctionsByThisUser);
+        UserAuctions = new ObservableCollection<Auction>(auctionsByThisUser);
 
-        Console.WriteLine($"User auctions: Done loading");
+        Console.WriteLine("User auctions: Done loading");
     }
 
     private void ShowUserProfile()
@@ -98,8 +97,16 @@ public class HomeScreenViewModel : ViewModelBase
 
         ContentArea.Navigate(view);
     }
-    private void ShowBidHistory() => ContentArea.Navigate(new BidHistoryView());
-    private void ShowSetForSale() => ContentArea.Navigate(new SetForSaleView());
+
+    private void ShowBidHistory()
+    {
+        ContentArea.Navigate(new BidHistoryView());
+    }
+
+    private void ShowSetForSale()
+    {
+        ContentArea.Navigate(new SetForSaleView());
+    }
 
     private void SignOut()
     {

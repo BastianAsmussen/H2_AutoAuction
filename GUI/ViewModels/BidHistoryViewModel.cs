@@ -12,13 +12,6 @@ namespace GUI.ViewModels;
 public class BidHistoryViewModel : ViewModelBase
 {
     private ObservableCollection<Bid> _userBids;
-    public ObservableCollection<Bid> UserBids
-    {
-        get => _userBids;
-        set => this.RaiseAndSetIfChanged(ref _userBids, value);
-    }
-
-    public ICommand CancelCommand { get; }
 
     public BidHistoryViewModel()
     {
@@ -32,6 +25,14 @@ public class BidHistoryViewModel : ViewModelBase
             Console.WriteLine($"Error loading auctions: {e.Message}");
         }
     }
+
+    public ObservableCollection<Bid> UserBids
+    {
+        get => _userBids;
+        set => this.RaiseAndSetIfChanged(ref _userBids, value);
+    }
+
+    public ICommand CancelCommand { get; }
 
     private void GetYourBids()
     {

@@ -10,7 +10,64 @@ namespace Data.DatabaseManager;
 /// </summary>
 public partial class DatabaseManager
 {
+    #region Login
+
+    /// <summary>
+    ///     Logs a user in.
+    /// </summary>
+    /// <param name="username">The username of the user to log in.</param>
+    /// <param name="password">The password of the user to log in.</param>
+    /// <returns>The logged in user, either a private user or a corporate user.</returns>
+    /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
+    /// <exception cref="DataException">Thrown when the user does not exist.</exception>
+    /// <exception cref="InvalidCredentialException"></exception>
+    public static User Login(string username, string password)
+    {
+        if (string.IsNullOrWhiteSpace(username)) throw new ArgumentException("Username cannot be empty!");
+
+        if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Password cannot be empty!");
+
+        var connection = Instance.GetConnection();
+
+        var command = connection.CreateCommand();
+
+        // Get the hashed password from the database.
+        command.CommandText = "SELECT Id, Password FROM Users" +
+                              " WHERE Username = @Username";
+        command.Parameters.AddWithValue("@Username", username);
+
+        var reader = command.ExecuteReader();
+        if (!reader.HasRows)
+        {
+            reader.Close();
+            connection.Close();
+
+            throw new DataException("User does not exist!");
+        }
+
+        reader.Read();
+
+        var userId = reader.GetInt32(0);
+        var hashedPassword = reader.GetString(1);
+
+        reader.Close();
+        connection.Close();
+
+        // Check if the password is correct.
+        if (!IsValidPassword(password, hashedPassword))
+            throw new InvalidCredentialException("Password is incorrect!");
+
+        // If the user is a corporate user, return the corporate user.
+        if (IsCorporateUser(userId))
+            return GetCorporateUserByUserId(userId)!;
+
+        return GetPrivateUserByUserId(userId)!;
+    }
+
+    #endregion
+
     #region User
+
     /// <summary>
     ///     Gets all users from the database.
     /// </summary>
@@ -234,69 +291,11 @@ public partial class DatabaseManager
 
         connection.Close();
     }
-    #endregion
 
-    #region Login
-    /// <summary>
-    ///     Logs a user in.
-    /// </summary>
-    /// <param name="username">The username of the user to log in.</param>
-    /// <param name="password">The password of the user to log in.</param>
-    /// <returns>The logged in user, either a private user or a corporate user.</returns>
-    /// <exception cref="ArgumentException">Thrown when the username or password is null or empty.</exception>
-    /// <exception cref="DataException">Thrown when the user does not exist.</exception>
-    /// <exception cref="InvalidCredentialException"></exception>
-    public static User Login(string username, string password)
-    {
-        if (string.IsNullOrWhiteSpace(username))
-        {
-            throw new ArgumentException("Username cannot be empty!");
-        }
-
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            throw new ArgumentException("Password cannot be empty!");
-        }
-
-        var connection = Instance.GetConnection();
-
-        var command = connection.CreateCommand();
-
-        // Get the hashed password from the database.
-        command.CommandText = "SELECT Id, Password FROM Users" +
-                              " WHERE Username = @Username";
-        command.Parameters.AddWithValue("@Username", username);
-
-        var reader = command.ExecuteReader();
-        if (!reader.HasRows)
-        {
-            reader.Close();
-            connection.Close();
-
-            throw new DataException("User does not exist!");
-        }
-
-        reader.Read();
-
-        var userId = reader.GetInt32(0);
-        var hashedPassword = reader.GetString(1);
-
-        reader.Close();
-        connection.Close();
-
-        // Check if the password is correct.
-        if (!IsValidPassword(password, hashedPassword))
-            throw new InvalidCredentialException("Password is incorrect!");
-
-        // If the user is a corporate user, return the corporate user.
-        if (IsCorporateUser(userId))
-            return GetCorporateUserByUserId(userId)!;
-
-        return GetPrivateUserByUserId(userId)!;
-    }
     #endregion
 
     #region Signup
+
     /// <summary>
     ///     Signs up a user.
     /// </summary>
@@ -334,7 +333,8 @@ public partial class DatabaseManager
     {
         ValidateUser(privateUser);
 
-        var user = SignUp(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode, privateUser.Balance));
+        var user = SignUp(new User(0, privateUser.Username, privateUser.Password, privateUser.Zipcode,
+            privateUser.Balance));
 
         // Create the private user.
         var privateUserToCreate = new PrivateUser(0, privateUser.Cpr, user);
@@ -355,7 +355,8 @@ public partial class DatabaseManager
         ValidateUser(corporateUser);
 
         // Create the user.
-        var user = SignUp(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode, corporateUser.Balance));
+        var user = SignUp(new User(0, corporateUser.Username, corporateUser.Password, corporateUser.Zipcode,
+            corporateUser.Balance));
 
         // Create the corporate user.
         var corporateUserToCreate = new CorporateUser(0, corporateUser.Cvr, corporateUser.Credit, user);
@@ -363,9 +364,11 @@ public partial class DatabaseManager
 
         return createdCorporateUser;
     }
+
     #endregion
 
     #region PrivateUser
+
     /// <summary>
     ///     Gets all private users from the database.
     /// </summary>
@@ -662,7 +665,7 @@ public partial class DatabaseManager
         var lastDigit = int.Parse(secretPart[^1].ToString());
         if (isMale && lastDigit % 2 == 0)
             throw new ArgumentException("CPR number secret part last digit must be uneven if the person is male!");
-        
+
         // If we got this far, the CPR number is valid, but we still need to check if it is unique.
         if (IsCprNumberTaken(number))
             throw new ArgumentException("CPR number is already taken!");
@@ -697,9 +700,11 @@ public partial class DatabaseManager
 
         return false;
     }
+
     #endregion
 
     #region CorporateUser
+
     /// <summary>
     ///     Gets all corporate users from the database.
     /// </summary>
@@ -775,7 +780,8 @@ public partial class DatabaseManager
         reader.Close();
         connection.Close();
 
-        return new CorporateUser(corporateUserId, corporateUser.Cvr, corporateUser.Credit, GetUserById(corporateUser.UserId));
+        return new CorporateUser(corporateUserId, corporateUser.Cvr, corporateUser.Credit,
+            GetUserById(corporateUser.UserId));
     }
 
     /// <summary>
@@ -950,9 +956,11 @@ public partial class DatabaseManager
 
         connection.Close();
     }
+
     #endregion
 
     #region Misc
+
     /// <summary>
     ///     Checks if a given password matches a given hash.
     /// </summary>
@@ -1031,20 +1039,11 @@ public partial class DatabaseManager
     /// <exception cref="ArgumentException">Thrown when a value is detected as invalid.</exception>
     private static void ValidateUser(User user)
     {
-        if (string.IsNullOrWhiteSpace(user.Username))
-        {
-            throw new ArgumentException("Username cannot be empty!");
-        }
+        if (string.IsNullOrWhiteSpace(user.Username)) throw new ArgumentException("Username cannot be empty!");
 
-        if (string.IsNullOrWhiteSpace(user.Password))
-        {
-            throw new ArgumentException("Password cannot be empty!");
-        }
+        if (string.IsNullOrWhiteSpace(user.Password)) throw new ArgumentException("Password cannot be empty!");
 
-        if (string.IsNullOrWhiteSpace(user.Zipcode))
-        {
-            throw new ArgumentException("Zipcode cannot be empty!");
-        }
+        if (string.IsNullOrWhiteSpace(user.Zipcode)) throw new ArgumentException("Zipcode cannot be empty!");
 
         switch (user)
         {
@@ -1094,5 +1093,6 @@ public partial class DatabaseManager
 
         return UpdateUser(user);
     }
+
     #endregion
 }

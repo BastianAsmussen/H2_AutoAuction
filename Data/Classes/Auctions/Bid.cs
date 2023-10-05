@@ -2,6 +2,15 @@ namespace Data.Classes.Auctions;
 
 public class Bid
 {
+    public Bid(int id, DateTime time, decimal amount, User bidder, Auction auction)
+    {
+        BidId = id;
+        Time = time;
+        Amount = amount;
+        Bidder = bidder;
+        Auction = auction;
+    }
+
     public int BidId { get; }
     public DateTime Time { get; }
     public decimal Amount { get; }
@@ -17,24 +26,12 @@ public class Bid
         {
             var bid = DatabaseManager.DatabaseManager.GetBidById(BidId);
 
-            if (bid.Auction.Buyer == null)
-            {
-                return "TBD";
-            }
+            if (bid.Auction.Buyer == null) return "TBD";
 
             return bid.Auction.Buyer.UserId == bid.Bidder.UserId
                 ? "Du vandt auktionen!"
                 : bid.Auction.CurrentPrice.ToString("C0");
         }
-    }
-
-    public Bid(int id, DateTime time, decimal amount, User bidder, Auction auction)
-    {
-        BidId = id;
-        Time = time;
-        Amount = amount;
-        Bidder = bidder;
-        Auction = auction;
     }
 
     public override string ToString()

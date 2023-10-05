@@ -1,11 +1,7 @@
-﻿using Data.Classes;
-using Data.Classes.Auctions;
-using Data.Classes.Vehicles;
-using Data.Classes.Vehicles.HeavyVehicles;
-using Data.Classes.Vehicles.PersonalCars;
+﻿using Data.Classes.Vehicles;
+using Data.DatabaseManager;
 using Data.Interfaces;
 using GUI;
-using DatabaseManager = Data.DatabaseManager.DatabaseManager;
 
 namespace H2_AutoAuction;
 

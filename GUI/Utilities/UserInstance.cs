@@ -6,7 +6,7 @@ namespace GUI.Utilities;
 
 #pragma warning disable
 /// <summary>
-/// This class is used to store the current user instance
+///     This class is used to store the current user instance
 /// </summary>
 public abstract class UserInstance : ViewModelBase
 {
@@ -15,12 +15,12 @@ public abstract class UserInstance : ViewModelBase
 
 
     /// <summary>
-    /// Sets the current user. The current user can only be set once,
-    /// subsequent attempts will throw an AccessViolationException.
+    ///     Sets the current user. The current user can only be set once,
+    ///     subsequent attempts will throw an AccessViolationException.
     /// </summary>
     /// <param name="user">The user to set as the current user.</param>
     /// <exception cref="AccessViolationException">
-    /// Thrown when an attempt is made to change the current user after it has already been set.
+    ///     Thrown when an attempt is made to change the current user after it has already been set.
     /// </exception>
     public static void SetCurrentUser(User user)
     {
@@ -32,7 +32,7 @@ public abstract class UserInstance : ViewModelBase
     }
 
     /// <summary>
-    /// Gets the currently set user.
+    ///     Gets the currently set user.
     /// </summary>
     /// <returns>The currently set user.</returns>
     public static User GetCurrentUser()

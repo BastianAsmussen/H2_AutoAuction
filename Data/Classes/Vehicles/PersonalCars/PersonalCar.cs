@@ -6,6 +6,23 @@
 public class PersonalCar : Vehicle
 {
     /// <summary>
+    ///     The personal car class is the base class for all personal cars.
+    /// </summary>
+    /// <param name="id">The ID of the personal car in the database.</param>
+    /// <param name="numberOfSeats">The number of seats in the personal car.</param>
+    /// <param name="trunkDimensions">The dimensions of the trunk.</param>
+    /// <param name="vehicle">The vehicle the personal car is based on.</param>
+    public PersonalCar(int id, byte numberOfSeats, Dimensions trunkDimensions, Vehicle vehicle) : base(
+        vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.NewPrice,
+        vehicle.HasTowbar, vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType,
+        vehicle.EnergyClass)
+    {
+        PersonalCarId = id;
+        NumberOfSeats = numberOfSeats;
+        TrunkDimensions = trunkDimensions;
+    }
+
+    /// <summary>
     ///     The ID of the personal car in the database.
     /// </summary>
     public int PersonalCarId { get; set; }
@@ -20,23 +37,11 @@ public class PersonalCar : Vehicle
     /// </summary>
     public Dimensions TrunkDimensions { get; set; }
 
-    /// <summary>
-    ///     The personal car class is the base class for all personal cars.
-    /// </summary>
-    /// <param name="id">The ID of the personal car in the database.</param>
-    /// <param name="numberOfSeats">The number of seats in the personal car.</param>
-    /// <param name="trunkDimensions">The dimensions of the trunk.</param>
-    /// <param name="vehicle">The vehicle the personal car is based on.</param>
-    public PersonalCar(int id, byte numberOfSeats, Dimensions trunkDimensions, Vehicle vehicle) : base(vehicle.VehicleId, vehicle.Name, vehicle.Km, vehicle.RegistrationNumber, vehicle.Year, vehicle.NewPrice, vehicle.HasTowbar, vehicle.LicenseType, vehicle.EngineSize, vehicle.KmPerLiter, vehicle.FuelType, vehicle.EnergyClass)
+    public override string ToString()
     {
-        PersonalCarId = id;
-        NumberOfSeats = numberOfSeats;
-        TrunkDimensions = trunkDimensions;
+        return $"{base.ToString()}\n" +
+               $"PersonalCarId: {PersonalCarId}\n" +
+               $"NumberOfSeats: {NumberOfSeats}\n" +
+               $"TrunkDimensions: {TrunkDimensions}";
     }
-
-    public override string ToString() =>
-        $"{base.ToString()}\n" +
-        $"PersonalCarId: {PersonalCarId}\n" +
-        $"NumberOfSeats: {NumberOfSeats}\n" +
-        $"TrunkDimensions: {TrunkDimensions}";
 }

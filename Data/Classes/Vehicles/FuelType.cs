@@ -9,8 +9,9 @@ public enum FuelType
     ///     The vehicle uses diesel.
     /// </summary>
     Diesel = 1,
+
     /// <summary>
     ///     The vehicle uses benzine.
     /// </summary>
-    Benzine = 2,
+    Benzine = 2
 }

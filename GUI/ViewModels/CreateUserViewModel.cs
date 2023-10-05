@@ -14,15 +14,32 @@ namespace GUI.ViewModels;
 
 public class CreateUserViewModel : ViewModelBase
 {
-    private string _userName;
+    private bool _btnCreateEnabled;
+    private string _cprNumber;
+    private string _cvrNumber;
+    private bool _isCorporate;
+    private bool _isPrivate;
     private string _passWord;
     private string _repeatPassword;
-    private bool _isCorporate;
-    private string _cvrNumber;
-    private bool _isPrivate;
+    private string _userName;
     private string _zipCode;
-    private string _cprNumber;
-    private bool _btnCreateEnabled;
+
+#pragma warning disable
+    public CreateUserViewModel()
+    {
+        CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView()); });
+        CreateCommand = ReactiveCommand.Create(Create);
+        IsCorporateCommand = ReactiveCommand.Create(Corporate);
+        IsPrivateCommand = ReactiveCommand.Create(Private);
+
+        InitializeCreateButtonState();
+    }
+#pragma warning restore
+
+    public ICommand CancelCommand { get; }
+    public ICommand CreateCommand { get; }
+    public ICommand IsCorporateCommand { get; }
+    public ICommand IsPrivateCommand { get; }
 
     #region Properties
 
@@ -46,10 +63,8 @@ public class CreateUserViewModel : ViewModelBase
         set
         {
             if (!PassWord.Equals(value))
-            {
                 //Rider 
                 throw new DataValidationException("Password does not match");
-            }
 
             this.RaiseAndSetIfChanged(ref _repeatPassword, value);
         }
@@ -84,16 +99,12 @@ public class CreateUserViewModel : ViewModelBase
     public string CprNumber
     {
         get => _cprNumber;
-        set
-        {
+        set =>
             // if (!string.IsNullOrEmpty(value))
             //     if (!value.All(char.IsDigit))
             //         if (!value.Contains("-"))
             //             throw new DataValidationException("Numbers only");
-
-
             this.RaiseAndSetIfChanged(ref _cprNumber, value);
-        }
     }
 
     public bool BtnCreateEnabled
@@ -103,23 +114,6 @@ public class CreateUserViewModel : ViewModelBase
     }
 
     #endregion
-
-    public ICommand CancelCommand { get; }
-    public ICommand CreateCommand { get; }
-    public ICommand IsCorporateCommand { get; }
-    public ICommand IsPrivateCommand { get; }
-
-#pragma warning disable
-    public CreateUserViewModel()
-    {
-        CancelCommand = ReactiveCommand.Create(() => { Navigate(new LoginView()); });
-        CreateCommand = ReactiveCommand.Create(Create);
-        IsCorporateCommand = ReactiveCommand.Create(Corporate);
-        IsPrivateCommand = ReactiveCommand.Create(Private);
-
-        InitializeCreateButtonState();
-    }
-#pragma warning restore
 
     #region Methods
 
@@ -201,7 +195,7 @@ public class CreateUserViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Sets the user type to Corporate 
+    ///     Sets the user type to Corporate
     /// </summary>
     private void Corporate()
     {
@@ -210,7 +204,7 @@ public class CreateUserViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// Sets the user type to Private 
+    ///     Sets the user type to Private
     /// </summary>
     private void Private()
     {
@@ -220,14 +214,14 @@ public class CreateUserViewModel : ViewModelBase
 
 
     /// <summary>
-    /// Initializes the state of the Create button based on the values of user input fields.
+    ///     Initializes the state of the Create button based on the values of user input fields.
     /// </summary>
     /// <remarks>
-    /// This method subscribes to changes in the UserName, PassWord, and RPassWord properties
-    /// and evaluates whether the Create button should be enabled or disabled based on the presence
-    /// of non-empty and non-whitespace values in these input fields. If all input fields have
-    /// valid values, the BtnCreateEnabled property is set to true, enabling the Create button;
-    /// otherwise, it is set to false, disabling the button.
+    ///     This method subscribes to changes in the UserName, PassWord, and RPassWord properties
+    ///     and evaluates whether the Create button should be enabled or disabled based on the presence
+    ///     of non-empty and non-whitespace values in these input fields. If all input fields have
+    ///     valid values, the BtnCreateEnabled property is set to true, enabling the Create button;
+    ///     otherwise, it is set to false, disabling the button.
     /// </remarks>
     private void InitializeCreateButtonState()
     {

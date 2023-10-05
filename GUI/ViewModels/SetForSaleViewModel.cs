@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Data.Classes.Auctions;
 using Data.Classes.Vehicles;
 using Data.DatabaseManager;
@@ -15,18 +14,30 @@ namespace GUI.ViewModels;
 
 public class SetForSaleViewModel : ViewModelBase
 {
-    private string _name = null!;
-    private double _mileage;
-    private string _regNumber;
-    private decimal _startingBid;
-    private DateTime _startDate;
     private DateTime _endDate;
-    private FuelType _fuelType;
     private EnergyType _energyType;
-    private LicenseType _selectedLicenseType;
+    private FuelType _fuelType;
     private LicenseType _licenseTypes;
-    private VehicleBlueprintViewModel _vehiclebpVm = new();
+    private double _mileage;
+    private string _name = null!;
+    private string _regNumber;
+    private LicenseType _selectedLicenseType;
+    private DateTime _startDate;
+    private decimal _startingBid;
     private UserControl _vehicleBlueprintControl = null!;
+    private VehicleBlueprintViewModel _vehiclebpVm = new();
+
+    public SetForSaleViewModel()
+    {
+        CreateSaleCommand = ReactiveCommand.Create(CreateSale);
+        CancelCommand = ReactiveCommand.Create(Cancel);
+
+        InitVehicleBlueprint();
+        InitDateTimes();
+    }
+
+    public ICommand CreateSaleCommand { get; }
+    public ICommand CancelCommand { get; }
 
     #region Properties
 
@@ -95,18 +106,6 @@ public class SetForSaleViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand CreateSaleCommand { get; }
-    public ICommand CancelCommand { get; }
-
-    public SetForSaleViewModel()
-    {
-        CreateSaleCommand = ReactiveCommand.Create(CreateSale);
-        CancelCommand = ReactiveCommand.Create(Cancel);
-
-        InitVehicleBlueprint();
-        InitDateTimes();
-    }
-
     #region Methods
 
     private void Cancel()
@@ -135,18 +134,19 @@ public class SetForSaleViewModel : ViewModelBase
     {
         try
         {
-            _vehiclebpVm.SetRegistrationNumber(String.Concat(RegNumber.Where(c => !Char.IsWhiteSpace(c))).Remove(2, 1));
+            _vehiclebpVm.SetRegistrationNumber(string.Concat(RegNumber.Where(c => !char.IsWhiteSpace(c))).Remove(2, 1));
             _vehiclebpVm.SetLicenseType(SelectedLicenseType);
             _vehiclebpVm.SetMileage(Mileage);
             _vehiclebpVm.SetVehicleName(Name);
 
-            var auction = new Auction(0, StartingBid, StartingBid, StartDate, EndDate, _vehiclebpVm.GetVehicleBlueprint(),
+            var auction = new Auction(0, StartingBid, StartingBid, StartDate, EndDate,
+                _vehiclebpVm.GetVehicleBlueprint(),
                 UserInstance.GetCurrentUser(),
                 null);
 
             DatabaseManager.CreateAuction(auction);
             Console.WriteLine("Sale created");
-            Utilities.ContentArea.Navigate(new HomeScreenView());
+            ContentArea.Navigate(new HomeScreenView());
         }
         catch (Exception e)
         {
