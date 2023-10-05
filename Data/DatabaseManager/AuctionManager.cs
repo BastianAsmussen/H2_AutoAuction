@@ -21,7 +21,11 @@ public partial class DatabaseManager
         var connection = Instance.GetConnection();
 
         var command = connection.CreateCommand();
-        command.CommandText = "SELECT * FROM Auctions";
+        // command.CommandText = "SELECT * FROM Auctions";
+        
+        // Select top 50 in sql
+        command.CommandText = "SELECT TOP 5 * FROM Auctions";
+        
         
         var reader = command.ExecuteReader();
         if (!reader.HasRows)

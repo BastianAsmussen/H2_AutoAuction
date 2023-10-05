@@ -17,7 +17,7 @@ public class SetForSaleViewModel : ViewModelBase
 {
     private string _name = null!;
     private double _mileage;
-    private string _regNumber = null!;
+    private string _regNumber;
     private decimal _startingBid;
     private DateTime _startDate;
     private DateTime _endDate;
@@ -26,13 +26,13 @@ public class SetForSaleViewModel : ViewModelBase
     private FuelType _fuelType;
     private EnergyType _energyType;
     private VehicleBlueprintViewModel _vehiclebpVm = new();
-    private object _selectedLicenseType;
+    private LicenseType _selectedLicenseType;
 
     #region Properties
 
     public List<LicenseType> LicenseTypes { get; } = Enum.GetValues(typeof(LicenseType)).Cast<LicenseType>().ToList();
 
-    public object SelectedLicenseType
+    public LicenseType SelectedLicenseType
     {
         get => _selectedLicenseType;
         set
@@ -64,9 +64,9 @@ public class SetForSaleViewModel : ViewModelBase
         get => _regNumber;
         set
         {
-            _vehiclebpVm.SetRegNumber(RegNumber);
-
-            this.RaiseAndSetIfChanged(ref _regNumber, value);
+            var valueFixed = String.Concat(value.Where(c => !Char.IsWhiteSpace(c))).Remove(2, 1);
+            this.RaiseAndSetIfChanged(ref _regNumber, valueFixed);
+            _vehiclebpVm.SetRegNumber(valueFixed);
         }
     }
 
@@ -109,22 +109,23 @@ public class SetForSaleViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand CreateSaleCommand { get; set; } = null!;
-    public ICommand CancelCommand { get; set; } = null!;
+    public ICommand CreateSaleCommand { get; }
+    public ICommand CancelCommand { get; }
 
     public SetForSaleViewModel()
     {
+        CreateSaleCommand = ReactiveCommand.Create(CreateSale);
+        CancelCommand = ReactiveCommand.Create(Cancel);
+
         InitVehicleBlueprint();
-        InitCommands();
         InitDateTimes();
     }
 
     #region Methods
 
-    private void InitCommands()
+    private void Cancel()
     {
-        CreateSaleCommand = ReactiveCommand.Create(CreateSale);
-        CancelCommand = ReactiveCommand.Create(() => ContentArea.Navigate(new HomeScreenView()));
+        ContentArea.Navigate(new HomeScreenView());
     }
 
     private void InitVehicleBlueprint()
@@ -149,8 +150,9 @@ public class SetForSaleViewModel : ViewModelBase
         try
         {
             var vehicle = _vehiclebpVm.GetVehicleBlueprint();
-            
-            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, vehicle, UserInstance.GetCurrentUser(),
+
+            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, vehicle,
+                UserInstance.GetCurrentUser(),
                 null);
 
             var aa = auction;

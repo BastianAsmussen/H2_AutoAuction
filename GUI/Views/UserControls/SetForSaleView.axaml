@@ -88,15 +88,26 @@
                         MinWidth="160"
                         Text="Reg. num"
                         VerticalAlignment="Center" />
-                    <TextBox
-                        BorderBrush="Black"
-                        BorderThickness="2"
+
+                    <MaskedTextBox
                         FontSize="25"
                         Foreground="White"
-                        MaxLength="8"
+                        Mask="A A - 0 0 0 0 0"
+                        MaxWidth="240"
                         MinWidth="240"
-                        Text="{Binding Path=RegNumber}"
-                        VerticalAlignment="Center" />
+                        Text="{Binding RegNumber, Mode=TwoWay}"
+                        TextAlignment="Center"
+                        VerticalAlignment="Top"
+                        Watermark="Cpr number" />
+                    <!--  <TextBox  -->
+                    <!--  BorderBrush="Black"  -->
+                    <!--  BorderThickness="2"  -->
+                    <!--  FontSize="25"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  MaxLength="8"  -->
+                    <!--  MinWidth="240"  -->
+                    <!--  Text="{Binding Path=RegNumber}"  -->
+                    <!--  VerticalAlignment="Center" />  -->
                 </StackPanel>
 
                 <!--  Year  -->

@@ -32,14 +32,17 @@ public class HomeScreenViewModel : ViewModelBase
 
     #endregion
 
-    public ICommand? SetForSaleCommand { get; set; }
-    public ICommand? UserProfileCommand { get; set; }
-    public ICommand? BidHistoryCommand { get; set; }
-    public ICommand? SignOutCommand { get; set; }
+    public ICommand SetForSaleCommand { get; }
+    public ICommand UserProfileCommand { get; }
+    public ICommand BidHistoryCommand { get; }
+    public ICommand SignOutCommand { get; }
 
     public HomeScreenViewModel()
     {
-        CommandsLoader();
+        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
+        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
+        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
+        SignOutCommand = ReactiveCommand.Create(SignOut);
 
         try
         {
@@ -81,14 +84,6 @@ public class HomeScreenViewModel : ViewModelBase
         UserAuctions = new(auctionsByThisUser);
 
         Console.WriteLine($"User auctions: Done loading");
-    }
-
-    private void CommandsLoader()
-    {
-        UserProfileCommand = ReactiveCommand.Create(ShowUserProfile);
-        SetForSaleCommand = ReactiveCommand.Create(ShowSetForSale);
-        BidHistoryCommand = ReactiveCommand.Create(ShowBidHistory);
-        SignOutCommand = ReactiveCommand.Create(SignOut);
     }
 
     private void ShowUserProfile() => ContentArea.Navigate(new UserProfileView());

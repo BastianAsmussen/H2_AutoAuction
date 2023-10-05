@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Avalonia.Data;
 using Data.Classes.Vehicles;
 using Data.Classes.Vehicles.HeavyVehicles;
 using Data.Classes.Vehicles.PersonalCars;
+using Data.DatabaseManager;
 using ReactiveUI;
 
 namespace GUI.ViewModels;
@@ -18,7 +20,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private double _mileage;
     private string _regNumber;
     private int _manufacturingyear;
-    private object _licenseType;
+    private LicenseType _licenseType;
 
 
     private string? _selectedVehicleType;
@@ -48,6 +50,21 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private bool _hasToilet;
 
     #region Properties
+
+    public Vehicle VehicleData
+    {
+        get
+        {
+            return SelectedVehicleType switch
+            {
+                "Private Personal Car" => GetPrivatePersonalCar(),
+                "Professional Personal Car" => GetProfessionalCar(),
+                "Bus" => GetBus(),
+                "Truck" => GetBus(),
+                _ => throw new InvalidDataException("Vehicle type is empty!")
+            };
+        }
+    }
 
     public int Manufacturingyear
     {
@@ -88,31 +105,10 @@ public class VehicleBlueprintViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _name, value);
     }
 
-    public object LisenceType
+    public LicenseType LisenceType
     {
         get => _licenseType;
         set => this.RaiseAndSetIfChanged(ref _licenseType, value);
-    }
-
-    public Vehicle VehicleData
-    {
-        get
-        {
-            switch (SelectedVehicleType)
-            {
-                case
-                    "Private Personal Car":
-                    return GetPrivatePersonalCar();
-                case "Professional Personal Car":
-                    return GetProfessionalCar();
-                case "Bus":
-                    return GetBus();
-                case "Truck":
-                    return GetBus();
-                default:
-                    throw new("Vehicle Type is empty");
-            }
-        }
     }
 
     public List<string> VehicleType { get; } = new()
@@ -313,31 +309,28 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #region Icommands
 
 #pragma warning disable
-    public ICommand YesIsoFixCommand { get; set; } = null!;
-    public ICommand NoIsoFixCommand { get; set; } = null!;
-    public ICommand YesSafetyBarCommand { get; set; } = null!;
-    public ICommand NoSafetyBarCommand { get; set; } = null!;
-    public ICommand YesToiletCommand { get; set; } = null!;
-    public ICommand NoToiletCommand { get; set; } = null!;
-    public ICommand YesTowBarCommand { get; set; } = null!;
-    public ICommand NoTowBarCommand { get; set; } = null!;
+    public ICommand YesIsoFixCommand { get; }
+    public ICommand NoIsoFixCommand { get; }
+    public ICommand YesSafetyBarCommand { get; }
+    public ICommand NoSafetyBarCommand { get; }
+    public ICommand YesToiletCommand { get; }
+    public ICommand NoToiletCommand { get; }
+    public ICommand YesTowBarCommand { get; }
+    public ICommand NoTowBarCommand { get; }
 #pragma warning restore
 
     #endregion
 
     public VehicleBlueprintViewModel()
     {
-        try
-        {
-            InitCommands();
-        }
-
-        catch (Exception e)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Error : {e.Message}");
-            Console.ResetColor();
-        }
+        YesIsoFixCommand = ReactiveCommand.Create(YesIsoFix);
+        NoIsoFixCommand = ReactiveCommand.Create(NoIsoFix);
+        YesSafetyBarCommand = ReactiveCommand.Create(YesSafetyBar);
+        NoSafetyBarCommand = ReactiveCommand.Create(NoSafetyBar);
+        YesToiletCommand = ReactiveCommand.Create(YesToilet);
+        NoToiletCommand = ReactiveCommand.Create(NoToilet);
+        YesTowBarCommand = ReactiveCommand.Create(YesTowBar);
+        NoTowBarCommand = ReactiveCommand.Create(NoTowBar);
     }
 
     #region Methods
@@ -383,15 +376,22 @@ public class VehicleBlueprintViewModel : ViewModelBase
             var vehicle = new Vehicle()
             {
                 VehicleId = 0,
-                Km = DrivenKilometers,
-                HasTowbar = HasTowBar,
-                EngineSize = EngineSize,
                 Name = Name,
-                KmPerLiter = Mileage,
+                Km = DrivenKilometers,
                 RegistrationNumber = this.RegNumber,
                 Year = (short)Manufacturingyear,
+                NewPrice = 0,
+                HasTowbar = HasTowBar,
+                EngineSize = EngineSize,
+                KmPerLiter = Mileage,
                 LicenseType = (LicenseType)LisenceType,
             };
+
+            // RegNumber,Manufacturingyear,(LicenseType)LisenceType,HasTowBar,EngineSize,Mileage
+
+            Vehicle v = new(0, Name, DrivenKilometers, RegNumber, (short)Convert.ToInt16(Manufacturingyear), 0,
+                HasTowBar,
+                (LicenseType)LicenseType.CE, (double)EngineSize, Mileage, fuelType: FuelType.Benzine, EnergyType.C);
 
             return new PersonalCar(0, seatNumber, GetDimensions(), vehicle);
         }
@@ -480,18 +480,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #endregion
 
     #region Command Methods
-
-    private void InitCommands()
-    {
-        YesIsoFixCommand = ReactiveCommand.Create(YesIsoFix);
-        NoIsoFixCommand = ReactiveCommand.Create(NoIsoFix);
-        YesSafetyBarCommand = ReactiveCommand.Create(YesSafetyBar);
-        NoSafetyBarCommand = ReactiveCommand.Create(NoSafetyBar);
-        YesToiletCommand = ReactiveCommand.Create(YesToilet);
-        NoToiletCommand = ReactiveCommand.Create(NoToilet);
-        YesTowBarCommand = ReactiveCommand.Create(YesTowBar);
-        NoTowBarCommand = ReactiveCommand.Create(NoTowBar);
-    }
 
     private void NoToilet() => HasToilet = false;
 
