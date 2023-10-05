@@ -86,8 +86,19 @@ public class HomeScreenViewModel : ViewModelBase
         Console.WriteLine($"User auctions: Done loading");
     }
 
-    private void ShowUserProfile() => ContentArea.Navigate(new UserProfileView());
-    private void ShowBidHistory() => ContentArea.Navigate(new UserProfileView());
+    private void ShowUserProfile()
+    {
+        var user = UserInstance.GetCurrentUser();
+
+        var vm = new UserProfileViewModel(user);
+        var view = new UserProfileView
+        {
+            DataContext = vm
+        };
+
+        ContentArea.Navigate(view);
+    }
+    private void ShowBidHistory() => ContentArea.Navigate(new BidHistoryView());
     private void ShowSetForSale() => ContentArea.Navigate(new SetForSaleView());
 
     private void SignOut()
