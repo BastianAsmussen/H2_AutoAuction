@@ -53,44 +53,43 @@ public class PrivateUser : User
             return false;
 
         // If the last bidder is the same as the current bidder, return false.
-        var latestBid = DatabaseManager.DatabaseManager.GetBidsByAuction(auction)
-                                                            .OrderByDescending(b => b.Time)
-                                                            .First();
-        if (latestBid.Bidder.UserId == buyer.UserId)
-            return false;
-
-        // Checks if the newBid is higher than the current highest bid.
         try
         {
-            auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+            var latestBid = DatabaseManager.DatabaseManager.GetBidsByAuction(auction)
+                .OrderByDescending(b => b.Time)
+                .First();
 
-            List<Bid> bids;
-            try
-            {
-                bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
-            }
-            catch (Exception e) when (e is DataException)
-            {
-                Console.WriteLine($"Warning: {e.Message}");
+            if (latestBid.Bidder.UserId == buyer.UserId)
+                return false;
 
-                bids = new List<Bid>();
-            }
+        } catch (Exception e) when (e is DataException)
+        {
+            Console.WriteLine($"Warning: {e.Message}");
+        }
 
-            var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
+        // Checks if the newBid is higher than the current highest bid.
+        auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
+
+        try
+        {
+            var bids = DatabaseManager.DatabaseManager.GetBidsByAuction(auction);
 
             var highestBid = bids.Max(b => b.Amount);
-            if (ourBid.Amount > highestBid)
+            if (newBid > highestBid)
             {
-                auction.CurrentPrice = ourBid.Amount;
+                auction.CurrentPrice = newBid;
             }
-
-            DatabaseManager.DatabaseManager.UpdateAuction(auction);
         }
-        catch (Exception e)
+        catch (Exception e) when (e is DataException)
         {
-            throw;
+            Console.WriteLine($"Warning: {e.Message}");
+
+            auction.CurrentPrice = newBid;
         }
-        
+
+        DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
+        DatabaseManager.DatabaseManager.UpdateAuction(auction);
+
         return true;
     }
     
