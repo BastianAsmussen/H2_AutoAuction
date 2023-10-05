@@ -13,7 +13,7 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        new Thread(() =>
+        var databaseThread = new Thread(() =>
         {
             while (true)
             {
@@ -23,7 +23,10 @@ internal class Program
                 // Sleep for 1 minute.
                 Thread.Sleep(1_000 * 60);
             }
-        }).Start();
+        });
+
+        databaseThread.IsBackground = true;
+        databaseThread.Start();
 
         // Start the GUI.
         Gui.Main(args);
