@@ -1,4 +1,5 @@
 ﻿<UserControl
+    Background="#1b1827"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -7,19 +8,64 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:vm="clr-namespace:GUI.ViewModels">
-    <StackPanel>
-        <Label Content="Din Profil" FontSize="44"/>
+    xmlns:vm="clr-namespace:GUI.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-        <Label Content="{Binding Username, StringFormat='Brugernavn: {0}'}"/>
-        <Button Content="Skift Adgangskode" Command="{Binding ChangePasswordCommand}"/>
-        <Label Content="{Binding FormattedBalance}"/>
 
-        <Label Content="{Binding FormattedActiveAuctions}"/>
-        <Label Content="{Binding FormattedAuctionsSold}"/>
-        <Label Content="{Binding FormattedAuctionsWon}"/>
+    <Grid
+        ColumnDefinitions="Auto,Auto"
+        HorizontalAlignment="Center"
+        RowDefinitions="100,160,90,100">
 
-        <Button Content="Tilbage" Command="{Binding BackCommand}"/>
-    </StackPanel>
+        <Label
+            Content="Your Profile"
+            FontSize="30"
+            FontWeight="Medium" />
+
+        <StackPanel Grid.Row="1" Spacing="10">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Username" />
+                <TextBlock FontSize="22" Text="{Binding Username}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Password" />
+                <Button
+                    Command="{Binding ChangePasswordCommand}"
+                    Content="Skift Adgangskode"
+                    FontSize="22" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Balance" />
+                <TextBlock FontSize="22" Text="{Binding FormattedBalance, StringFormat=' {0},-'}" />
+            </StackPanel>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="2" Spacing="10">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Aktive Auktioner:" />
+                <TextBlock FontSize="22" Text="{Binding FormattedActiveAuctions}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Auktioner Solgt:" />
+                <TextBlock FontSize="22" Text="{Binding FormattedAuctionsSold}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock FontSize="22" Text="Auktioner Vundet:" />
+                <TextBlock FontSize="22" Text="{Binding FormattedAuctionsWon}" />
+            </StackPanel>
+        </StackPanel>
+
+
+        <Button
+            Command="{Binding BackCommand}"
+            Content="Tilbage"
+            Grid.Row="3" />
+    </Grid>
+
+
 </UserControl>

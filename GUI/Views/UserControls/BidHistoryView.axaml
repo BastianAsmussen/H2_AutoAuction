@@ -34,8 +34,6 @@
                 ItemsSource="{Binding UserBids}"
                 Margin="15">
 
-
-
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Binding="{Binding Auction.Vehicle.Name}"
@@ -69,7 +67,6 @@
                     FontSize="23"
                     Foreground="Red" />
             </Button>
-
         </StackPanel>
     </Grid>
 </UserControl>
