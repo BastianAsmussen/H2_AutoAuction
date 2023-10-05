@@ -140,7 +140,7 @@ public class SetForSaleViewModel : ViewModelBase
             _vehiclebpVm.SetMileage(Mileage);
             _vehiclebpVm.SetVehicleName(Name);
 
-            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, _vehiclebpVm.GetVehicleBlueprint(),
+            var auction = new Auction(0, StartingBid, StartingBid, StartDate, EndDate, _vehiclebpVm.GetVehicleBlueprint(),
                 UserInstance.GetCurrentUser(),
                 null);
 
