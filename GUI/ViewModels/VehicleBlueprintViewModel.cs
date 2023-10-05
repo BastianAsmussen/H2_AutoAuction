@@ -24,10 +24,10 @@ public class VehicleBlueprintViewModel : ViewModelBase
         {
             return SelectedVehicleType switch
             {
-                "Private Personal Car" => GetPrivatePersonalCar(),
-                "Professional Personal Car" => GetProfessionalCar(),
+                "Privat Personbil" => GetPrivatePersonalCar(),
+                "Erhvervs Personbil" => GetProfessionalCar(),
                 "Bus" => GetBus(),
-                "Truck" => GetTruck(),
+                "Lastbil" => GetTruck(),
                 _ => throw new InvalidDataException("Vehicle type is empty!")
             };
         }
@@ -310,10 +310,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #region Personal Vehicles
 
     [Description("It Returns the Dimensions of the vehicle")]
-    public Dimensions GetDimensions()
-    {
-        return new Dimensions(0, Height, Width, Weight);
-    }
+    public Dimensions GetDimensions() => DatabaseManager.CreateDimensions(new Dimensions(0, Height, Width, Weight));
 
     [Description("It Returns a PersonalCar Object")]
     public PersonalCar GetPersonalCar()
@@ -322,8 +319,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
         {
             var seatNumber = Convert.ToByte(NumberOfSeats);
 
-            // Vehicle vehicle = 
-            var personalCar = new PersonalCar(0, seatNumber, GetDimensions(), new Vehicle()
+            var vehicle = new Vehicle()
             {
                 VehicleId = 0,
                 Km = DrivenKilometers,
@@ -336,9 +332,13 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 FuelType = SelectedFuelType,
                 KmPerLiter = _mileage,
                 Name = _name,
-            });
+            };
 
-            return personalCar;
+            // Vehicle vehicle = 
+            var personalCar = new PersonalCar(0, seatNumber, GetDimensions(), DatabaseManager.CreateVehicle(vehicle));
+
+
+            return DatabaseManager.CreatePersonalCar(personalCar);
         }
         catch (Exception e)
         {
@@ -351,7 +351,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new PrivatePersonalCar(0, HasIsoFix, GetPersonalCar());
+            return DatabaseManager.CreatePrivatePersonalCar(new PrivatePersonalCar(0, HasIsoFix, GetPersonalCar()));
         }
         catch (Exception e)
         {
@@ -365,7 +365,8 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new ProfessionalPersonalCar(0, HasSafetyBar, Convert.ToDouble(LoadCapacity), GetPersonalCar());
+            return DatabaseManager.CreateProfessionalPersonalCar(
+                new ProfessionalPersonalCar(0, HasSafetyBar, Convert.ToDouble(LoadCapacity), GetPersonalCar()));
         }
         catch (Exception e)
         {
@@ -382,8 +383,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            // Vehicle vehicle = 
-            var heavyVehicle = new HeavyVehicle(0, GetDimensions(), new Vehicle()
+            var vehicle = new Vehicle()
             {
                 VehicleId = 0,
                 Km = DrivenKilometers,
@@ -396,9 +396,12 @@ public class VehicleBlueprintViewModel : ViewModelBase
                 FuelType = SelectedFuelType,
                 KmPerLiter = _mileage,
                 Name = _name,
-            });
+            };
 
-            return heavyVehicle;
+            // Vehicle vehicle = 
+            var heavyVehicle = new HeavyVehicle(0, GetDimensions(), DatabaseManager.CreateVehicle(vehicle));
+
+            return DatabaseManager.CreateHeavyVehicle(heavyVehicle);
         }
         catch (Exception e)
         {
@@ -411,8 +414,9 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         try
         {
-            return new Bus(0, Convert.ToByte(NumberOfSeats), Convert.ToByte(NumberOfSLeeepingSpaces), HasToilet,
-                GetHeavyVehicle());
+            return DatabaseManager.CreateBus(new Bus(0, Convert.ToByte(NumberOfSeats),
+                Convert.ToByte(NumberOfSLeeepingSpaces), HasToilet,
+                GetHeavyVehicle()));
         }
         catch (Exception e)
         {
@@ -423,10 +427,9 @@ public class VehicleBlueprintViewModel : ViewModelBase
     [Description("It Returns a Truck Object")]
     public Truck GetTruck()
     {
-       
         try
         {
-            return new Truck(0, Convert.ToDouble(LoadCapacity), GetHeavyVehicle());
+            return DatabaseManager.CreateTruck(new Truck(0, Convert.ToDouble(LoadCapacity), GetHeavyVehicle()));
         }
         catch (Exception e)
         {
