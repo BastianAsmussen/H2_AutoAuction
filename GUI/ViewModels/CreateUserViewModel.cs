@@ -174,6 +174,8 @@ public class CreateUserViewModel : ViewModelBase
         catch (Exception e) when (e is ArgumentException or DataException)
         {
             Console.WriteLine($"Error: {e.Message}");
+
+            throw;
         }
 
         Console.WriteLine($"Success: Private user created with username {username}");

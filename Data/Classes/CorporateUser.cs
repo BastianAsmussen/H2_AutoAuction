@@ -51,13 +51,22 @@ public class CorporateUser : User
     public bool PlaceBid(CorporateUser buyer, Auction auction, decimal newBid)
     {
         auction = DatabaseManager.DatabaseManager.GetAuctionById(auction.AuctionId);
-        
-        if (newBid < auction.CurrentPrice)
+
+        // If the new bid is less than or equal to the current price, return false.
+        if (newBid <= auction.CurrentPrice)
             return false;
 
+        // If the buyer does not have sufficient funds, return false.
         if (!HasSufficientFunds(buyer.Balance, buyer.Credit, auction.CurrentPrice))
             return false;
-        
+
+        // If the last bidder is the same as the current bidder, return false.
+        var latestBid = DatabaseManager.DatabaseManager.GetBidsByAuction(auction)
+            .OrderByDescending(b => b.Time)
+            .First();
+        if (latestBid.Bidder.UserId == buyer.UserId)
+            return false;
+
         try
         {
             var ourBid = DatabaseManager.DatabaseManager.CreateBid(new Bid(0, DateTime.Now, newBid, buyer, auction));
