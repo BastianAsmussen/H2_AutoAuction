@@ -73,6 +73,7 @@
                         BorderThickness="2"
                         FontSize="25"
                         Foreground="White"
+                        MaxLength="7"
                         MinWidth="240"
                         Text="{Binding Path=Mileage}"
                         VerticalAlignment="Center" />
@@ -87,15 +88,26 @@
                         MinWidth="160"
                         Text="Reg. num"
                         VerticalAlignment="Center" />
-                    <TextBox
-                        BorderBrush="Black"
-                        BorderThickness="2"
+
+                    <MaskedTextBox
                         FontSize="25"
                         Foreground="White"
-                        MaxLength="11"
+                        Mask="AA-00000"
+                        MaxWidth="240"
                         MinWidth="240"
-                        Text="{Binding Path=RegNumber}"
-                        VerticalAlignment="Center" />
+                        Text="{Binding RegNumber}"
+                        TextAlignment="Center"
+                        VerticalAlignment="Top"
+                        Watermark="Cpr number" />
+                    <!--  <TextBox  -->
+                    <!--  BorderBrush="Black"  -->
+                    <!--  BorderThickness="2"  -->
+                    <!--  FontSize="25"  -->
+                    <!--  Foreground="White"  -->
+                    <!--  MaxLength="8"  -->
+                    <!--  MinWidth="240"  -->
+                    <!--  Text="{Binding Path=RegNumber}"  -->
+                    <!--  VerticalAlignment="Center" />  -->
                 </StackPanel>
 
                 <!--  Year  -->
@@ -114,12 +126,35 @@
                         BorderBrush="Black"
                         BorderThickness="4"
                         DayVisible="False"
-                        Foreground="Green"
+                        Foreground="White"
                         Height="35"
-                        MaxYear="{Binding Path=ThisYear}"
                         MonthVisible="False"
+                        SelectedDateChanged="DatePicker_OnSelectedDateChanged"
                         Width="240" />
                 </StackPanel>
+            </StackPanel>
+
+            <!--  License type  -->
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    FontSize="25"
+                    FontWeight="Medium"
+                    Foreground="#ffffff"
+                    MinWidth="160"
+                    Text="License Type"
+                    VerticalAlignment="Center" />
+
+                <ComboBox
+                    Background="#322e40"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Foreground="White"
+                    Height="35"
+                    HorizontalAlignment="Center"
+                    ItemsSource="{Binding LicenseTypes}"
+                    SelectedItem="{Binding Path=SelectedLicenseType}"
+                    VerticalAlignment="Center"
+                    Width="240" />
             </StackPanel>
         </WrapPanel>
 
@@ -150,6 +185,7 @@
                         BorderThickness="2"
                         FontSize="25"
                         Foreground="White"
+                        MaxLength="15"
                         MinWidth="240"
                         Text="{Binding Path=StartingBid}"
                         VerticalAlignment="Center" />
@@ -249,8 +285,10 @@
                 <Border Background="{DynamicResource ErrorBrush}" ToolTip.Placement="Right">
                     <ToolTip.Tip>
                         <StackPanel>
-                            <TextBlock Classes="h1">ToolTip</TextBlock>
-                            <TextBlock Classes="h2">A control which pops up a hint when a control is hovered</TextBlock>
+                            <TextBlock>
+                                Remember to fill everything up
+                                <TextBlock.FontWeight>Black</TextBlock.FontWeight>
+                            </TextBlock>
                         </StackPanel>
                     </ToolTip.Tip>
                     <Button

@@ -27,25 +27,30 @@
             <!--  UserName Input  -->
             <WrapPanel HorizontalAlignment="Left">
                 <TextBox
+                    AcceptsTab="False"
                     FontSize="22"
                     Foreground="White"
                     Margin="0,20,0,0"
+                    MaxWidth="350"
+                    MinWidth="350"
                     Text="{Binding UserName}"
-                    Watermark="Username"
-                    Width="350" />
+                    TextWrapping="NoWrap"
+                    Watermark="Username" />
             </WrapPanel>
 
             <!--  Password Input  -->
             <WrapPanel HorizontalAlignment="Left">
                 <TextBox
+                    AcceptsTab="False"
                     FontSize="22"
                     Foreground="White"
                     Margin="0,20,0,0"
+                    MaxWidth="350"
+                    MinWidth="350"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
-                    Watermark="Password"
-                    Width="350"
-                    x:Name="PasswordBox" />
+                    TextWrapping="NoWrap"
+                    Watermark="Password" />
 
             </WrapPanel>
 
