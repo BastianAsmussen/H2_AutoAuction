@@ -15,7 +15,8 @@
 
 ## Beskrivelse
 I dette projekt har vi lavet et simpelt auktions hus til at handle med biler.
-Programmet er skrevet i [C#](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) med [.NET 6.0](https://en.wikipedia.org/wiki/.NET) og bruger [Microsoft SQL Server](https://en.wikipedia.org/wiki/Microsoft_SQL_Server) som database.
+Programmet er skrevet i C# med .NET 6.0 og bruger Microsoft SQL Server som database.
+Til GUI har vi valgt at bruge [Avalonia](https://avaloniaui.net/) som er et cross-platform GUI framework til .NET da det gør MVVM meget nemmere at implementere.
 Der er håndtering af brugere, biler, auktioner og bud.
 
 ## Entity Relationship Diagram (ERD)
