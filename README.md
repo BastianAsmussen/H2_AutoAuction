@@ -13,9 +13,11 @@
 * [Biler](#biler)
 * [Bud](#bud)
 * [Building](#building)
-  * [Requirements](#requirements)
   * [Release](#release)
   * [Debug](#debug)
+* [Running](#running)
+  * [Requirements](#requirements)
+  * [Running](#running)
 
 ## Beskrivelse
 I dette projekt har vi lavet et simpelt auktions hus til at handle med biler.
@@ -68,8 +70,6 @@ Det er en `en til mange` relation i den sans at en auktion kan have mange bud.
 Brugere kan godt byde flere gange på samme auktion, så længe at de ikke er den seneste byder.
 
 # Building
-## Requirements
-* .NET 6.0 SDK
 
 ## Release
 ```bash
@@ -79,4 +79,23 @@ dotnet build -c Release
 ## Debug
 ```bash
 dotnet build
+```
+
+# Running
+
+## Requirements
+* .NET 6.0 Runtime
+* A `.env` file in the same directory as the executable file with the following variables:
+```dotenv
+# SQL Credentials
+SQL_HOST="localhost"
+SQL_PORT=1433
+SQL_DATABASE="AutoAuction"
+SQL_USERNAME="root"
+SQL_PASSWORD="toor"
+```
+
+## Running
+```bash
+dotnet run
 ```
