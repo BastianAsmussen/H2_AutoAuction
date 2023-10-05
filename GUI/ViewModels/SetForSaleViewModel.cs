@@ -144,7 +144,7 @@ public class SetForSaleViewModel : ViewModelBase
                 UserInstance.GetCurrentUser(),
                 null);
 
-            // DatabaseManager.CreateAuction(auction);
+            DatabaseManager.CreateAuction(auction);
             Console.WriteLine("Sale created");
         }
         catch (Exception e)
