@@ -12,6 +12,10 @@
   * [Afslutning af auktioner](#afslutning-af-auktioner)
 * [Biler](#biler)
 * [Bud](#bud)
+* [Building](#building)
+  * [Requirements](#requirements)
+  * [Release](#release)
+  * [Debug](#debug)
 
 ## Beskrivelse
 I dette projekt har vi lavet et simpelt auktions hus til at handle med biler.
@@ -62,3 +66,17 @@ Se [UML](#unified-modeling-language-uml) diagrammet for mere information om bile
 Et bud er en pris en bruger er villig til at betale for en bil, og er en del af en auktion.
 Det er en `en til mange` relation i den sans at en auktion kan have mange bud.
 Brugere kan godt byde flere gange på samme auktion, så længe at de ikke er den seneste byder.
+
+# Building
+## Requirements
+* .NET 6.0 SDK
+
+## Release
+```bash
+dotnet build -c Release
+```
+
+## Debug
+```bash
+dotnet build
+```
