@@ -10,18 +10,27 @@ using Data.Classes.Vehicles;
 using Data.Classes.Vehicles.HeavyVehicles;
 using Data.Classes.Vehicles.PersonalCars;
 using Data.DatabaseManager;
+using GUI.Views.UserControls;
 using ReactiveUI;
 
 namespace GUI.ViewModels;
 
 public class VehicleBlueprintViewModel : ViewModelBase
 {
-    private string _name;
-    private double _mileage;
-    private string _regNumber;
-    private int _manufacturingyear;
-    private LicenseType _licenseType;
-
+    public Vehicle VehicleData
+    {
+        get
+        {
+            return SelectedVehicleType switch
+            {
+                "Private Personal Car" => GetPrivatePersonalCar(),
+                "Professional Personal Car" => GetProfessionalCar(),
+                "Bus" => GetBus(),
+                "Truck" => GetBus(),
+                _ => throw new InvalidDataException("Vehicle type is empty!")
+            };
+        }
+    }
 
     private string? _selectedVehicleType;
     private bool _isPrivatePersonalCar;
@@ -31,6 +40,11 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private int _height;
     private int _width;
     private int _weight;
+    private string _regNumber;
+    private LicenseType _selectedLicenseType;
+    private FuelType _selectedFuelType;
+    private double _mileage;
+    private string _name;
 
     // Private Personal Car
     private bool _hasIsoFix;
@@ -49,67 +63,10 @@ public class VehicleBlueprintViewModel : ViewModelBase
     private int _numberOfSleepingSpaces;
     private bool _hasToilet;
 
+
     #region Properties
 
-    public Vehicle VehicleData
-    {
-        get
-        {
-            return SelectedVehicleType switch
-            {
-                "Private Personal Car" => GetPrivatePersonalCar(),
-                "Professional Personal Car" => GetProfessionalCar(),
-                "Bus" => GetBus(),
-                "Truck" => GetBus(),
-                _ => throw new InvalidDataException("Vehicle type is empty!")
-            };
-        }
-    }
-
-    public int Manufacturingyear
-    {
-        get => _manufacturingyear;
-        set
-        {
-            NumberOnly(value);
-
-            this.RaiseAndSetIfChanged(ref _manufacturingyear, value);
-        }
-    }
-
-    public double Mileage
-    {
-        get => _mileage;
-        set
-        {
-            NumberOnly(value);
-
-            this.RaiseAndSetIfChanged(ref _mileage, value);
-        }
-    }
-
-    public string RegNumber
-    {
-        get => _regNumber;
-        set
-        {
-            NumberOnly(value);
-
-            this.RaiseAndSetIfChanged(ref _regNumber, value);
-        }
-    }
-
-    public string Name
-    {
-        get => _name;
-        set => this.RaiseAndSetIfChanged(ref _name, value);
-    }
-
-    public LicenseType LisenceType
-    {
-        get => _licenseType;
-        set => this.RaiseAndSetIfChanged(ref _licenseType, value);
-    }
+    public List<FuelType> FuelTypes { get; } = Enum.GetValues(typeof(FuelType)).Cast<FuelType>().ToList();
 
     public List<string> VehicleType { get; } = new()
     {
@@ -165,6 +122,12 @@ public class VehicleBlueprintViewModel : ViewModelBase
     {
         get => _isPrivatePersonalCar;
         set => this.RaiseAndSetIfChanged(ref _isPrivatePersonalCar, value);
+    }
+
+    public FuelType SelectedFuelType
+    {
+        get => _selectedFuelType;
+        set => this.RaiseAndSetIfChanged(ref _selectedFuelType, value);
     }
 
     public bool IsProfessionalPersonalCar
@@ -335,21 +298,6 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     #region Methods
 
-    public void SetRegNumber(string regNumber)
-    {
-        RegNumber = regNumber;
-    }
-
-    public void SetMileAge(double mileage)
-    {
-        Mileage = mileage;
-    }
-
-    public void SetLicenseType(LicenseType licenseType)
-    {
-        LisenceType = licenseType;
-    }
-
     private void NumberOnly(object? value)
     {
         if (value is string val)
@@ -373,27 +321,23 @@ public class VehicleBlueprintViewModel : ViewModelBase
         {
             var seatNumber = Convert.ToByte(NumberOfSeats);
 
-            var vehicle = new Vehicle()
+            // Vehicle vehicle = 
+            var personalCar = new PersonalCar(0, seatNumber, GetDimensions(), new Vehicle()
             {
                 VehicleId = 0,
-                Name = Name,
                 Km = DrivenKilometers,
-                RegistrationNumber = this.RegNumber,
-                Year = (short)Manufacturingyear,
                 NewPrice = 0,
                 HasTowbar = HasTowBar,
                 EngineSize = EngineSize,
-                KmPerLiter = Mileage,
-                LicenseType = (LicenseType)LisenceType,
-            };
+                RegistrationNumber = _regNumber,
+                Year = (short)SetForSaleView.Year,
+                LicenseType = _selectedLicenseType,
+                FuelType = SelectedFuelType,
+                KmPerLiter = _mileage,
+                Name = _name,
+            });
 
-            // RegNumber,Manufacturingyear,(LicenseType)LisenceType,HasTowBar,EngineSize,Mileage
-
-            Vehicle v = new(0, Name, DrivenKilometers, RegNumber, (short)Convert.ToInt16(Manufacturingyear), 0,
-                HasTowBar,
-                (LicenseType)LicenseType.CE, (double)EngineSize, Mileage, fuelType: FuelType.Benzine, EnergyType.C);
-
-            return new PersonalCar(0, seatNumber, GetDimensions(), vehicle);
+            return personalCar;
         }
         catch (Exception e)
         {
@@ -500,6 +444,11 @@ public class VehicleBlueprintViewModel : ViewModelBase
     #endregion
 
     #endregion
+
+    public void SetRegistrationNumber(string regNumber) => _regNumber = regNumber;
+    public void SetMileage(double mileage) => _mileage = mileage;
+    public void SetLicenseType(LicenseType licenseType) => _selectedLicenseType = licenseType;
+    public void SetVehicleName(string vehicleName) => _name = vehicleName;
 
     public Vehicle GetVehicleBlueprint() => VehicleData;
 }

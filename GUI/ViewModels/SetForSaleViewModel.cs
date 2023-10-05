@@ -21,12 +21,12 @@ public class SetForSaleViewModel : ViewModelBase
     private decimal _startingBid;
     private DateTime _startDate;
     private DateTime _endDate;
-    private UserControl _vehicleBlueprintControl = null!;
-    private LicenseType _licenseType;
     private FuelType _fuelType;
     private EnergyType _energyType;
-    private VehicleBlueprintViewModel _vehiclebpVm = new();
     private LicenseType _selectedLicenseType;
+    private LicenseType _licenseTypes;
+    private VehicleBlueprintViewModel _vehiclebpVm = new();
+    private UserControl _vehicleBlueprintControl = null!;
 
     #region Properties
 
@@ -35,12 +35,7 @@ public class SetForSaleViewModel : ViewModelBase
     public LicenseType SelectedLicenseType
     {
         get => _selectedLicenseType;
-        set
-        {
-            _vehiclebpVm.SetLicenseType((LicenseType)SelectedLicenseType);
-
-            this.RaiseAndSetIfChanged(ref _selectedLicenseType, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _selectedLicenseType, value);
     }
 
     public string Name
@@ -52,22 +47,13 @@ public class SetForSaleViewModel : ViewModelBase
     public double Mileage
     {
         get => _mileage;
-        set
-        {
-            _vehiclebpVm.SetMileAge(Mileage);
-            this.RaiseAndSetIfChanged(ref _mileage, value);
-        }
+        set => this.RaiseAndSetIfChanged(ref _mileage, value);
     }
 
     public string RegNumber
     {
         get => _regNumber;
-        set
-        {
-            var valueFixed = String.Concat(value.Where(c => !Char.IsWhiteSpace(c))).Remove(2, 1);
-            this.RaiseAndSetIfChanged(ref _regNumber, valueFixed);
-            _vehiclebpVm.SetRegNumber(valueFixed);
-        }
+        set => this.RaiseAndSetIfChanged(ref _regNumber, value);
     }
 
     public decimal StartingBid
@@ -149,22 +135,22 @@ public class SetForSaleViewModel : ViewModelBase
     {
         try
         {
-            var vehicle = _vehiclebpVm.GetVehicleBlueprint();
+            _vehiclebpVm.SetRegistrationNumber(String.Concat(RegNumber.Where(c => !Char.IsWhiteSpace(c))).Remove(2, 1));
+            _vehiclebpVm.SetLicenseType(SelectedLicenseType);
+            _vehiclebpVm.SetMileage(Mileage);
+            _vehiclebpVm.SetVehicleName(Name);
 
-            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, vehicle,
+            Auction auction = new(0, StartingBid, StartingBid, StartDate, EndDate, _vehiclebpVm.GetVehicleBlueprint(),
                 UserInstance.GetCurrentUser(),
                 null);
 
-            var aa = auction;
-
             // DatabaseManager.CreateAuction(auction);
+            Console.WriteLine("Sale created");
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error : {e.Message}");
         }
-
-        Console.WriteLine("Sale created");
     }
 
     #endregion

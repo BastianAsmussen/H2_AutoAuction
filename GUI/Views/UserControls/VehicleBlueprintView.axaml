@@ -29,6 +29,20 @@
                     Width="150" />
             </StackPanel>
 
+            <!--  Fuel Type  -->
+            <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    Text="Fuel type"
+                    VerticalAlignment="Center"
+                    Width="120" />
+                <ComboBox
+                    ItemsSource="{Binding Path=FuelTypes}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding SelectedFuelType}"
+                    Width="150" />
+            </StackPanel>
+
             <!--  Height  -->
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock

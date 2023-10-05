@@ -92,10 +92,10 @@
                     <MaskedTextBox
                         FontSize="25"
                         Foreground="White"
-                        Mask="A A - 0 0 0 0 0"
+                        Mask="AA-00000"
                         MaxWidth="240"
                         MinWidth="240"
-                        Text="{Binding RegNumber, Mode=TwoWay}"
+                        Text="{Binding RegNumber}"
                         TextAlignment="Center"
                         VerticalAlignment="Top"
                         Watermark="Cpr number" />
