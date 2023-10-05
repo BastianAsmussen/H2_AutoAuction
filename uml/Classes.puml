@@ -169,6 +169,8 @@ class Bid {
     +Auction: Auction
     +Buyer: IBuyer
 
+    +FinalAuctionPrice: string
+
     +Bid(id: int, amount: decimal, auction: Auction, buyer: User)
     +ToString(): string
 }
