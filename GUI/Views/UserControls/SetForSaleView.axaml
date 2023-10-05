@@ -35,7 +35,7 @@
             VerticalAlignment="Center">
             <StackPanel>
                 <Label
-                    Content="Set for sale"
+                    Content="Sæt Til Salg"
                     FontSize="30"
                     FontWeight="Black"
                     Foreground="#ffffff" />
@@ -47,7 +47,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="160"
-                        Text="Name"
+                        Text="Navn"
                         VerticalAlignment="Center" />
                     <TextBox
                         BorderBrush="Black"
@@ -66,7 +66,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="160"
-                        Text="Mileage"
+                        Text="Km. Kørt"
                         VerticalAlignment="Center" />
                     <TextBox
                         BorderBrush="Black"
@@ -86,7 +86,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="160"
-                        Text="Reg. num"
+                        Text="Reg. Nr."
                         VerticalAlignment="Center" />
 
                     <MaskedTextBox
@@ -98,7 +98,7 @@
                         Text="{Binding RegNumber}"
                         TextAlignment="Center"
                         VerticalAlignment="Top"
-                        Watermark="Cpr number" />
+                        Watermark="AB12345" />
                     <!--  <TextBox  -->
                     <!--  BorderBrush="Black"  -->
                     <!--  BorderThickness="2"  -->
@@ -117,7 +117,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="160"
-                        Text="Year"
+                        Text="Årgang"
                         VerticalAlignment="Center" />
 
                     <!--  TODO: Fix selected Year  -->
@@ -141,7 +141,7 @@
                     FontWeight="Medium"
                     Foreground="#ffffff"
                     MinWidth="160"
-                    Text="License Type"
+                    Text="Kørekort"
                     VerticalAlignment="Center" />
 
                 <ComboBox
@@ -178,7 +178,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="180"
-                        Text="Starting Bid"
+                        Text="Start Bud"
                         VerticalAlignment="Center" />
                     <TextBox
                         BorderBrush="Black"
@@ -201,7 +201,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="180"
-                        Text="Start Auction"
+                        Text="Start Dato"
                         VerticalAlignment="Center" />
 
                     <CalendarDatePicker
@@ -227,7 +227,7 @@
                         FontWeight="Medium"
                         Foreground="#ffffff"
                         MinWidth="180"
-                        Text="Close Auction"
+                        Text="Slut Dato"
                         VerticalAlignment="Center" />
 
                     <CalendarDatePicker
@@ -277,7 +277,7 @@
 
                 <Button Command="{Binding Path=CancelCommand}" HorizontalAlignment="Left">
                     <Label
-                        Content="Cancel"
+                        Content="Annuler"
                         FontSize="23"
                         Foreground="Red" />
                 </Button>
@@ -286,14 +286,14 @@
                     <ToolTip.Tip>
                         <StackPanel>
                             <TextBlock>
-                                Remember to fill everything up
+                                Husk at udfylde alle felter!
                                 <TextBlock.FontWeight>Black</TextBlock.FontWeight>
                             </TextBlock>
                         </StackPanel>
                     </ToolTip.Tip>
                     <Button
                         Command="{Binding Path=CreateSaleCommand}"
-                        Content="Create Sale"
+                        Content="Opret Auktion"
                         FontSize="23"
                         Foreground="Green"
                         HorizontalAlignment="Right" />

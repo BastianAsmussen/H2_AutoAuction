@@ -19,7 +19,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Vehicle type"
+                    Text="Køretøjstype"
                     VerticalAlignment="Center"
                     Width="120" />
                 <ComboBox
@@ -33,7 +33,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Fuel type"
+                    Text="Brandstoftype"
                     VerticalAlignment="Center"
                     Width="120" />
                 <ComboBox
@@ -47,7 +47,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Height"
+                    Text="Højde (meter)"
                     VerticalAlignment="Center"
                     Width="120" />
                 <TextBox
@@ -60,7 +60,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Length"
+                    Text="Længde (meter)"
                     VerticalAlignment="Center"
                     Width="120" />
                 <TextBox
@@ -73,7 +73,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Weight"
+                    Text="Vægt (kg.)"
                     VerticalAlignment="Center"
                     Width="120" />
                 <TextBox
@@ -86,7 +86,7 @@
             <StackPanel Margin="0,5,0,5" Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Engine Size"
+                    Text="Motorstørrelse (L)"
                     VerticalAlignment="Center"
                     Width="120" />
                 <TextBox
@@ -98,18 +98,18 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock
                     HorizontalAlignment="Right"
-                    Text="Has Tow Bar"
+                    Text="Har Anhængertræk?"
                     VerticalAlignment="Center"
-                    Width="120" />
+                    Width="140" />
                 <StackPanel Orientation="Horizontal">
                     <RadioButton
                         Command="{Binding YesTowBarCommand}"
-                        Content="Yes"
+                        Content="Ja"
                         Margin="10,0,0,0" />
 
                     <RadioButton
                         Command="{Binding NoTowBarCommand}"
-                        Content="No"
+                        Content="Nej"
                         Margin="10,0,0,0" />
                 </StackPanel>
             </StackPanel>
@@ -123,7 +123,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Number Of Seats"
+                        Text="Antal Sæder"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox
@@ -135,7 +135,7 @@
                 <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text=" Has Iso fix"
+                        Text="Har Isofix?"
                         VerticalAlignment="Center"
                         Width="120" />
 
@@ -145,11 +145,11 @@
                         VerticalAlignment="Center">
                         <RadioButton
                             Command="{Binding YesIsoFixCommand}"
-                            Content="Yes"
+                            Content="Ja"
                             Margin="10,0,10,0" />
                         <RadioButton
                             Command="{Binding NoIsoFixCommand}"
-                            Content="No"
+                            Content="Nej"
                             Margin="10,0,0,0" />
                     </StackPanel>
                 </StackPanel>
@@ -165,7 +165,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Number Of Seats"
+                        Text="Antal Sæder"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding NumberOfSeats}" Width="150" />
@@ -174,7 +174,7 @@
                 <StackPanel Margin="0,10,0,5" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Load Capacity"
+                        Text="Lastkapacitet (kg.)"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding LoadCapacity}" Width="150" />
@@ -183,20 +183,20 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Has Safety Cage"
+                        Text="Har Sikkerhedsbøjle?"
                         VerticalAlignment="Center"
-                        Width="120" />
+                        Width="140" />
                     <StackPanel
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
                         VerticalAlignment="Center">
                         <RadioButton
                             Command="{Binding YesSafetyBarCommand}"
-                            Content="Yes"
+                            Content="Ja"
                             Margin="10,0,5,0" />
                         <RadioButton
                             Command="{Binding NoSafetyBarCommand}"
-                            Content="No"
+                            Content="Nej"
                             Margin="10,0,0,0" />
                     </StackPanel>
                 </StackPanel>
@@ -211,7 +211,7 @@
                 <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Num. Of Seats"
+                        Text="Antal Sæder"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding NumberOfSeats}" Width="150" />
@@ -220,7 +220,7 @@
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Num. Of Sleeping Space"
+                        Text="Antal Sovepladser"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding NumberOfSLeeepingSpaces}" Width="150" />
@@ -229,18 +229,18 @@
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Has Toilet"
+                        Text="Har Toilet?"
                         VerticalAlignment="Center"
                         Width="120" />
 
                     <StackPanel Orientation="Horizontal">
                         <RadioButton
                             Command="{Binding YesToiletCommand}"
-                            Content="Yes"
+                            Content="Ja"
                             Margin="20,0,0,0" />
                         <RadioButton
                             Command="{Binding NoToiletCommand}"
-                            Content="No"
+                            Content="Nej"
                             Margin="20,0,0,0" />
                     </StackPanel>
 
@@ -256,7 +256,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         HorizontalAlignment="Right"
-                        Text="Load Capacity"
+                        Text="Lastkapacitet (kg.)"
                         VerticalAlignment="Center"
                         Width="120" />
                     <TextBox Text="{Binding LoadCapacity}" Width="150" />

@@ -17,7 +17,7 @@
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <Label
-            Content="Create user"
+            Content="Opret Bruger"
             FontSize="40"
             Foreground="White"
             HorizontalAlignment="Center" />
@@ -31,7 +31,7 @@
                 Margin="0,20,0,0"
                 MaxWidth="400"
                 Text="{Binding UserName}"
-                Watermark="Username" />
+                Watermark="Brugernavn" />
 
             <!--  Password Input  -->
             <StackPanel>
@@ -42,7 +42,7 @@
                     MaxWidth="400"
                     PasswordChar="*"
                     Text="{Binding PassWord}"
-                    Watermark="Password" />
+                    Watermark="Adgangskode" />
             </StackPanel>
 
             <TextBox
@@ -52,7 +52,7 @@
                 MaxWidth="400"
                 PasswordChar="*"
                 Text="{Binding RepeatPassword}"
-                Watermark="Password again" />
+                Watermark="Gentag Adgangskode" />
 
             <!--  Corporate or Private Buttons  -->
             <WrapPanel
@@ -61,7 +61,7 @@
                 VerticalAlignment="Center">
                 <RadioButton
                     Command="{Binding Path=IsCorporateCommand}"
-                    Content="Corporate"
+                    Content="Erverv"
                     FontSize="23"
                     Foreground="White"
                     Width="150"
@@ -69,7 +69,7 @@
 
                 <RadioButton
                     Command="{Binding IsPrivateCommand}"
-                    Content="Private"
+                    Content="Privat"
                     FontSize="23"
                     Foreground="White"
                     HorizontalAlignment="Center"
@@ -99,7 +99,7 @@
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
                         VerticalAlignment="Top"
-                        Watermark="Zip code"
+                        Watermark="Post Nummer"
                         Width="150" />
                 </WrapPanel>
 
@@ -115,7 +115,7 @@
                         Mask="00 00 00 - 00 00"
                         Text="{Binding CprNumber, Mode=TwoWay}"
                         VerticalAlignment="Top"
-                        Watermark="Cpr number"
+                        Watermark="CPR Nummer"
                         Width="170" />
 
                     <TextBox
@@ -125,7 +125,7 @@
                         MaxLength="5"
                         Text="{Binding ZipCode, Mode=TwoWay}"
                         VerticalAlignment="Top"
-                        Watermark="Zip code"
+                        Watermark="Post Nummer"
                         Width="150" />
                 </WrapPanel>
             </WrapPanel>
@@ -134,7 +134,7 @@
             <WrapPanel HorizontalAlignment="Center">
                 <Button Command="{Binding Path=CancelCommand}" Margin="0,0,40,0">
                     <Label
-                        Content="Cancel"
+                        Content="Annuler"
                         FontSize="23"
                         Foreground="White" />
                 </Button>
@@ -145,7 +145,7 @@
                     IsEnabled="{Binding Path=BtnCreateEnabled}"
                     Margin="40,0,0,0">
                     <Label
-                        Content="Create"
+                        Content="Opret"
                         FontSize="23"
                         Foreground="White" />
                 </Button>

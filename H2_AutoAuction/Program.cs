@@ -34,13 +34,13 @@ internal class Program
         /*
         var random = new Random();
 
-        const int totalUsers = 1_000;
+        const int totalUsers = 100;
         const string defaultPassword = "1234";
 
         var users = new List<User>();
         for (var i = 0; i < totalUsers; i++)
         {
-            var username = $"{Faker.Name.First()}-{random.Next(1_000, 9_999)}";
+            var username = $"{Faker.Name.First()}{Faker.Name.Last()}";
             var password = defaultPassword;
             var zipcode = $"{random.Next(1_000, 9_999)}";
             var balance = random.Next(0, 1_000_000);
@@ -69,7 +69,7 @@ internal class Program
             }
         }
 
-        const int totalVehicles = 1_000;
+        const int totalVehicles = 100;
 
         var licenseTypes = Enum.GetValues(typeof(LicenseType)).Cast<LicenseType>().ToList();
         var fuelTypes = Enum.GetValues(typeof(FuelType)).Cast<FuelType>().ToList();
@@ -224,16 +224,15 @@ internal class Program
             Console.WriteLine(bus + "\n");
         }
 
-        const int totalAuctions = 1_000;
+        const int totalAuctions = 10;
 
         var auctions = new List<Auction>();
         for (var i = 0; i < totalAuctions; i++)
         {
-            var name = Faker.Name.First();
-            var startDate = DateTime.Now.AddDays(random.Next(1, 100));
-            var endDate = startDate.AddDays(random.Next(1, 100));
-            var vehicle = DatabaseManager.GetVehicleById(random.Next(1, 1_000));
-            var seller = DatabaseManager.GetUserById(random.Next(1, 1_000));
+            var startDate = DateTime.Now.AddDays(random.Next(1, 7));
+            var endDate = startDate.AddDays(random.Next(1, 7));
+            var vehicle = DatabaseManager.GetVehicleById(random.Next(1, totalVehicles));
+            var seller = DatabaseManager.GetUserById(random.Next(1, totalUsers));
             var startingBid = random.Next(0, 1_000_000);
             var auction = DatabaseManager.CreateAuction(new Auction(0, startingBid, startingBid, startDate, endDate,
                 vehicle, seller, null));
@@ -248,8 +247,8 @@ internal class Program
         {
             var auction = auctions[random.Next(auctions.Count)];
             var time = auction.StartDate.AddSeconds(random.Next(1, 100));
-            var bidder = DatabaseManager.GetUserById(random.Next(1, 1_000));
-            var amount = auction.CurrentPrice + random.Next(1, 1_000);
+            var bidder = DatabaseManager.GetUserById(random.Next(1, totalUsers));
+            var amount = auction.CurrentPrice + random.Next(1_000, 10_000);
             var bid = DatabaseManager.CreateBid(new Bid(0, time, amount, bidder, auction));
 
             bids.Add(bid);

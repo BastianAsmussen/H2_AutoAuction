@@ -34,7 +34,7 @@
             Grid.ColumnSpan="2"
             Grid.Row="0">
             <Label
-                Content="Your auctions"
+                Content="Dine Auktioner"
                 FontSize="22"
                 Foreground="White" />
 
@@ -51,7 +51,7 @@
                     <DataGridTextColumn
                         Binding="{Binding Vehicle.Name}"
                         Foreground="White"
-                        Header="Name"
+                        Header="Bil"
                         MinWidth="130" />
 
                     <DataGridTextColumn
@@ -63,7 +63,7 @@
                     <DataGridTextColumn
                         Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
                         Foreground="White"
-                        Header="Bud"
+                        Header="Højeste Bud"
                         MinWidth="130" />
                 </DataGrid.Columns>
             </DataGrid>
@@ -76,7 +76,7 @@
             Grid.Row="2"
             Grid.RowSpan="2">
             <Label
-                Content="Current Auctions"
+                Content="Andres Auktioner"
                 FontSize="22"
                 Foreground="White" />
 
@@ -92,7 +92,7 @@
                     <DataGridTextColumn
                         Binding="{Binding Vehicle.Name}"
                         Foreground="White"
-                        Header="Name"
+                        Header="Bil"
                         Width="130" />
 
                     <DataGridTextColumn
@@ -104,7 +104,7 @@
                     <DataGridTextColumn
                         Binding="{Binding CurrentPrice, StringFormat=' {0:C}'}"
                         Foreground="White"
-                        Header="Bud"
+                        Header="Højeste Bud"
                         Width="130" />
                 </DataGrid.Columns>
             </DataGrid>
@@ -117,7 +117,7 @@
             <Button
                 Background="#5cb85c"
                 Command="{Binding SetForSaleCommand}"
-                Content="+ Set For Sale"
+                Content="+ Sæt Til Salg"
                 FontSize="22"
                 Foreground="White"
                 HorizontalContentAlignment="Center"
@@ -125,7 +125,7 @@
 
             <Button
                 Command="{Binding UserProfileCommand}"
-                Content="User Profile"
+                Content="Din Profil"
                 FontSize="22"
                 Foreground="White"
                 HorizontalContentAlignment="Center"
@@ -133,7 +133,7 @@
 
             <Button
                 Command="{Binding BidHistoryCommand}"
-                Content="Bid History"
+                Content="Bud Historik"
                 FontSize="22"
                 Foreground="White"
                 HorizontalContentAlignment="Center"
@@ -143,14 +143,13 @@
                 Background="Red"
                 BorderThickness="33"
                 Command="{Binding SignOutCommand}"
-                Content="Sign Out"
+                Content="Log Ud"
                 CornerRadius="32,32,32,32"
                 FontSize="22"
                 Foreground="White"
                 HorizontalContentAlignment="Center"
                 Margin="0,100,0,0"
                 MinWidth="180" />
-
         </StackPanel>
     </Grid>
 </UserControl>

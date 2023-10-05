@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -70,10 +71,10 @@ public class VehicleBlueprintViewModel : ViewModelBase
 
     public List<string> VehicleType { get; } = new()
     {
-        "Private Personal Car",
-        "Professional Personal Car",
+        "Privat Personbil",
+        "Erhvervs Personbil",
         "Bus",
-        "Truck"
+        "Lastbil"
     };
 
     public string? SelectedVehicleType
@@ -84,14 +85,14 @@ public class VehicleBlueprintViewModel : ViewModelBase
             switch (value)
             {
                 case
-                    "Private Personal Car":
+                    "Privat Personbil":
                     IsPrivatePersonalCar = true;
                     IsProfessionalPersonalCar = false;
                     IsBus = false;
                     IsTruck = false;
                     this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
                     break;
-                case "Professional Personal Car":
+                case "Erhvervs Personbil":
                     IsProfessionalPersonalCar = true;
                     IsPrivatePersonalCar = false;
                     IsBus = false;
@@ -105,7 +106,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
                     IsTruck = false;
                     this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
                     break;
-                case "Truck":
+                case "Lastbil":
                     IsTruck = true;
                     IsBus = false;
                     IsPrivatePersonalCar = false;
@@ -113,7 +114,7 @@ public class VehicleBlueprintViewModel : ViewModelBase
                     this.RaiseAndSetIfChanged(ref _selectedVehicleType, value);
                     break;
                 default:
-                    throw new("Vehicle Type is empty");
+                    throw new DataException("Vehicle type is empty!");
             }
         }
     }

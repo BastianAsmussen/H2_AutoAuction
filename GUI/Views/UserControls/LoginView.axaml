@@ -20,7 +20,7 @@
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <StackPanel>
             <Label
-                Content="Log in"
+                Content="Log Ind"
                 FontSize="44"
                 Foreground="White" />
 
@@ -35,7 +35,7 @@
                     MinWidth="350"
                     Text="{Binding UserName}"
                     TextWrapping="NoWrap"
-                    Watermark="Username" />
+                    Watermark="Brugernavn" />
             </WrapPanel>
 
             <!--  Password Input  -->
@@ -50,24 +50,26 @@
                     PasswordChar="*"
                     Text="{Binding PassWord}"
                     TextWrapping="NoWrap"
-                    Watermark="Password" />
+                    Watermark="Adgangskode" />
 
             </WrapPanel>
 
             <!--  Sign Up  -->
             <StackPanel Orientation="Horizontal">
                 <Label
-                    Content="Not registered? "
+                    Content="Ingen konto?"
                     FontSize="22"
                     Foreground="White" />
 
-                <Label
-                    Content="Create user"
+                <TextBlock
+                    Text="Opret Bruger"
                     FontSize="22"
                     FontWeight="Bold"
                     Foreground="Green"
-                    behaviors:PointerPressedBehavior.Command="{Binding Path=SignUpCommand}" />
-
+                    TextDecorations="Underline"
+                    Cursor="Hand"
+                    behaviors:PointerPressedBehavior.Command="{Binding Path=SignUpCommand}"
+                    Margin="5,2,0,0" />
             </StackPanel>
 
             <!--  Sign In  -->
@@ -79,11 +81,10 @@
                 VerticalAlignment="Bottom">
 
                 <Label
-                    Content="Login"
+                    Content="Log Ind"
                     FontSize="23"
                     Foreground="White" />
             </Button>
         </StackPanel>
-
     </Grid>
 </UserControl>

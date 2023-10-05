@@ -40,7 +40,7 @@
                     <DataGridTextColumn
                         Binding="{Binding Auction.Vehicle.Name}"
                         Foreground="White"
-                        Header="Name" />
+                        Header="Navn" />
 
                     <DataGridTextColumn
                         Binding="{Binding Auction.Vehicle.Year}"
@@ -55,7 +55,7 @@
                     <DataGridTextColumn
                         Binding="{Binding Path=FinalAuctionPrice}"
                         Foreground="White"
-                        Header="Final" />
+                        Header="Slut Pris" />
                 </DataGrid.Columns>
             </DataGrid>
 
