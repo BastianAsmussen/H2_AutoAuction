@@ -43,7 +43,7 @@
             <Button
                 Background="Red"
                 Click="OnCancelButtonClicked"
-                Content="Afbrud" />
+                Content="Afbryd" />
 
             <Button
                 Background="Green"
