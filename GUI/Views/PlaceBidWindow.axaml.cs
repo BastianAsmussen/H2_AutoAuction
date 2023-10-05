@@ -17,4 +17,8 @@ public partial class PlaceBidWindow : Window
         InitializeComponent();
     }
 
+    private void OnCancelButtonClicked(object? sender, RoutedEventArgs e)
+    {
+        Close();
+    }
 }

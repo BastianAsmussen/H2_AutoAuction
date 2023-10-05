@@ -1,16 +1,57 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="250"
-        x:Class="GUI.Views.PlaceBidWindow"
-        Title="Placer Bud"
-        xmlns:vm="clr-namespace:GUI.ViewModels"
-        x:DataType="vm:PlaceBidWindowViewModel">
-        <StackPanel>
-                <TextBlock Text="Placer Bud" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Bud:"/>
-                <TextBox Text="{Binding Amount}" x:Name="Amount"/>
-                <Button Content="Placer Bud" Command="{Binding PlaceBidCommand}" CommandParameter="{Binding $parent[Window]}"/>
+<Window
+    Background="#1b1827"
+    MaxHeight="200"
+    MaxWidth="400"
+    MinHeight="200"
+    MinWidth="400"
+    Title="Placer Bud"
+    mc:Ignorable="d"
+    x:Class="GUI.Views.PlaceBidWindow"
+    x:DataType="vm:PlaceBidWindowViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:GUI.ViewModels"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid RowDefinitions="50,100,50">
+        <TextBlock
+            FontSize="20"
+            HorizontalAlignment="Center"
+            Text="Placer Bud"
+            VerticalAlignment="Top" />
+
+        <StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="20"
+            VerticalAlignment="Center">
+            <TextBlock Text="Bud:" VerticalAlignment="Center" />
+            <TextBox
+                MaxWidth="200"
+                MinWidth="200"
+                Text="{Binding Amount}"
+                x:Name="Amount" />
         </StackPanel>
+
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="90">
+            <Button
+                Background="Red"
+                Click="OnCancelButtonClicked"
+                Content="Afbrud" />
+
+            <Button
+                Background="Green"
+                Command="{Binding PlaceBidCommand}"
+                CommandParameter="{Binding $parent[Window]}"
+                Content="Placer Bud" />
+        </StackPanel>
+    </Grid>
+
+
 </Window>
